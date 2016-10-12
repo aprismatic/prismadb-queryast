@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PrismaDBQueryBaseModel.DML
+namespace PrismaDB.QueryAST.DML
 {
     public class SelectQuery : DMLQuery
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace PrismaDBQueryBaseModel.DDL
+namespace PrismaDB.QueryAST.DDL
 {
     public enum SQLDataType
     {

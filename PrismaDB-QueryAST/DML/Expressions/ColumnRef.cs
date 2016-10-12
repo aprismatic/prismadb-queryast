@@ -2,7 +2,7 @@
 using System.Data;
 using System.Text;
 
-namespace PrismaDBQueryBaseModel.DML
+namespace PrismaDB.QueryAST.DML
 {
     public class ColumnRef : Expression
     {

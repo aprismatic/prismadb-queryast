@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PrismaDBQueryBaseModel.DDL
+namespace PrismaDB.QueryAST.DDL
 {
     public class CreateTableQuery : DDLQuery
     {

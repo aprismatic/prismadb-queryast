@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PrismaDBQueryBaseModel.DML
+namespace PrismaDB.QueryAST.DML
 {
     public class InsertQuery : DMLQuery
     {

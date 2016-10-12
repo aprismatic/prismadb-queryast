@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using PrismaDBQueryBaseModel.DML;
+using PrismaDB.QueryAST.DML;
 
-namespace PrismaDBQueryBaseModel.DDL
+namespace PrismaDB.QueryAST.DDL
 {
     public enum IndexType
     {

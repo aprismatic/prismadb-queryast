@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 
-namespace PrismaDBQueryBaseModel.DML
+namespace PrismaDB.QueryAST.DML
 {
     public abstract class BooleanExpression : Expression
     {

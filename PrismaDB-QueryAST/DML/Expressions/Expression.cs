@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 
-namespace PrismaDBQueryBaseModel.DML
+namespace PrismaDB.QueryAST.DML
 {
     public abstract class Expression
     {

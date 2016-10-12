@@ -1,4 +1,4 @@
-﻿namespace PrismaDBQueryBaseModel
+﻿namespace PrismaDB.QueryAST
 {
     public class TableRef
     {

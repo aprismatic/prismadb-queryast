@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PrismaDBQueryBaseModel.Misc
+namespace PrismaDB.QueryAST.Misc
 {
     internal static class Helper
     {
@@ -34,7 +34,7 @@ namespace PrismaDBQueryBaseModel.Misc
             return new string(result);
         }
 
-        public static string GetRandomString(int length)
+        /*public static string GetRandomString(int length)
         {
             var res = new char[length];
 
@@ -44,9 +44,9 @@ namespace PrismaDBQueryBaseModel.Misc
             }
 
             return new string(res);
-        }
+        }*/
 
-        public static string GetUniqueString()
+        /*public static string GetUniqueString()
         {
             var digits = new[] { _alpha[0], _alpha[0], _alpha[0],
                                  _alpha[0], _alpha[0], _alpha[0],
@@ -64,6 +64,6 @@ namespace PrismaDBQueryBaseModel.Misc
             }
 
             return new string(digits);
-        }
+        }*/
     }
 }

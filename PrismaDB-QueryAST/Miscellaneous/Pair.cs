@@ -1,4 +1,4 @@
-﻿namespace PrismaDBQueryBaseModel.Misc
+﻿namespace PrismaDB.QueryAST.Misc
 {
     public class Pair<T, U>
     {

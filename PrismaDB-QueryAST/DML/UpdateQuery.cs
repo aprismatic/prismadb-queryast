@@ -1,8 +1,8 @@
-﻿using PrismaDBQueryBaseModel.Misc;
+﻿using PrismaDB.QueryAST.Misc;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PrismaDBQueryBaseModel.DML
+namespace PrismaDB.QueryAST.DML
 {
     public class UpdateQuery : DMLQuery
     {
