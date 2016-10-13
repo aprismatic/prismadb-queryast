@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PrismaDBQueryBaseModel")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("PrismaDB.QueryAST")]
+[assembly: AssemblyDescription(@"A class library that contains basic blocks to create AST for SQL queries.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PrismaDBQueryBaseModel")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCompany("Vasily Sidorov (bazzilic) / Nanyang Technological University")]
+[assembly: AssemblyProduct("")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

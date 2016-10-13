@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <description>$description$</description>
+    <projectUrl>https://github.com/bazzilic/PrismaDB-QueryAST</projectUrl>
+    <licenseUrl>https://github.com/bazzilic/PrismaDB-QueryAST</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>AST SQL query queries asbtract syntax tree</tags>
+  </metadata>
+</package>
