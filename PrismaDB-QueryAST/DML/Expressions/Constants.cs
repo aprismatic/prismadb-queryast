@@ -165,7 +165,7 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString()
         {
             var sb = new StringBuilder("0x");
-            sb.Append(Misc.Helper.ByteArrayToHex(binvalue));
+            sb.Append(Commons.Helper.ByteArrayToHex(binvalue));
 
             if (ColumnName.Length > 0)
             {
