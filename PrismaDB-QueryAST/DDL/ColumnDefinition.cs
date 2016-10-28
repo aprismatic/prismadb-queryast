@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace PrismaDB.QueryAST.DDL
 {
@@ -10,10 +11,21 @@ namespace PrismaDB.QueryAST.DDL
         VARCHAR
     }
 
+    [Flags]
+    public enum ColumnEncryptionFlags
+    {
+        None = 1,
+        Text = 2,
+        IntegerAddition = 4,
+        IntegerMultiplication = 8,
+        Search = 16
+    }
+
     public class ColumnDefinition
     {
         public string ColumnName;
         public SQLDataType DataType;
+        public ColumnEncryptionFlags EncryptionFlags;
         public int? Length;
         public bool Nullable;
         public bool isRowId;
@@ -22,10 +34,12 @@ namespace PrismaDB.QueryAST.DDL
                                 SQLDataType DataType = SQLDataType.INT,
                                 int? Length = null,
                                 bool Nullable = true,
-                                bool isRowId = false)
+                                bool isRowId = false,
+                                ColumnEncryptionFlags EncryptionFlags = ColumnEncryptionFlags.None)
         {
             this.ColumnName = ColumnName;
             this.DataType = DataType;
+            this.EncryptionFlags = EncryptionFlags;
             this.Length = Length;
             this.Nullable = Nullable;
             this.isRowId = isRowId;
