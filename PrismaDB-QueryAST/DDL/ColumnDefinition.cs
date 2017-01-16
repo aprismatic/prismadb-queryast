@@ -14,11 +14,11 @@ namespace PrismaDB.QueryAST.DDL
     [Flags]
     public enum ColumnEncryptionFlags
     {
-        None = 1,
-        Text = 2,
-        IntegerAddition = 4,
-        IntegerMultiplication = 8,
-        Search = 16
+        None = 0,
+        Text = 1,
+        IntegerAddition = 2,
+        IntegerMultiplication = 4,
+        Search = 8
     }
 
     public class ColumnDefinition
