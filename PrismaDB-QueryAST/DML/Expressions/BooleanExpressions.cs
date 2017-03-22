@@ -178,7 +178,7 @@ namespace PrismaDB.QueryAST.DML
             var leftEval = left.Eval(r);
             var rightEval = right.Eval(r);
 
-            if (leftEval is string && rightEval is string)
+            if (leftEval is String && rightEval is String)
             {
                 res = ((string)leftEval == (string)rightEval) ? !NOT : NOT;
             }
@@ -188,7 +188,10 @@ namespace PrismaDB.QueryAST.DML
             }
             else
             {
-                throw new ApplicationException("Left and right expressions of BooleanEquals are not of the same type");
+                throw new ApplicationException(
+                     "Left and right expressions of BooleanEquals are not of the same type.\n" +
+                    $"Left expression is \"{left.ToString()}\" of type {left.GetType().ToString()}\n" +
+                    $"Right expression is \"{right.ToString()}\" of type {right.GetType().ToString()}");
             }
 
             return res;
