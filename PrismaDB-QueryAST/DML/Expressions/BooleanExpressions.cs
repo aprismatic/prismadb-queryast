@@ -180,18 +180,20 @@ namespace PrismaDB.QueryAST.DML
 
             if (leftEval is String && rightEval is String)
             {
-                res = ((string)leftEval == (string)rightEval) ? !NOT : NOT;
+                res = ((String)leftEval == (String)rightEval) ? !NOT : NOT;
             }
             else if (leftEval is Int32 && rightEval is Int32)
             {
-                res = ((int)leftEval == (int)rightEval) ? !NOT : NOT; // assume data in DataRow are in int
+                res = ((Int32)leftEval == (Int32)rightEval) ? !NOT : NOT; // assume data in DataRow are in int
             }
             else
             {
                 throw new ApplicationException(
                      "Left and right expressions of BooleanEquals are not of the same type.\n" +
-                    $"Left expression is \"{left.ToString()}\" of type {left.GetType().ToString()}\n" +
-                    $"Right expression is \"{right.ToString()}\" of type {right.GetType().ToString()}");
+                    $"Left expression is \"{left}\" of type {left.GetType()}\n" +
+                    $"Left expression evaluates to \"{leftEval}\" of type {leftEval.GetType()}\n" +
+                    $"Right expression is \"{right}\" of type {right.GetType()}\n" +
+                    $"Right expression evaluates to \"{rightEval}\" of type {rightEval.GetType()}");
             }
 
             return res;
