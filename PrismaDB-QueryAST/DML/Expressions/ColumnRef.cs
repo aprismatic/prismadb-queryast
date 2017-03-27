@@ -22,16 +22,20 @@ namespace PrismaDB.QueryAST.DML
         { }
 
         public ColumnRef(TableRef table, string columnName)
-            : this(table.Table.id, columnName)
-        { }
+            : this(columnName)
+        {
+            Table = table.Clone();
+        }
 
         public ColumnRef(string tableName, Identifier column)
             : this(tableName, column.id)
         { }
 
         public ColumnRef(TableRef table, Identifier column)
-            : this(table.Table.id, column.id)
-        { }
+            : this(column.id)
+        {
+            Table = table.Clone();
+        }
 
         public override void setValue(params object[] value)
         {
