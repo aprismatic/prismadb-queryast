@@ -30,7 +30,7 @@ namespace PrismaDB.QueryAST.DDL
         public bool Nullable;
         public bool isRowId;
 
-        public ColumnDefinition(string columnName = "",
+        public ColumnDefinition(string columnName,
                                 SQLDataType dataType = SQLDataType.INT,
                                 int? length = null,
                                 bool nullable = true,
