@@ -17,6 +17,10 @@ namespace PrismaDB.QueryAST.DML
             : this("", columnName)
         { }
 
+        public ColumnRef(Identifier column)
+            : this("", column.id)
+        { }
+
         public ColumnRef(TableRef table, string columnName)
             : this(table.Table.id, columnName)
         { }

@@ -30,18 +30,18 @@ namespace PrismaDB.QueryAST.DDL
         public bool Nullable;
         public bool isRowId;
 
-        public ColumnDefinition(string ColumnName = "",
-                                SQLDataType DataType = SQLDataType.INT,
-                                int? Length = null,
-                                bool Nullable = true,
+        public ColumnDefinition(string columnName = "",
+                                SQLDataType dataType = SQLDataType.INT,
+                                int? length = null,
+                                bool nullable = true,
                                 bool isRowId = false,
-                                ColumnEncryptionFlags EncryptionFlags = ColumnEncryptionFlags.None)
+                                ColumnEncryptionFlags encryptionFlags = ColumnEncryptionFlags.None)
         {
-            this.ColumnName = new Identifier(ColumnName);
-            this.DataType = DataType;
-            this.EncryptionFlags = EncryptionFlags;
-            this.Length = Length;
-            this.Nullable = Nullable;
+            this.ColumnName = new Identifier(columnName);
+            this.DataType = dataType;
+            this.EncryptionFlags = encryptionFlags;
+            this.Length = length;
+            this.Nullable = nullable;
             this.isRowId = isRowId;
         }
 
