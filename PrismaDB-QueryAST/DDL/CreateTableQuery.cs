@@ -11,14 +11,16 @@ namespace PrismaDB.QueryAST.DDL
         public List<ColumnDefinition> ColumnDefinitions;
 
         public CreateTableQuery()
-        {
-            TableName = new TableRef("");
-            ColumnDefinitions = new List<ColumnDefinition>();
-        }
+            : this(new TableRef(""))
+        { }
 
         public CreateTableQuery(string newTableName)
+            : this(new TableRef(newTableName))
+        { }
+
+        public CreateTableQuery(TableRef newTable)
         {
-            TableName = new TableRef(newTableName);
+            TableName = newTable.Clone();
             ColumnDefinitions = new List<ColumnDefinition>();
         }
 
