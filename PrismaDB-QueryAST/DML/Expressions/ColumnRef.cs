@@ -83,7 +83,7 @@ namespace PrismaDB.QueryAST.DML
             var otherCR = other as ColumnRef;
             if (otherCR == null) return false;
 
-            return (this.ColumnName == otherCR.ColumnName)
+            return (this.ColumnName.Equals(otherCR.ColumnName))
                 && (this.Table.Equals(otherCR.Table));
         }
 
