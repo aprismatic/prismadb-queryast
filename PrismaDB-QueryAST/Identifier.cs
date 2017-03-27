@@ -14,20 +14,22 @@
             return new Identifier(id);
         }
 
-        public new virtual string ToString()
+        public override string ToString()
         {
-            return "[" + id + "]";
+            return id.Length == 0
+                ? ""
+                : "[" + id + "]";
         }
 
-        public new virtual bool Equals(object other)
+        public override bool Equals(object other)
         {
-            var otherID = other as Identifier;
-            if (otherID == null) return false;
+            var otherId = other as Identifier;
+            if (otherId == null) return false;
 
-            return this.id == otherID.id;
+            return this.id == otherId.id;
         }
 
-        public new virtual int GetHashCode()
+        public override int GetHashCode()
         {
             return id.GetHashCode();
         }
