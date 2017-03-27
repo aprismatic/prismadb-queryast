@@ -28,6 +28,9 @@ namespace PrismaDB.QueryAST.DML
         public override object Eval(DataRow r) { return !NOT; }
         public override List<ColumnRef> GetColumns() { return new List<ColumnRef>(); }
         public override string ToString() { return NOT ? "(1<>1)" : "(1=1)"; }
+        public override bool Equals(object other) { return (ColumnName == (other as BooleanTrue)?.ColumnName)
+                                                        && (NOT == (other as BooleanTrue)?.NOT); }
+        public override int GetHashCode() { return unchecked(ColumnName.GetHashCode() * NOT.GetHashCode()); }
     }
 
     public class BooleanIn : BooleanExpression
@@ -102,13 +105,33 @@ namespace PrismaDB.QueryAST.DML
             sb.Append(" ( ");
 
             sb.Append(Column.ToString());
-            sb.Append(" IN (");
+            sb.Append(" IN ( ");
             sb.Append(String.Join(" , ", InValues));
             sb.Append(" ) ");
 
             sb.Append(" ) ");
 
             return sb.ToString();
+        }
+
+        public override bool Equals(object other)
+        {
+            var otherBI = other as BooleanIn;
+            if (otherBI == null) return false;
+
+            return (this.NOT != otherBI.NOT)
+                && (this.ColumnName == otherBI.ColumnName)
+                && (this.Column.Equals(otherBI.Column))
+                && (this.InValues.All(x => otherBI.InValues.Exists(y => x.Equals(y))));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                NOT.GetHashCode() *
+                ColumnName.GetHashCode() *
+                Column.GetHashCode() *
+                InValues.Aggregate(1, (x, y) => unchecked(x * y.GetHashCode())));
         }
     }
 
@@ -169,6 +192,26 @@ namespace PrismaDB.QueryAST.DML
             sb.Append(" ) ");
 
             return sb.ToString();
+        }
+
+        public override bool Equals(object other)
+        {
+            var otherBE = other as BooleanEquals;
+            if (otherBE == null) return false;
+
+            return (this.NOT != otherBE.NOT)
+                && (this.ColumnName == otherBE.ColumnName)
+                && (this.left.Equals(otherBE.left))
+                && (this.right.Equals(otherBE.right));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                NOT.GetHashCode() *
+                ColumnName.GetHashCode() *
+                left.GetHashCode() *
+                right.GetHashCode());
         }
 
         public override object Eval(DataRow r)

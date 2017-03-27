@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 
 namespace PrismaDB.QueryAST.DML
@@ -61,6 +62,22 @@ namespace PrismaDB.QueryAST.DML
 
             return sb.ToString();
         }
+
+        public override bool Equals(object other)
+        {
+            var otherIC = other as IntConstant;
+            if (otherIC == null) return false;
+
+            return (this.ColumnName == otherIC.ColumnName)
+                && (this.intvalue == otherIC.intvalue);
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                ColumnName.GetHashCode() *
+                intvalue.GetHashCode());
+        }
     }
 
     public class StringConstant : Constant
@@ -119,6 +136,22 @@ namespace PrismaDB.QueryAST.DML
 
             return sb.ToString();
         }
+
+        public override bool Equals(object other)
+        {
+            var otherSC = other as StringConstant;
+            if (otherSC == null) return false;
+
+            return (this.ColumnName == otherSC.ColumnName)
+                && (this.strvalue == otherSC.strvalue);
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                ColumnName.GetHashCode() *
+                strvalue.GetHashCode());
+        }
     }
 
     public class BinaryConstant : Constant
@@ -175,6 +208,22 @@ namespace PrismaDB.QueryAST.DML
             }
 
             return sb.ToString();
+        }
+
+        public override bool Equals(object other)
+        {
+            var otherBC = other as BinaryConstant;
+            if (otherBC == null) return false;
+
+            return (this.ColumnName == otherBC.ColumnName)
+                && (this.binvalue.SequenceEqual(otherBC.binvalue));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                ColumnName.GetHashCode() *
+                binvalue.Aggregate(1, unchecked((x, y) => x * y.GetHashCode())));
         }
     }
 }

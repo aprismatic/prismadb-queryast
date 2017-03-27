@@ -65,5 +65,21 @@ namespace PrismaDB.QueryAST.DML
 
             return sb.ToString();
         }
+
+        public override bool Equals(object other)
+        {
+            var otherCR = other as ColumnRef;
+            if (otherCR == null) return false;
+
+            return (this.ColumnName == otherCR.ColumnName)
+                && (this.Table.Equals(otherCR.Table));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                ColumnName.GetHashCode() *
+                Table.GetHashCode());
+        }
     }
 }

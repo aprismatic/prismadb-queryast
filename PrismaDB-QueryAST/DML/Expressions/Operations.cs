@@ -94,6 +94,24 @@ namespace PrismaDB.QueryAST.DML
 
             return sb.ToString();
         }
+
+        public override bool Equals(object other)
+        {
+            var otherA = other as Addition;
+            if (otherA == null) return false;
+
+            return (this.ColumnName == otherA.ColumnName)
+                && (this.left.Equals(otherA.left))
+                && (this.right.Equals(otherA.right));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                ColumnName.GetHashCode() *
+                left.GetHashCode() *
+                right.GetHashCode());
+        }
     }
 
     public class Multiplication : Operation
@@ -159,6 +177,24 @@ namespace PrismaDB.QueryAST.DML
             }
 
             return sb.ToString();
+        }
+
+        public override bool Equals(object other)
+        {
+            var otherM = other as Multiplication;
+            if (otherM == null) return false;
+
+            return (this.ColumnName == otherM.ColumnName)
+                && (this.left.Equals(otherM.left))
+                && (this.right.Equals(otherM.right));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                ColumnName.GetHashCode() *
+                left.GetHashCode() *
+                right.GetHashCode());
         }
     }
 
@@ -231,6 +267,26 @@ namespace PrismaDB.QueryAST.DML
 
             return sb.ToString();
         }
+
+        public override bool Equals(object other)
+        {
+            var otherPA = other as PaillierAddition;
+            if (otherPA == null) return false;
+
+            return (this.ColumnName == otherPA.ColumnName)
+                && (this.left.Equals(otherPA.left))
+                && (this.right.Equals(otherPA.right))
+                && (this.N.Equals(otherPA.N));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                ColumnName.GetHashCode() *
+                left.GetHashCode() *
+                right.GetHashCode() *
+                N.GetHashCode());
+        }
     }
 
     public class ElGamalMultiplication : Operation
@@ -301,6 +357,26 @@ namespace PrismaDB.QueryAST.DML
                 sb.Append(" ) ");
 
             return sb.ToString();
+        }
+
+        public override bool Equals(object other)
+        {
+            var otherEGM = other as ElGamalMultiplication;
+            if (otherEGM == null) return false;
+
+            return (this.ColumnName == otherEGM.ColumnName)
+                && (this.left.Equals(otherEGM.left))
+                && (this.right.Equals(otherEGM.right))
+                && (this.P.Equals(otherEGM.P));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                ColumnName.GetHashCode() *
+                left.GetHashCode() *
+                right.GetHashCode() *
+                P.GetHashCode());
         }
     }
 }
