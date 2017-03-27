@@ -30,7 +30,7 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString() { return NOT ? "(1<>1)" : "(1=1)"; }
         public override bool Equals(object other) { return (ColumnName == (other as BooleanTrue)?.ColumnName)
                                                         && (NOT == (other as BooleanTrue)?.NOT); }
-        public override int GetHashCode() { return unchecked(ColumnName.GetHashCode() * NOT.GetHashCode()); }
+        public override int GetHashCode() { return unchecked(ColumnName.GetHashCode() * (NOT.GetHashCode() + 1)); }
     }
 
     public class BooleanIn : BooleanExpression
@@ -40,7 +40,7 @@ namespace PrismaDB.QueryAST.DML
 
         public BooleanIn()
         {
-            ColumnName = "";
+            ColumnName = new Identifier("");
             Column = new ColumnRef("");
             InValues = new List<Constant>();
             NOT = false;
@@ -76,9 +76,9 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(DataRow r)  // TODO: Check for correctness
         {
-            return InValues.Select(x => x.ToString()).Contains(r[Column.ColumnName].ToString()) ? !NOT : NOT;
+            return InValues.Select(x => x.ToString()).Contains(r[Column.ColumnName.id].ToString()) ? !NOT : NOT;
         }
 
         public override List<ColumnRef> GetColumns()
@@ -128,7 +128,7 @@ namespace PrismaDB.QueryAST.DML
         public override int GetHashCode()
         {
             return unchecked(
-                NOT.GetHashCode() *
+                (NOT.GetHashCode() + 1) *
                 ColumnName.GetHashCode() *
                 Column.GetHashCode() *
                 InValues.Aggregate(1, (x, y) => unchecked(x * y.GetHashCode())));
@@ -208,7 +208,7 @@ namespace PrismaDB.QueryAST.DML
         public override int GetHashCode()
         {
             return unchecked(
-                NOT.GetHashCode() *
+                (NOT.GetHashCode() + 1) *
                 ColumnName.GetHashCode() *
                 left.GetHashCode() *
                 right.GetHashCode());

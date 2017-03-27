@@ -23,7 +23,7 @@ namespace PrismaDB.QueryAST.DDL
 
     public class ColumnDefinition
     {
-        public string ColumnName;
+        public Identifier ColumnName;
         public SQLDataType DataType;
         public ColumnEncryptionFlags EncryptionFlags;
         public int? Length;
@@ -37,7 +37,7 @@ namespace PrismaDB.QueryAST.DDL
                                 bool isRowId = false,
                                 ColumnEncryptionFlags EncryptionFlags = ColumnEncryptionFlags.None)
         {
-            this.ColumnName = ColumnName;
+            this.ColumnName = new Identifier(ColumnName);
             this.DataType = DataType;
             this.EncryptionFlags = EncryptionFlags;
             this.Length = Length;
@@ -49,9 +49,8 @@ namespace PrismaDB.QueryAST.DDL
         {
             var sb = new StringBuilder();
 
-            sb.Append("[");
-            sb.Append(ColumnName);
-            sb.Append("] ");
+            sb.Append(ColumnName.ToString());
+            sb.Append(" ");
             sb.Append(DataType.ToString());
 
             if (Length != null)

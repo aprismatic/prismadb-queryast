@@ -8,26 +8,32 @@ namespace PrismaDB.QueryAST.DML
     {
         public TableRef Table;
 
-        public ColumnRef(string ColumnName)
+        public ColumnRef(string tableName, string columnName)
         {
-            setValue("", ColumnName);
+            setValue(tableName, columnName);
         }
 
-        public ColumnRef(string TableName, string ColumnName)
-        {
-            setValue(TableName, ColumnName);
-        }
+        public ColumnRef(string columnName)
+            : this("", columnName)
+        { }
 
-        public ColumnRef(TableRef Table, string ColumnName)
-        {
-            setValue(Table.TableName, ColumnName);
-        }
+        public ColumnRef(TableRef table, string columnName)
+            : this(table.Table.id, columnName)
+        { }
+
+        public ColumnRef(string tableName, Identifier column)
+            : this(tableName, column.id)
+        { }
+
+        public ColumnRef(TableRef table, Identifier column)
+            : this(table.Table.id, column.id)
+        { }
 
         public override void setValue(params object[] value)
         {
             Parent = null;
             Table = new TableRef((string)value[0]);
-            ColumnName = (string)value[1];
+            ColumnName = new Identifier((string)value[1]);
         }
 
         public override Expression Clone()
@@ -44,7 +50,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns()
         {
-            return new List<ColumnRef>()
+            return new List<ColumnRef>
             {
                 (ColumnRef)Clone()
             };
@@ -56,12 +62,10 @@ namespace PrismaDB.QueryAST.DML
 
             var sb = new StringBuilder(tblnm);
 
-            if (tblnm.Length > 0)
+            if (sb.Length > 0)
                 sb.Append(".");
 
-            sb.Append("[");
-            sb.Append(ColumnName);
-            sb.Append("]");
+            sb.Append(ColumnName.ToString());
 
             return sb.ToString();
         }

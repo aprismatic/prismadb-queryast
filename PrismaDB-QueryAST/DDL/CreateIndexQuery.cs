@@ -17,12 +17,12 @@ namespace PrismaDB.QueryAST.DDL
         public IndexType Type;
         public TableRef OnTable;
         public List<ColumnRef> OnColumns;
-        public string Name;
+        public Identifier Name;
 
         public CreateIndexQuery(IndexType type, string name, TableRef table, params ColumnRef[] columns)
         {
             Type = type;
-            Name = name;
+            Name = new Identifier(name);
             OnTable = table.Clone();
             OnColumns = new List<ColumnRef>(columns.Length);
             OnColumns.AddRange(columns.Select(x => x.Clone() as ColumnRef));
@@ -33,7 +33,7 @@ namespace PrismaDB.QueryAST.DDL
         { }
 
         public CreateIndexQuery(CreateIndexQuery other)
-            : this(other.Type, other.Name, other.OnTable, other.OnColumns.ToArray())
+            : this(other.Type, other.Name.id, other.OnTable, other.OnColumns.ToArray())
         { }
 
         public override string ToString()
@@ -41,9 +41,9 @@ namespace PrismaDB.QueryAST.DDL
             var sb = new StringBuilder("CREATE ");
 
             sb.Append(Type.ToString());
-            sb.Append(" INDEX [");
-            sb.Append(Name);
-            sb.Append("] ON ");
+            sb.Append(" INDEX ");
+            sb.Append(Name.ToString());
+            sb.Append(" ON ");
             sb.Append(OnTable.ToString());
             sb.Append(" ( ");
             sb.Append(String.Join(" , ", OnColumns.Select(x => x.ToString())));

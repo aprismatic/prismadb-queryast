@@ -51,7 +51,7 @@ namespace PrismaDB.QueryAST.DML
             right = (Expression)value[1];
 
             if (value.Length > 2)
-                ColumnName = (string)value[2];
+                ColumnName = new Identifier((string)value[2]);
         }
 
         public override Expression Clone()
@@ -59,7 +59,7 @@ namespace PrismaDB.QueryAST.DML
             var left_clone = left.Clone();
             var right_clone = right.Clone();
 
-            var clone = new Addition(left_clone, right_clone, ColumnName);
+            var clone = new Addition(left_clone, right_clone, ColumnName.id);
 
             return clone;
         }
@@ -85,11 +85,11 @@ namespace PrismaDB.QueryAST.DML
             sb.Append(right.ToString());
             sb.Append(" ) ");
 
-            if (ColumnName.Length > 0)
+            if (ColumnName.id.Length > 0)
             {
-                sb.Append("AS [");
-                sb.Append(ColumnName);
-                sb.Append("] ");
+                sb.Append("AS ");
+                sb.Append(ColumnName.ToString());
+                sb.Append(" ");
             }
 
             return sb.ToString();
@@ -135,7 +135,7 @@ namespace PrismaDB.QueryAST.DML
             right = (Expression)value[1];
 
             if (value.Length > 2)
-                ColumnName = (string)value[2];
+                ColumnName = new Identifier((string)value[2]);
         }
 
         public override Expression Clone()
@@ -143,7 +143,7 @@ namespace PrismaDB.QueryAST.DML
             var left_clone = left.Clone();
             var right_clone = right.Clone();
 
-            var clone = new Multiplication(left_clone, right_clone, ColumnName);
+            var clone = new Multiplication(left_clone, right_clone, ColumnName.id);
 
             return clone;
         }
@@ -169,11 +169,11 @@ namespace PrismaDB.QueryAST.DML
             sb.Append(right.ToString());
             sb.Append(" ) ");
 
-            if (ColumnName.Length > 0)
+            if (ColumnName.id.Length > 0)
             {
-                sb.Append("AS [");
-                sb.Append(ColumnName);
-                sb.Append("] ");
+                sb.Append("AS ");
+                sb.Append(ColumnName.ToString());
+                sb.Append(" ");
             }
 
             return sb.ToString();
@@ -223,7 +223,7 @@ namespace PrismaDB.QueryAST.DML
             N = (Expression)value[2];
 
             if (value.Length > 3)
-                ColumnName = (string)value[3];
+                ColumnName = new Identifier((string)value[3]);
         }
 
         public override Expression Clone()
@@ -232,7 +232,7 @@ namespace PrismaDB.QueryAST.DML
             var right_clone = right.Clone();
             var N_clone = N.Clone();
 
-            var clone = new PaillierAddition(left_clone, right_clone, N_clone, ColumnName);
+            var clone = new PaillierAddition(left_clone, right_clone, N_clone, ColumnName.id);
 
             return clone;
         }
@@ -256,11 +256,11 @@ namespace PrismaDB.QueryAST.DML
             sb.Append(" , ");
             sb.Append(N.ToString());
 
-            if (ColumnName.Length > 0)
+            if (ColumnName.id.Length > 0)
             {
-                sb.Append(" ) AS [");
-                sb.Append(ColumnName);
-                sb.Append("] ");
+                sb.Append(" ) AS ");
+                sb.Append(ColumnName.ToString());
+                sb.Append(" ");
             }
             else
                 sb.Append(" ) ");
@@ -314,7 +314,7 @@ namespace PrismaDB.QueryAST.DML
             P = (Expression)value[2];
 
             if (value.Length > 3)
-                ColumnName = (string)value[3];
+                ColumnName = new Identifier((string)value[3]);
         }
 
         public override Expression Clone()
@@ -323,7 +323,7 @@ namespace PrismaDB.QueryAST.DML
             var right_clone = right.Clone();
             var P_clone = P.Clone();
 
-            var clone = new ElGamalMultiplication(left_clone, right_clone, P_clone, ColumnName);
+            var clone = new ElGamalMultiplication(left_clone, right_clone, P_clone, ColumnName.id);
 
             return clone;
         }
@@ -347,11 +347,11 @@ namespace PrismaDB.QueryAST.DML
             sb.Append(" , ");
             sb.Append(P.ToString());
 
-            if (ColumnName.Length > 0)
+            if (ColumnName.id.Length > 0)
             {
-                sb.Append(" ) AS [");
-                sb.Append(ColumnName);
-                sb.Append("] ");
+                sb.Append(" ) AS ");
+                sb.Append(ColumnName.ToString());
+                sb.Append(" ");
             }
             else
                 sb.Append(" ) ");

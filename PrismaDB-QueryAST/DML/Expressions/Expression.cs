@@ -5,7 +5,7 @@ namespace PrismaDB.QueryAST.DML
 {
     public abstract class Expression
     {
-        public string ColumnName;
+        public Identifier ColumnName;
 
         public Expression Parent;
 

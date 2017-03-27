@@ -29,12 +29,12 @@ namespace PrismaDB.QueryAST.DML
             intvalue = (Int32)value[0];
 
             if (value.Length > 1)
-                ColumnName = (string)value[1];
+                ColumnName = new Identifier((string)value[1]);
         }
 
         public override Expression Clone()
         {
-            var clone = new IntConstant(intvalue, ColumnName);
+            var clone = new IntConstant(intvalue, ColumnName.id);
 
             return clone;
         }
@@ -51,14 +51,13 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            if (ColumnName.Length == 0)
+            if (ColumnName.id.Length == 0)
                 return intvalue.ToString();
 
             var sb = new StringBuilder(intvalue.ToString());
 
-            sb.Append(" AS [");
-            sb.Append(ColumnName);
-            sb.Append("]");
+            sb.Append(" AS ");
+            sb.Append(ColumnName.ToString());
 
             return sb.ToString();
         }
@@ -101,12 +100,12 @@ namespace PrismaDB.QueryAST.DML
             strvalue = (string)((string)value[0]).Clone();
 
             if (value.Length > 1)
-                ColumnName = (string)value[1];
+                ColumnName = new Identifier((string)value[1]);
         }
 
         public override Expression Clone()
         {
-            var clone = new StringConstant(strvalue, ColumnName);
+            var clone = new StringConstant(strvalue, ColumnName.id);
 
             return clone;
         }
@@ -127,11 +126,10 @@ namespace PrismaDB.QueryAST.DML
             sb.Append(strvalue);
             sb.Append("'");
 
-            if (ColumnName.Length > 0)
+            if (ColumnName.id.Length > 0)
             {
-                sb.Append(" AS [");
-                sb.Append(ColumnName);
-                sb.Append("]");
+                sb.Append(" AS ");
+                sb.Append(ColumnName.ToString());
             }
 
             return sb.ToString();
@@ -175,12 +173,12 @@ namespace PrismaDB.QueryAST.DML
             binvalue = (byte[])((byte[])value[0]).Clone();
 
             if (value.Length > 1)
-                ColumnName = (string)value[1];
+                ColumnName = new Identifier((string)value[1]);
         }
 
         public override Expression Clone()
         {
-            var clone = new BinaryConstant(binvalue, ColumnName);
+            var clone = new BinaryConstant(binvalue, ColumnName.id);
 
             return clone;
         }
@@ -200,11 +198,10 @@ namespace PrismaDB.QueryAST.DML
             var sb = new StringBuilder("0x");
             sb.Append(Commons.Helper.ByteArrayToHex(binvalue));
 
-            if (ColumnName.Length > 0)
+            if (ColumnName.id.Length > 0)
             {
-                sb.Append(" AS [");
-                sb.Append(ColumnName);
-                sb.Append("]");
+                sb.Append(" AS ");
+                sb.Append(ColumnName.ToString());
             }
 
             return sb.ToString();
