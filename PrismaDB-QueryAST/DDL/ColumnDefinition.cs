@@ -88,5 +88,29 @@ namespace PrismaDB.QueryAST.DDL
 
             return sb.ToString();
         }
+
+        public override bool Equals(object other)
+        {
+            var otherCD = other as ColumnDefinition;
+            if (otherCD == null) return false;
+
+            return (ColumnName.Equals(otherCD.ColumnName))
+                && (DataType == otherCD.DataType)
+                && (EncryptionFlags == otherCD.EncryptionFlags)
+                && (Length == otherCD.Length)
+                && (Nullable == otherCD.Nullable)
+                && (isRowId == otherCD.isRowId);
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked (
+                ColumnName.GetHashCode() *
+                DataType.GetHashCode() *
+                EncryptionFlags.GetHashCode() *
+                (Length == null ? 1 : Length.GetHashCode()) *
+                (1 + Nullable.GetHashCode()) *
+                (1 + isRowId.GetHashCode()));
+        }
     }
 }
