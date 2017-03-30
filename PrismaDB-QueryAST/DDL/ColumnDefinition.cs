@@ -30,6 +30,10 @@ namespace PrismaDB.QueryAST.DDL
         public bool Nullable;
         public bool isRowId;
 
+        public ColumnDefinition()
+            : this("")
+        { }
+
         public ColumnDefinition(string columnName,
                                 SQLDataType dataType = SQLDataType.INT,
                                 int? length = null,
@@ -44,7 +48,7 @@ namespace PrismaDB.QueryAST.DDL
                    encryptionFlags)
         { }
 
-        public ColumnDefinition(Identifier column = null,
+        public ColumnDefinition(Identifier column,
                                 SQLDataType dataType = SQLDataType.INT,
                                 int? length = null,
                                 bool nullable = true,
