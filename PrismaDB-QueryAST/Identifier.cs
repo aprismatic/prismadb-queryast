@@ -33,7 +33,7 @@ namespace PrismaDB.QueryAST
 
         public override int GetHashCode()
         {
-            return id.GetHashCode();
+            return id.ToLowerInvariant().GetHashCode();
         }
     }
 }

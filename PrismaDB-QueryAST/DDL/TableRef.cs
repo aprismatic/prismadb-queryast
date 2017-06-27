@@ -37,7 +37,7 @@ namespace PrismaDB.QueryAST
         public override int GetHashCode()
         {
             return unchecked(
-                Table.id.GetHashCode() *
+                Table.GetHashCode() *
                 (IsTempTable.GetHashCode() + 1));
         }
     }
