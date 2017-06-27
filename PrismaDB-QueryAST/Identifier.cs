@@ -1,4 +1,6 @@
-﻿namespace PrismaDB.QueryAST
+﻿using System;
+
+namespace PrismaDB.QueryAST
 {
     public class Identifier
     {
@@ -26,7 +28,7 @@
             var otherId = other as Identifier;
             if (otherId == null) return false;
 
-            return this.id == otherId.id;
+            return String.Equals(id, otherId.id, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public override int GetHashCode()

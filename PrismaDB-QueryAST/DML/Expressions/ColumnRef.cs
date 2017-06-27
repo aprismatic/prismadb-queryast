@@ -83,8 +83,8 @@ namespace PrismaDB.QueryAST.DML
             var otherCR = other as ColumnRef;
             if (otherCR == null) return false;
 
-            return (this.ColumnName.Equals(otherCR.ColumnName))
-                && (this.Table.Equals(otherCR.Table));
+            return ColumnName.Equals(otherCR.ColumnName)
+                && Table.Equals(otherCR.Table);
         }
 
         public override int GetHashCode()

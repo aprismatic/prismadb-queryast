@@ -1,4 +1,6 @@
-﻿namespace PrismaDB.QueryAST
+﻿using System;
+
+namespace PrismaDB.QueryAST
 {
     public class TableRef
     {
@@ -28,8 +30,8 @@
             var otherTR = other as TableRef;
             if (otherTR == null) return false;
 
-            return (this.Table.id == otherTR.Table.id)
-                && (this.IsTempTable == otherTR.IsTempTable);
+            return String.Equals(Table.id, otherTR.Table.id, StringComparison.InvariantCultureIgnoreCase)
+                && IsTempTable == otherTR.IsTempTable;
         }
 
         public override int GetHashCode()
