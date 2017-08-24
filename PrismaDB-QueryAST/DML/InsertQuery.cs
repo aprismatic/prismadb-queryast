@@ -37,22 +37,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            var sb = new StringBuilder("INSERT INTO ");
-
-            sb.Append(Into.ToString());
-            sb.Append(" ( ");
-            sb.Append(String.Join(" , ", Columns));
-            sb.Append(" ) VALUES ");
-            foreach (var valuesList in Values)
-            {
-                sb.Append(" ( ");
-                sb.Append(String.Join(" , ", valuesList));
-                sb.Append(" ) ");
-                if (!valuesList.Equals(Values.Last()))
-                    sb.Append(", ");
-            }
-
-            return sb.ToString();
+            return DialectResolver.Dialect.InsertQueryToString(this);
         }
     }
 }

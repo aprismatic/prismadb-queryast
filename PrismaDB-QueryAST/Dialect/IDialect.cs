@@ -26,5 +26,7 @@ namespace PrismaDB.QueryAST
         string BooleanTrueToString(BooleanTrue q);
         string BooleanInToString(BooleanIn q);
         string BooleanEqualsToString(BooleanEquals q);
+        string ConjunctiveNormalFormToString(ConjunctiveNormalForm q);
+        string DisjunctionToString(Disjunction q);
     }
 }

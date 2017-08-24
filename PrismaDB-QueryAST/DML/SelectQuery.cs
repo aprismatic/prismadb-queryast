@@ -32,19 +32,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            var sb = new StringBuilder("SELECT ");
-
-            sb.Append(String.Join(", ", SelectExpressions));
-
-            if (FromTables.Count != 0)
-            {
-                sb.Append(" FROM ");
-                sb.Append(String.Join(", ", FromTables));
-            }
-
-            sb.Append(Where.ToString());
-
-            return sb.ToString();
+            return DialectResolver.Dialect.SelectQueryToString(this);
         }
     }
 }

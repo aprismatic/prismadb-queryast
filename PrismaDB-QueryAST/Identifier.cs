@@ -18,9 +18,7 @@ namespace PrismaDB.QueryAST
 
         public override string ToString()
         {
-            return id.Length == 0
-                ? ""
-                : "[" + id + "]";
+            return DialectResolver.Dialect.IdentifierToString(this);
         }
 
         public override bool Equals(object other)

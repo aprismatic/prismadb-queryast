@@ -27,7 +27,7 @@ namespace PrismaDB.QueryAST.DML
         public override Expression Clone() { return new BooleanTrue(NOT); }
         public override object Eval(DataRow r) { return !NOT; }
         public override List<ColumnRef> GetColumns() { return new List<ColumnRef>(); }
-        public override string ToString() { return NOT ? "(1<>1)" : "(1=1)"; }
+        public override string ToString() { return DialectResolver.Dialect.BooleanTrueToString(this); }
         public override bool Equals(object other) { return (ColumnName == (other as BooleanTrue)?.ColumnName)
                                                         && (NOT == (other as BooleanTrue)?.NOT); }
         public override int GetHashCode() { return unchecked(ColumnName.GetHashCode() * (NOT.GetHashCode() + 1)); }
@@ -91,27 +91,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            if (InValues.Count == 0)
-            {
-                var BoolFalse = new BooleanTrue(true);
-                return BoolFalse.ToString();
-            }
-
-            var sb = new StringBuilder();
-
-            if (NOT)
-                sb.Append(" NOT ");
-
-            sb.Append(" ( ");
-
-            sb.Append(Column.ToString());
-            sb.Append(" IN ( ");
-            sb.Append(String.Join(" , ", InValues));
-            sb.Append(" ) ");
-
-            sb.Append(" ) ");
-
-            return sb.ToString();
+            return DialectResolver.Dialect.BooleanInToString(this);
         }
 
         public override bool Equals(object other)
@@ -180,18 +160,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            var sb = new StringBuilder();
-
-            if (NOT)
-                sb.Append(" NOT");
-
-            sb.Append(" ( ");
-            sb.Append(left.ToString());
-            sb.Append(" = ");
-            sb.Append(right.ToString());
-            sb.Append(" ) ");
-
-            return sb.ToString();
+            return DialectResolver.Dialect.BooleanEqualsToString(this);
         }
 
         public override bool Equals(object other)

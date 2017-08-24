@@ -20,9 +20,7 @@ namespace PrismaDB.QueryAST
 
         public override string ToString()
         {
-            return Table.id.Length > 0
-                ? "[" + (IsTempTable ? "#" : "") + Table.id + "]"
-                : "";
+            return DialectResolver.Dialect.TableRefToString(this);
         }
 
         public override bool Equals(object other)

@@ -65,28 +65,7 @@ namespace PrismaDB.QueryAST.DDL
 
         public override string ToString()
         {
-            var sb = new StringBuilder();
-
-            sb.Append(ColumnName.ToString());
-            sb.Append(" ");
-            sb.Append(DataType.ToString());
-
-            if (Length != null)
-            {
-                sb.Append("(");
-                sb.Append(Length < 0 ? "MAX" : Length.ToString());
-                sb.Append(")");
-            }
-
-            sb.Append(" ");
-            if (!Nullable)
-                sb.Append("NOT ");
-            sb.Append("NULL");
-
-            if (isRowId)
-                sb.Append(" DEFAULT NEWID()");
-
-            return sb.ToString();
+            return DialectResolver.Dialect.ColumnDefinitionToString(this);
         }
 
         public override bool Equals(object other)

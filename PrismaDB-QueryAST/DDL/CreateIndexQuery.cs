@@ -38,18 +38,7 @@ namespace PrismaDB.QueryAST.DDL
 
         public override string ToString()
         {
-            var sb = new StringBuilder("CREATE ");
-
-            sb.Append(Type.ToString());
-            sb.Append(" INDEX ");
-            sb.Append(Name.ToString());
-            sb.Append(" ON ");
-            sb.Append(OnTable.ToString());
-            sb.Append(" ( ");
-            sb.Append(String.Join(" , ", OnColumns.Select(x => x.ToString())));
-            sb.Append(" ) ");
-
-            return sb.ToString();
+            return DialectResolver.Dialect.CreateIndexQueryToString(this);
         }
     }
 }

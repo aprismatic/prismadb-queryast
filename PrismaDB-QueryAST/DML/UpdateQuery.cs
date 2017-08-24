@@ -33,27 +33,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            var sb = new StringBuilder("UPDATE ");
-
-            sb.Append(UpdateTable.ToString());
-
-            sb.Append(" SET ");
-
-            var first = true;
-            foreach (var pr in UpdateExpressions)
-            {
-                if (!first)
-                    sb.Append(" , ");
-                first = false;
-                sb.Append(pr.First.ToString());
-                sb.Append(" = ");
-                sb.Append(pr.Second.ToString());
-            }
-            sb.Append(" ");
-
-            sb.Append(Where.ToString());
-
-            return sb.ToString();
+            return DialectResolver.Dialect.UpdateQueryToString(this);
         }
     }
 }

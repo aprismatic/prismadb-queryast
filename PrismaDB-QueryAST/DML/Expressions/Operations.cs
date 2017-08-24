@@ -79,20 +79,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            var sb = new StringBuilder(" ( ");
-            sb.Append(left.ToString());
-            sb.Append(" + ");
-            sb.Append(right.ToString());
-            sb.Append(" ) ");
-
-            if (ColumnName.id.Length > 0)
-            {
-                sb.Append("AS ");
-                sb.Append(ColumnName.ToString());
-                sb.Append(" ");
-            }
-
-            return sb.ToString();
+            return DialectResolver.Dialect.AdditionToString(this);
         }
 
         public override bool Equals(object other)
@@ -163,20 +150,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            var sb = new StringBuilder(" ( ");
-            sb.Append(left.ToString());
-            sb.Append(" * ");
-            sb.Append(right.ToString());
-            sb.Append(" ) ");
-
-            if (ColumnName.id.Length > 0)
-            {
-                sb.Append("AS ");
-                sb.Append(ColumnName.ToString());
-                sb.Append(" ");
-            }
-
-            return sb.ToString();
+            return DialectResolver.Dialect.MultiplicationToString(this);
         }
 
         public override bool Equals(object other)
@@ -249,23 +223,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            var sb = new StringBuilder("[dbo].[PaillierAddition] ( ");
-            sb.Append(left.ToString());
-            sb.Append(" , ");
-            sb.Append(right.ToString());
-            sb.Append(" , ");
-            sb.Append(N.ToString());
-
-            if (ColumnName.id.Length > 0)
-            {
-                sb.Append(" ) AS ");
-                sb.Append(ColumnName.ToString());
-                sb.Append(" ");
-            }
-            else
-                sb.Append(" ) ");
-
-            return sb.ToString();
+            return DialectResolver.Dialect.PaillierAdditionToString(this);
         }
 
         public override bool Equals(object other)
@@ -340,23 +298,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            var sb = new StringBuilder("[dbo].[ElGamalMultiplication] ( ");
-            sb.Append(left.ToString());
-            sb.Append(" , ");
-            sb.Append(right.ToString());
-            sb.Append(" , ");
-            sb.Append(P.ToString());
-
-            if (ColumnName.id.Length > 0)
-            {
-                sb.Append(" ) AS ");
-                sb.Append(ColumnName.ToString());
-                sb.Append(" ");
-            }
-            else
-                sb.Append(" ) ");
-
-            return sb.ToString();
+            return DialectResolver.Dialect.ElGamalMultiplicationToString(this);
         }
 
         public override bool Equals(object other)

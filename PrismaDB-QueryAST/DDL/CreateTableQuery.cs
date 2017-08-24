@@ -26,14 +26,7 @@ namespace PrismaDB.QueryAST.DDL
 
         public override string ToString()
         {
-            var sb = new StringBuilder("CREATE TABLE ");
-            sb.Append(TableName.ToString());
-
-            sb.Append(" ( ");
-            sb.Append(String.Join(" , ", ColumnDefinitions.Select(x => x.ToString())));
-            sb.Append(" ) ");
-
-            return sb.ToString();
+            return DialectResolver.Dialect.CreateTableQueryToString(this);
         }
     }
 }

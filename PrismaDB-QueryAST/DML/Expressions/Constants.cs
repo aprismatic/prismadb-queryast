@@ -51,15 +51,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            if (ColumnName.id.Length == 0)
-                return intvalue.ToString();
-
-            var sb = new StringBuilder(intvalue.ToString());
-
-            sb.Append(" AS ");
-            sb.Append(ColumnName.ToString());
-
-            return sb.ToString();
+            return DialectResolver.Dialect.IntConstantToString(this);
         }
 
         public override bool Equals(object other)
@@ -122,17 +114,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            var sb = new StringBuilder("'");
-            sb.Append(strvalue);
-            sb.Append("'");
-
-            if (ColumnName.id.Length > 0)
-            {
-                sb.Append(" AS ");
-                sb.Append(ColumnName.ToString());
-            }
-
-            return sb.ToString();
+            return DialectResolver.Dialect.StringConstantToString(this);
         }
 
         public override bool Equals(object other)
@@ -195,16 +177,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            var sb = new StringBuilder("0x");
-            sb.Append(Commons.Helper.ByteArrayToHex(binvalue));
-
-            if (ColumnName.id.Length > 0)
-            {
-                sb.Append(" AS ");
-                sb.Append(ColumnName.ToString());
-            }
-
-            return sb.ToString();
+            return DialectResolver.Dialect.BinaryConstantToString(this);
         }
 
         public override bool Equals(object other)

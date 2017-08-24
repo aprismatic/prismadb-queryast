@@ -66,16 +66,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            var tblnm = Table.ToString();
-
-            var sb = new StringBuilder(tblnm);
-
-            if (sb.Length > 0)
-                sb.Append(".");
-
-            sb.Append(ColumnName.ToString());
-
-            return sb.ToString();
+            return DialectResolver.Dialect.ColumnRefToString(this);
         }
 
         public override bool Equals(object other)

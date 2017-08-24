@@ -21,15 +21,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            var sb = new StringBuilder("DELETE FROM ");
-
-            sb.Append(DeleteTable.ToString());
-
-            sb.Append(" ");
-
-            sb.Append(Where.ToString());
-
-            return sb.ToString();
+            return DialectResolver.Dialect.DeleteQueryToString(this);
         }
     }
 }

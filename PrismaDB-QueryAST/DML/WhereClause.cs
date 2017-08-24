@@ -30,9 +30,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            if (CNF.IsEmpty())
-                return "";
-            return " WHERE " + CNF.ToString();
+            return DialectResolver.Dialect.WhereClauseToString(this);
         }
 
         public bool CheckDataRow(DataRow r)
@@ -84,13 +82,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            var sb = new StringBuilder(" ( ");
-
-            sb.Append(String.Join(" ) AND ( ", AND));
-
-            sb.Append(" ) ");
-
-            return sb.ToString();
+            return DialectResolver.Dialect.ConjunctiveNormalFormToString(this);
         }
     }
 
@@ -120,13 +112,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            var sb = new StringBuilder(" ( ");
-
-            sb.Append(String.Join(" ) OR ( ", OR));
-
-            sb.Append(" ) ");
-
-            return sb.ToString();
+            return DialectResolver.Dialect.DisjunctionToString(this);
         }
     }
 }
