@@ -1,0 +1,43 @@
+---
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+branches:
+  only:
+    - master
+build:
+  publish_nuget: true
+  publish_nuget_symbols: true
+  verbosity: minimal
+before_build:
+  - nuget restore
+configuration: Release
+image: "Visual Studio 2017 Preview"
+nuget:
+  disable_publish_on_pr: true
+cache:
+  - packages
+environment:
+  AppVeyorAPIToken:
+    secure: GvygCCndEp8eiXvItooIyglWYnyfUvg4YNyaufw3N3A=
+  AppVeyorGlobalAPIToken:
+    secure: XaWtuymf7dtXgjvEdnxXZVuIGVwMYUqOcE3dl3f3JzA=
+version: "0.1.{build}"
+init:
+  - ps: |
+        if ( $env:APPVEYOR_REPO_TAG -And `
+            ($env:APPVEYOR_REPO_TAG_NAME -match '^v\d+\.\d+$') -And `
+            ($env:APPVEYOR_REPO_BRANCH -eq 'master') -And `
+            ($env:APPVEYOR_PULL_REQUEST_NUMBER -eq $null) ) # new version release
+        {
+          Invoke-RestMethod -Uri 'https://ci.appveyor.com/project/bazzilic/prismadb-queryast/settings/build-number' `
+                            -Headers @{ "Authorization" = "Bearer ${env:AppVeyorAPIToken}" ; "Content-type" = "application/json" } `
+                            -Method Put `
+                            -Body '{ nextBuildNumber: 1 }'
+          $env:APPVEYOR_REPO_TAG_NAME -match '^v(\d+)\.(\d+)$'
+          [int]$major = $Matches[1]/1
+          [int]$minor = $Matches[2]/1
+          Update-AppVeyorBuild -Version "$major.$minor.0"
+        }
