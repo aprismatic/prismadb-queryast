@@ -4,6 +4,7 @@ dotnet_csproj:
   file: '**\*.csproj'
   version: '{version}'
   package_version: '{version}'
+skip_tags: true
 branches:
   only:
     - master
@@ -12,9 +13,10 @@ build:
   publish_nuget_symbols: true
   verbosity: minimal
 before_build:
+  - nuget update -self
   - nuget restore
 configuration: Release
-image: "Visual Studio 2017 Preview"
+image: "Visual Studio 2017"
 nuget:
   disable_publish_on_pr: true
 cache:
@@ -27,8 +29,7 @@ environment:
 version: "0.1.{build}"
 init:
   - ps: |
-        if ( $env:APPVEYOR_REPO_TAG -And `
-            ($env:APPVEYOR_REPO_TAG_NAME -match '^v\d+\.\d+$') -And `
+        if (($env:APPVEYOR_REPO_COMMIT_MESSAGE -match '^v\d+\.\d+$') -And `
             ($env:APPVEYOR_REPO_BRANCH -eq 'master') -And `
             ($env:APPVEYOR_PULL_REQUEST_NUMBER -eq $null) ) # new version release
         {
