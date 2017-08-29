@@ -8,6 +8,6 @@
     <Authors>Vasily Sidorov (bazzilic)</Authors>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="PrismaDB-Commons" Version="0.1.4" />
+    <PackageReference Include="PrismaDB-Commons" Version="0.1.6" />
   </ItemGroup>
 </Project>
