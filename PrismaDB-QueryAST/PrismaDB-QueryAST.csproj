@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageVersion>0.1</PackageVersion>
+    <Version>0.1</Version>
     <Description>A class library that contains basic blocks to create AST for SQL queries.</Description>
     <Company>Nanyang Technological Unviersity</Company>
     <Product>PrismaDB-QueryAST</Product>
     <Authors>Vasily Sidorov (bazzilic)</Authors>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="PrismaDB-Commons" Version="0.1.6" />
+    <PackageReference Include="PrismaDB-Commons" Version="0.1.7" />
   </ItemGroup>
 </Project>
