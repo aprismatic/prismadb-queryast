@@ -6,14 +6,23 @@ using PrismaDB.QueryAST.DML;
 
 namespace PrismaDB.QueryAST.DDL
 {
+    public enum MySQLIndexClass
+    {
+        MySQL_UNIQUE,
+        MySQL_FULLTEXT,
+        MySQL_SPATIAL
+    }
+
     public enum IndexType
     {
-        CLUSTERED,
-        NONCLUSTERED,
+        MSSQL_CLUSTERED,
+        MSSQL_NONCLUSTERED,
+        MySQL_BTREE
     }
 
     public class CreateIndexQuery : DDLQuery
     {
+        public MySQLIndexClass IndexClass;
         public IndexType Type;
         public TableRef OnTable;
         public List<ColumnRef> OnColumns;

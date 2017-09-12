@@ -6,7 +6,7 @@ namespace PrismaDB.QueryAST.DDL
     public enum SQLDataType
     {
         INT,
-        UNIQUEIDENTIFIER,
+        MSSQL_UNIQUEIDENTIFIER,
         VARBINARY,
         VARCHAR
     }
