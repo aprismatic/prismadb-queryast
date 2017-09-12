@@ -30,7 +30,7 @@ namespace PrismaDB.QueryAST
         string DisjunctionToString(Disjunction q);
 
         string SQLDataTypeToString(SQLDataType q);
-        string MySQLIndexClassToString(MySQLIndexClass q);
+        string IndexModifierToString(IndexModifier q);
         string IndexTypeToString(IndexType q);
     }
 }
