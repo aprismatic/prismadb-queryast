@@ -1,8 +1,6 @@
-﻿using System;
+﻿using PrismaDB.QueryAST.DML;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using PrismaDB.QueryAST.DML;
 
 namespace PrismaDB.QueryAST.DDL
 {
@@ -26,27 +24,28 @@ namespace PrismaDB.QueryAST.DDL
 
     public class CreateIndexQuery : DDLQuery
     {
-        public IndexModifier IndexClass;
+        public IndexModifier Modifier;
         public IndexType Type;
         public TableRef OnTable;
         public List<ColumnRef> OnColumns;
         public Identifier Name;
 
-        public CreateIndexQuery(IndexType type, string name, TableRef table, params ColumnRef[] columns)
+        public CreateIndexQuery(string name, TableRef table, IndexType type = IndexType.DEFAULT, IndexModifier modifier = IndexModifier.DEFAULT, params ColumnRef[] columns)
         {
-            Type = type;
             Name = new Identifier(name);
             OnTable = table.Clone();
+            Type = type;
+            Modifier = modifier;
             OnColumns = new List<ColumnRef>(columns.Length);
             OnColumns.AddRange(columns.Select(x => x.Clone() as ColumnRef));
         }
 
-        public CreateIndexQuery(IndexType type, string name, string table, params ColumnRef[] columns)
-            : this(type, name, new TableRef(table), columns)
+        public CreateIndexQuery(string name, string table, IndexType type = IndexType.DEFAULT, IndexModifier modifier = IndexModifier.DEFAULT, params ColumnRef[] columns)
+            : this(name, new TableRef(table), type, modifier, columns)
         { }
 
         public CreateIndexQuery(CreateIndexQuery other)
-            : this(other.Type, other.Name.id, other.OnTable, other.OnColumns.ToArray())
+            : this(other.Name.id, other.OnTable, other.Type, other.Modifier, other.OnColumns.ToArray())
         { }
 
         public override string ToString()
