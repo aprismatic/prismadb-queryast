@@ -8,7 +8,8 @@ namespace PrismaDB.QueryAST.DDL
         INT,
         MSSQL_UNIQUEIDENTIFIER,
         VARBINARY,
-        VARCHAR
+        VARCHAR,
+        TEXT
     }
 
     [Flags]
