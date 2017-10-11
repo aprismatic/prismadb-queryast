@@ -6,21 +6,15 @@ namespace PrismaDB.QueryAST.DML
     public class Function : Expression
     {
         public string FunctionName;
-        public List<Constant> Parameters;
 
         public Function(string functionName)
         {
-            setValue(functionName, new List<Constant>);
-        }
-
-        public Function(string functionName, List<Constant> parameters)
-        {
-            setValue(functionName, parameters);
+            setValue(functionName);
         }
 
         public override Expression Clone()
         {
-            var clone = new Function(FunctionName, new List<Constant>(Parameters));
+            var clone = new Function(FunctionName);
 
             return clone;
         }
@@ -30,8 +24,7 @@ namespace PrismaDB.QueryAST.DML
             var otherF = other as Function;
             if (otherF == null) return false;
 
-            return FunctionName.Equals(otherF.FunctionName)
-                && Parameters.Equals(otherF.Parameters);
+            return FunctionName.Equals(otherF.FunctionName);
         }
 
         public override object Eval(DataRow r)
@@ -47,17 +40,13 @@ namespace PrismaDB.QueryAST.DML
         public override int GetHashCode()
         {
             return unchecked(
-                FunctionName.GetHashCode() *
-                Parameters.GetHashCode());
+                FunctionName.GetHashCode());
         }
 
         public override void setValue(params object[] value)
         {
             Parent = null;
             FunctionName = (string)value[0];
-
-            if (value.Length > 1)
-                Parameters = (List<Constant>)value[1];
         }
 
         public override string ToString()
