@@ -28,6 +28,7 @@ namespace PrismaDB.QueryAST
         string BooleanEqualsToString(BooleanEquals q);
         string ConjunctiveNormalFormToString(ConjunctiveNormalForm q);
         string DisjunctionToString(Disjunction q);
+        string FunctionToString(Function q);
 
         string SQLDataTypeToString(SQLDataType q);
         string IndexModifierToString(IndexModifier q);
