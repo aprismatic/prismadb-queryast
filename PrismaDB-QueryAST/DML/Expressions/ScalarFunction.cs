@@ -31,9 +31,13 @@ namespace PrismaDB.QueryAST.DML
             var otherF = other as ScalarFunction;
             if (otherF == null) return false;
 
-            return FunctionName.Equals(otherF.FunctionName)
-                && Enumerable.SequenceEqual(Parameters.OrderBy(t => t),
-                otherF.Parameters.OrderBy(t => t));
+            if (Parameters.Count == 0 && otherF.Parameters.Count == 0)
+                return FunctionName.Equals(otherF.FunctionName);
+            else
+                return FunctionName.Equals(otherF.FunctionName)
+                    && ((Parameters.Count == otherF.Parameters.Count)
+                    && Enumerable.Zip(Parameters, otherF.Parameters, (x, y)
+                    => x.Equals(y)).Aggregate((x, y) => x && y));
         }
 
         public override object Eval(DataRow r)
