@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -96,8 +95,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override bool Equals(object other)
         {
-            var otherBI = other as BooleanIn;
-            if (otherBI == null) return false;
+            if (!(other is BooleanIn otherBI)) return false;
 
             return (this.NOT != otherBI.NOT)
                 && (this.ColumnName == otherBI.ColumnName)
@@ -165,8 +163,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override bool Equals(object other)
         {
-            var otherBE = other as BooleanEquals;
-            if (otherBE == null) return false;
+            if (!(other is BooleanEquals otherBE)) return false;
 
             return (this.NOT != otherBE.NOT)
                 && (this.ColumnName == otherBE.ColumnName)

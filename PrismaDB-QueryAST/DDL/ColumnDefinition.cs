@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 
 namespace PrismaDB.QueryAST.DDL
 {
@@ -71,8 +70,7 @@ namespace PrismaDB.QueryAST.DDL
 
         public override bool Equals(object other)
         {
-            var otherCD = other as ColumnDefinition;
-            if (otherCD == null) return false;
+            if (!(other is ColumnDefinition otherCD)) return false;
 
             return (ColumnName.Equals(otherCD.ColumnName))
                 && (DataType == otherCD.DataType)

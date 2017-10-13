@@ -25,8 +25,7 @@ namespace PrismaDB.QueryAST
 
         public override bool Equals(object other)
         {
-            var otherTR = other as TableRef;
-            if (otherTR == null) return false;
+            if (!(other is TableRef otherTR)) return false;
 
             return String.Equals(Table.id, otherTR.Table.id, StringComparison.InvariantCultureIgnoreCase)
                 && IsTempTable == otherTR.IsTempTable;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -84,8 +83,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override bool Equals(object other)
         {
-            var otherA = other as Addition;
-            if (otherA == null) return false;
+            if (!(other is Addition otherA)) return false;
 
             return (this.ColumnName == otherA.ColumnName)
                 && (this.left.Equals(otherA.left))
@@ -155,8 +153,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override bool Equals(object other)
         {
-            var otherM = other as Multiplication;
-            if (otherM == null) return false;
+            if (!(other is Multiplication otherM)) return false;
 
             return (this.ColumnName == otherM.ColumnName)
                 && (this.left.Equals(otherM.left))
@@ -228,8 +225,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override bool Equals(object other)
         {
-            var otherPA = other as PaillierAddition;
-            if (otherPA == null) return false;
+            if (!(other is PaillierAddition otherPA)) return false;
 
             return (this.ColumnName == otherPA.ColumnName)
                 && (this.left.Equals(otherPA.left))
@@ -303,8 +299,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override bool Equals(object other)
         {
-            var otherEGM = other as ElGamalMultiplication;
-            if (otherEGM == null) return false;
+            if (!(other is ElGamalMultiplication otherEGM)) return false;
 
             return (this.ColumnName == otherEGM.ColumnName)
                 && (this.left.Equals(otherEGM.left))

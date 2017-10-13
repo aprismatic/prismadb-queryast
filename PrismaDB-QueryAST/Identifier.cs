@@ -23,8 +23,7 @@ namespace PrismaDB.QueryAST
 
         public override bool Equals(object other)
         {
-            var otherId = other as Identifier;
-            if (otherId == null) return false;
+            if (!(other is Identifier otherId)) return false;
 
             return String.Equals(id, otherId.id, StringComparison.InvariantCultureIgnoreCase);
         }
