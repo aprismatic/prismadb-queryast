@@ -45,6 +45,8 @@ namespace PrismaDB.QueryAST.DML
 
             if (!FunctionName.Equals(otherF.FunctionName)) return false;
 
+            if (Parameters.Count == 0) return true;
+
             return Parameters.Zip(otherF.Parameters, (x, y) => x.Equals(y)).Aggregate((x, y) => x && y);
         }
 
