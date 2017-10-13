@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -71,8 +70,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override bool Equals(object other)
         {
-            var otherCR = other as ColumnRef;
-            if (otherCR == null) return false;
+            if (!(other is ColumnRef otherCR)) return false;
 
             return ColumnName.Equals(otherCR.ColumnName)
                 && Table.Equals(otherCR.Table);

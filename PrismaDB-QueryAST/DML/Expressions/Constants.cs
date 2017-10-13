@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -56,8 +55,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override bool Equals(object other)
         {
-            var otherIC = other as IntConstant;
-            if (otherIC == null) return false;
+            if (!(other is IntConstant otherIC)) return false;
 
             return (this.ColumnName == otherIC.ColumnName)
                 && (this.intvalue == otherIC.intvalue);
@@ -119,8 +117,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override bool Equals(object other)
         {
-            var otherSC = other as StringConstant;
-            if (otherSC == null) return false;
+            if (!(other is StringConstant otherSC)) return false;
 
             return (this.ColumnName == otherSC.ColumnName)
                 && (this.strvalue == otherSC.strvalue);
@@ -182,8 +179,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override bool Equals(object other)
         {
-            var otherBC = other as BinaryConstant;
-            if (otherBC == null) return false;
+            if (!(other is BinaryConstant otherBC)) return false;
 
             return (this.ColumnName == otherBC.ColumnName)
                 && (this.binvalue.SequenceEqual(otherBC.binvalue));

@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace PrismaDB.QueryAST.DML
+﻿namespace PrismaDB.QueryAST.DML
 {
     public class DeleteQuery : DMLQuery
     {
