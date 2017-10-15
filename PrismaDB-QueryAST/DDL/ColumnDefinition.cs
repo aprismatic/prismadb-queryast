@@ -11,6 +11,14 @@ namespace PrismaDB.QueryAST.DDL
         TEXT
     }
 
+    public static class SQLDataTypeExtensions
+    {
+        public static string ToString(this SQLDataType code)
+        {
+            return DialectResolver.Dialect.SQLDataTypeToString(code);
+        }
+    }
+
     [Flags]
     public enum ColumnEncryptionFlags
     {
