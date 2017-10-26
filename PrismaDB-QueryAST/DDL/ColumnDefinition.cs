@@ -8,7 +8,8 @@ namespace PrismaDB.QueryAST.DDL
         MSSQL_UNIQUEIDENTIFIER,
         VARBINARY,
         VARCHAR,
-        TEXT
+        TEXT,
+        DATETIME
     }
 
     [Flags]
