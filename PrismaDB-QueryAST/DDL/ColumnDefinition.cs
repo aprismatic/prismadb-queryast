@@ -16,7 +16,7 @@ namespace PrismaDB.QueryAST.DDL
     public enum ColumnEncryptionFlags
     {
         None = 0,
-        Text = 1,
+        Store = 1,
         IntegerAddition = 2,
         IntegerMultiplication = 4,
         Search = 8
