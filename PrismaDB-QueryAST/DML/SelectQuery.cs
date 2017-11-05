@@ -7,12 +7,14 @@ namespace PrismaDB.QueryAST.DML
         public List<Expression> SelectExpressions;
         public List<TableRef> FromTables;
         public WhereClause Where;
+        public uint? Limit;
 
         public SelectQuery()
         {
             SelectExpressions = new List<Expression>();
             FromTables = new List<TableRef>();
             Where = new WhereClause();
+            Limit = null;
         }
 
         public SelectQuery(SelectQuery other)
@@ -26,6 +28,8 @@ namespace PrismaDB.QueryAST.DML
                 FromTables.Add(tref.Clone());
 
             Where = new WhereClause(other.Where);
+
+            Limit = other.Limit;
         }
 
         public override string ToString()
