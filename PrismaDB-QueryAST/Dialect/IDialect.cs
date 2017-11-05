@@ -33,5 +33,6 @@ namespace PrismaDB.QueryAST
         string SQLDataTypeToString(SQLDataType q);
         string IndexModifierToString(IndexModifier q);
         string IndexTypeToString(IndexType q);
+        string MySQLVariableToString(MySQLVariable q);
     }
 }
