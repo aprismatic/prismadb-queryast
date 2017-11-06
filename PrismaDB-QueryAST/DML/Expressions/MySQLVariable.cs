@@ -5,24 +5,44 @@ namespace PrismaDB.QueryAST.DML
 {
     public class MySQLVariable : Expression
     {
-        public MySQLVariable(string columnName)
+        public Identifier VariableName;
+
+        public MySQLVariable(string variableName)
         {
-            setValue(columnName);
+            setValue(variableName, "");
         }
 
-        public MySQLVariable(Identifier column)
-            : this(column.id)
+        public MySQLVariable(Identifier variable)
+            : this(variable.id)
+        { }
+
+        public MySQLVariable(string variableName, string columnName)
+        {
+            setValue(variableName, columnName);
+        }
+
+        public MySQLVariable(Identifier variable, string columnName)
+            : this(variable.id, columnName)
+        { }
+
+        public MySQLVariable(string variableName, Identifier column)
+            : this(variableName, column.id)
+        { }
+
+        public MySQLVariable(Identifier variable, Identifier column)
+            : this(variable.id, column.id)
         { }
 
         public override void setValue(params object[] value)
         {
             Parent = null;
-            ColumnName = new Identifier((string)value[0]);
+            VariableName = new Identifier((string)value[0]);
+            ColumnName = new Identifier((string)value[1]);
         }
 
         public override Expression Clone()
         {
-            var clone = new MySQLVariable(ColumnName);
+            var clone = new MySQLVariable(VariableName, ColumnName);
 
             return clone;
         }
@@ -46,12 +66,15 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is MySQLVariable otherVar)) return false;
 
-            return ColumnName.Equals(otherVar.ColumnName);
+            return VariableName.Equals(otherVar.VariableName)
+                && ColumnName.Equals(otherVar.ColumnName);
         }
 
         public override int GetHashCode()
         {
-            return unchecked(ColumnName.GetHashCode());
+            return unchecked(
+                VariableName.GetHashCode() *
+                ColumnName.GetHashCode());
         }
     }
 }
