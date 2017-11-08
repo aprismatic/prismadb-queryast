@@ -52,5 +52,10 @@ namespace PrismaDB.QueryAST.DDL
         {
             return DialectResolver.Dialect.CreateIndexQueryToString(this);
         }
+
+        public override object Clone()
+        {
+            return new CreateIndexQuery(this);
+        }
     }
 }

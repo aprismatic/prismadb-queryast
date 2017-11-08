@@ -22,7 +22,7 @@ namespace PrismaDB.QueryAST.DDL
         Search = 8
     }
 
-    public class ColumnDefinition
+    public class ColumnDefinition : ICloneable
     {
         public Identifier ColumnName;
         public SQLDataType DataType;
@@ -64,9 +64,24 @@ namespace PrismaDB.QueryAST.DDL
             this.isRowId = isRowId;
         }
 
+        public ColumnDefinition(ColumnDefinition other)
+        {
+            ColumnName = other.ColumnName.Clone();
+            DataType = other.DataType;
+            EncryptionFlags = other.EncryptionFlags;
+            Length = other.Length;
+            Nullable = other.Nullable;
+            isRowId = other.isRowId;
+        }
+
         public override string ToString()
         {
             return DialectResolver.Dialect.ColumnDefinitionToString(this);
+        }
+
+        public object Clone()
+        {
+            return new ColumnDefinition(this);
         }
 
         public override bool Equals(object other)

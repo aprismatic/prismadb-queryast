@@ -53,10 +53,10 @@ namespace PrismaDB.QueryAST.DML
                 ColumnName = new Identifier((string)value[2]);
         }
 
-        public override Expression Clone()
+        public override object Clone()
         {
-            var left_clone = left.Clone();
-            var right_clone = right.Clone();
+            var left_clone = left.Clone() as Expression;
+            var right_clone = right.Clone() as Expression;
 
             var clone = new Addition(left_clone, right_clone, ColumnName.id);
 
@@ -123,12 +123,12 @@ namespace PrismaDB.QueryAST.DML
                 ColumnName = new Identifier((string)value[2]);
         }
 
-        public override Expression Clone()
+        public override object Clone()
         {
             var left_clone = left.Clone();
             var right_clone = right.Clone();
 
-            var clone = new Multiplication(left_clone, right_clone, ColumnName.id);
+            var clone = new Multiplication(left_clone as Expression, right_clone as Expression, ColumnName.id);
 
             return clone;
         }
@@ -197,11 +197,11 @@ namespace PrismaDB.QueryAST.DML
                 ColumnName = new Identifier((string)value[3]);
         }
 
-        public override Expression Clone()
+        public override object Clone()
         {
-            var left_clone = left.Clone();
-            var right_clone = right.Clone();
-            var N_clone = N.Clone();
+            var left_clone = left.Clone() as Expression;
+            var right_clone = right.Clone() as Expression;
+            var N_clone = N.Clone() as Expression;
 
             var clone = new PaillierAddition(left_clone, right_clone, N_clone, ColumnName.id);
 
@@ -271,11 +271,11 @@ namespace PrismaDB.QueryAST.DML
                 ColumnName = new Identifier((string)value[3]);
         }
 
-        public override Expression Clone()
+        public override object Clone()
         {
-            var left_clone = left.Clone();
-            var right_clone = right.Clone();
-            var P_clone = P.Clone();
+            var left_clone = left.Clone() as Expression;
+            var right_clone = right.Clone() as Expression;
+            var P_clone = P.Clone() as Expression;
 
             var clone = new ElGamalMultiplication(left_clone, right_clone, P_clone, ColumnName.id);
 

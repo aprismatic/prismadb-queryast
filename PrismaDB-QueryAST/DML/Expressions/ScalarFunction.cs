@@ -50,7 +50,7 @@ namespace PrismaDB.QueryAST.DML
             setValue(functionName, columnName, parameters);
         }
 
-        public override Expression Clone()
+        public override object Clone()
         {
             var clone = new ScalarFunction(FunctionName, ColumnName, Parameters);
 
@@ -98,11 +98,18 @@ namespace PrismaDB.QueryAST.DML
             if (value.Length > 1)
             {
                 if (value[1].GetType() == typeof(Identifier))
+                {
                     ColumnName = (Identifier)value[1];
+                }
                 else
-                    Parameters = ((List<Expression>)value[1]).Select(x => x.Clone()).ToList();
+                {
+                    Parameters = ((List<Expression>)value[1]).Select(x => x.Clone() as Expression).ToList();
+                }
+
                 if (value.Length > 2)
-                    Parameters = ((List<Expression>)value[2]).Select(x => x.Clone()).ToList();
+                {
+                    Parameters = ((List<Expression>)value[2]).Select(x => x.Clone() as Expression).ToList();
+                }
             }
         }
 

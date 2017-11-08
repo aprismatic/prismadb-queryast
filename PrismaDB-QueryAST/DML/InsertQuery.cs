@@ -21,14 +21,13 @@ namespace PrismaDB.QueryAST.DML
             Into = other.Into.Clone();
 
             Columns = new List<ColumnRef>(other.Columns.Capacity);
-            foreach (var col in other.Columns)
-                Columns.Add((ColumnRef)col.Clone());
+            Columns.AddRange(other.Columns.Select(x => x.Clone() as ColumnRef));
 
             Values = new List<List<Expression>>(other.Values.Capacity);
             foreach (var vallist in other.Values)
             {
                 var new_vallist = new List<Expression>(vallist.Capacity);
-                new_vallist.AddRange(vallist.Select(val => val.Clone()));
+                new_vallist.AddRange(vallist.Select(val => val.Clone() as Expression));
                 Values.Add(new_vallist);
             }
         }
@@ -36,6 +35,11 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString()
         {
             return DialectResolver.Dialect.InsertQueryToString(this);
+        }
+
+        public override object Clone()
+        {
+            return new InsertQuery(this);
         }
     }
 }

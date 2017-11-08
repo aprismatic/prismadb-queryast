@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace PrismaDB.QueryAST.DDL
 {
@@ -21,9 +22,21 @@ namespace PrismaDB.QueryAST.DDL
             ColumnDefinitions = new List<ColumnDefinition>();
         }
 
+        public CreateTableQuery(CreateTableQuery other)
+        {
+            TableName = other.TableName.Clone();
+            ColumnDefinitions = new List<ColumnDefinition>(other.ColumnDefinitions.Count);
+            ColumnDefinitions.AddRange(other.ColumnDefinitions.Select(x => x.Clone() as ColumnDefinition));
+        }
+
         public override string ToString()
         {
             return DialectResolver.Dialect.CreateTableQueryToString(this);
+        }
+
+        public override object Clone()
+        {
+            return new CreateTableQuery(this);
         }
     }
 }

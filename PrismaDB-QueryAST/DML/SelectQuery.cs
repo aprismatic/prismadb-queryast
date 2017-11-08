@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -20,12 +21,10 @@ namespace PrismaDB.QueryAST.DML
         public SelectQuery(SelectQuery other)
         {
             SelectExpressions = new List<Expression>(other.SelectExpressions.Capacity);
-            foreach (var expr in other.SelectExpressions)
-                SelectExpressions.Add(expr.Clone());
+            SelectExpressions.AddRange(other.SelectExpressions.Select(x => x.Clone() as Expression));
 
             FromTables = new List<TableRef>(other.FromTables.Capacity);
-            foreach (var tref in other.FromTables)
-                FromTables.Add(tref.Clone());
+            FromTables.AddRange(other.FromTables.Select(x => x.Clone()));
 
             Where = new WhereClause(other.Where);
 
@@ -35,6 +34,11 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString()
         {
             return DialectResolver.Dialect.SelectQueryToString(this);
+        }
+
+        public override object Clone()
+        {
+            return new SelectQuery(this);
         }
     }
 }

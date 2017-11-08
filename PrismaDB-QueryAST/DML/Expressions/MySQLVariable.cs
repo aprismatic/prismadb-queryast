@@ -40,7 +40,7 @@ namespace PrismaDB.QueryAST.DML
             ColumnName = new Identifier((string)value[1]);
         }
 
-        public override Expression Clone()
+        public override object Clone()
         {
             var clone = new MySQLVariable(VariableName, ColumnName);
 

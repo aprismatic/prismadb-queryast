@@ -31,7 +31,7 @@ namespace PrismaDB.QueryAST.DML
                 ColumnName = new Identifier((string)value[1]);
         }
 
-        public override Expression Clone()
+        public override object Clone()
         {
             var clone = new IntConstant(intvalue, ColumnName.id);
 
@@ -93,7 +93,7 @@ namespace PrismaDB.QueryAST.DML
                 ColumnName = new Identifier((string)value[1]);
         }
 
-        public override Expression Clone()
+        public override object Clone()
         {
             var clone = new StringConstant(strvalue, ColumnName.id);
 
@@ -155,7 +155,7 @@ namespace PrismaDB.QueryAST.DML
                 ColumnName = new Identifier((string)value[1]);
         }
 
-        public override Expression Clone()
+        public override object Clone()
         {
             var clone = new BinaryConstant(binvalue, ColumnName.id);
 

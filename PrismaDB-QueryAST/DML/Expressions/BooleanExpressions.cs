@@ -23,7 +23,7 @@ namespace PrismaDB.QueryAST.DML
             else
                 throw new ArgumentException("BooleanTrue.setValue expects no more than one argument");
         }
-        public override Expression Clone() { return new BooleanTrue(NOT); }
+        public override object Clone() { return new BooleanTrue(NOT); }
         public override object Eval(DataRow r) { return !NOT; }
         public override List<ColumnRef> GetColumns() { return new List<ColumnRef>(); }
         public override string ToString() { return DialectResolver.Dialect.BooleanTrueToString(this); }
@@ -63,7 +63,7 @@ namespace PrismaDB.QueryAST.DML
             throw new NotImplementedException();
         }
 
-        public override Expression Clone()
+        public override object Clone()
         {
             var res = new BooleanIn
             {
@@ -146,10 +146,10 @@ namespace PrismaDB.QueryAST.DML
             }
         }
 
-        public override Expression Clone()
+        public override object Clone()
         {
-            var left_clone = left.Clone();
-            var right_clone = right.Clone();
+            var left_clone = left.Clone() as Expression;
+            var right_clone = right.Clone() as Expression;
 
             var clone = new BooleanEquals(left_clone, right_clone, NOT);
 

@@ -1,5 +1,6 @@
 ﻿using PrismaDB.Commons;
 using System.Collections.Generic;
+using System.Data;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -33,6 +34,11 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString()
         {
             return DialectResolver.Dialect.UpdateQueryToString(this);
+        }
+
+        public override object Clone()
+        {
+            return new UpdateQuery(this);
         }
     }
 }

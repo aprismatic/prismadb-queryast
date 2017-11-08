@@ -21,5 +21,10 @@
         {
             return DialectResolver.Dialect.DeleteQueryToString(this);
         }
+
+        public override object Clone()
+        {
+            return new DeleteQuery(this);
+        }
     }
 }

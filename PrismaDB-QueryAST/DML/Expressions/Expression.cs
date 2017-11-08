@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace PrismaDB.QueryAST.DML
 {
-    public abstract class Expression
+    public abstract class Expression : ICloneable
     {
         public Identifier ColumnName;
 
@@ -11,7 +12,7 @@ namespace PrismaDB.QueryAST.DML
 
         public abstract void setValue(params object[] value);
 
-        public abstract Expression Clone();
+        public abstract object Clone();
 
         public abstract object Eval(DataRow r);
 
