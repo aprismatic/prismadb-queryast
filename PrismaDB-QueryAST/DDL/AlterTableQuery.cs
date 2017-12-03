@@ -20,14 +20,14 @@ namespace PrismaDB.QueryAST.DDL
             : this(type, new TableRef(""))
         { }
 
-        public AlterTableQuery(AlterType type, string newTableName)
-            : this(type, new TableRef(newTableName))
+        public AlterTableQuery(AlterType type, string tableName)
+            : this(type, new TableRef(tableName))
         { }
 
-        public AlterTableQuery(AlterType type, TableRef newTable)
+        public AlterTableQuery(AlterType type, TableRef table)
         {
             AlterType = type;
-            TableName = newTable.Clone();
+            TableName = table.Clone();
             AlteredColumns = new List<AlteredColumn>();
         }
 
