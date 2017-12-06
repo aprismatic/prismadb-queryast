@@ -1,4 +1,7 @@
-﻿using System;
+﻿using PrismaDB.QueryAST.DML;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PrismaDB.QueryAST.DDL
 {
@@ -9,7 +12,9 @@ namespace PrismaDB.QueryAST.DDL
         VARBINARY,
         VARCHAR,
         TEXT,
-        DATETIME
+        DATETIME,
+        DOUBLE,
+        ENUM
     }
 
     [Flags]
@@ -28,6 +33,7 @@ namespace PrismaDB.QueryAST.DDL
         public SQLDataType DataType;
         public ColumnEncryptionFlags EncryptionFlags;
         public int? Length;
+        public List<StringConstant> EnumValues;
         public bool Nullable;
         public bool isRowId;
 
@@ -60,6 +66,7 @@ namespace PrismaDB.QueryAST.DDL
             this.DataType = dataType;
             this.EncryptionFlags = encryptionFlags;
             this.Length = length;
+            this.EnumValues = new List<StringConstant>();
             this.Nullable = nullable;
             this.isRowId = isRowId;
         }
@@ -70,6 +77,7 @@ namespace PrismaDB.QueryAST.DDL
             DataType = other.DataType;
             EncryptionFlags = other.EncryptionFlags;
             Length = other.Length;
+            EnumValues = other.EnumValues.Select(item => (StringConstant)item.Clone()).ToList();
             Nullable = other.Nullable;
             isRowId = other.isRowId;
         }
@@ -92,6 +100,7 @@ namespace PrismaDB.QueryAST.DDL
                 && (DataType == otherCD.DataType)
                 && (EncryptionFlags == otherCD.EncryptionFlags)
                 && (Length == otherCD.Length)
+                && (EnumValues.SequenceEqual(otherCD.EnumValues))
                 && (Nullable == otherCD.Nullable)
                 && (isRowId == otherCD.isRowId);
         }
@@ -103,6 +112,7 @@ namespace PrismaDB.QueryAST.DDL
                 DataType.GetHashCode() *
                 EncryptionFlags.GetHashCode() *
                 (Length == null ? 1 : Length.GetHashCode()) *
+                EnumValues.Select(x => x.GetHashCode()).Aggregate((a, b) => a * b) *
                 (1 + Nullable.GetHashCode()) *
                 (1 + isRowId.GetHashCode()));
         }
