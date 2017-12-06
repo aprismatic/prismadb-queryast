@@ -69,7 +69,8 @@ namespace PrismaDB.QueryAST.DDL
             this.DataType = dataType;
             this.EncryptionFlags = encryptionFlags;
             this.Length = length;
-            this.EnumValues = enumValues;
+            this.EnumValues = enumValues == null ? new List<StringConstant>() : 
+                              enumValues.Select(item => (StringConstant)item.Clone()).ToList();
             this.Nullable = nullable;
             this.isRowId = isRowId;
         }
@@ -80,7 +81,7 @@ namespace PrismaDB.QueryAST.DDL
             DataType = other.DataType;
             EncryptionFlags = other.EncryptionFlags;
             Length = other.Length;
-            EnumValues = other.EnumValues;
+            EnumValues = other.EnumValues.Select(item => (StringConstant)item.Clone()).ToList();
             Nullable = other.Nullable;
             isRowId = other.isRowId;
         }

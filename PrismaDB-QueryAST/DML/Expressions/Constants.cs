@@ -57,7 +57,7 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is IntConstant otherIC)) return false;
 
-            return (this.ColumnName == otherIC.ColumnName)
+            return (this.ColumnName.Equals(otherIC.ColumnName))
                 && (this.intvalue == otherIC.intvalue);
         }
 
@@ -119,7 +119,7 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is StringConstant otherSC)) return false;
 
-            return (this.ColumnName == otherSC.ColumnName)
+            return (this.ColumnName.Equals(otherSC.ColumnName))
                 && (this.strvalue == otherSC.strvalue);
         }
 
@@ -181,7 +181,7 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is BinaryConstant otherBC)) return false;
 
-            return (this.ColumnName == otherBC.ColumnName)
+            return (this.ColumnName.Equals(otherBC.ColumnName))
                 && (this.binvalue.SequenceEqual(otherBC.binvalue));
         }
 

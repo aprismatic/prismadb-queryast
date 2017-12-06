@@ -60,16 +60,9 @@ namespace PrismaDB.QueryAST.DML
         public override bool Equals(object other)
         {
             if (!(other is ScalarFunction otherF)) return false;
-
-            if (Parameters.Count != otherF.Parameters.Count) return false;
-
-            if (!FunctionName.Equals(otherF.FunctionName)) return false;
-
-            if (!ColumnName.Equals(otherF.ColumnName)) return false;
-
-            if (Parameters.Count == 0) return true;
-
-            return Parameters.Zip(otherF.Parameters, (x, y) => x.Equals(y)).Aggregate((x, y) => x && y);
+            return (FunctionName.Equals(otherF.FunctionName)) &&
+                   (ColumnName.Equals(otherF.ColumnName)) &&
+                   (Parameters.SequenceEqual(otherF.Parameters));
         }
 
         public override object Eval(DataRow r)
