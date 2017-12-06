@@ -44,14 +44,12 @@ namespace PrismaDB.QueryAST.DDL
         public ColumnDefinition(string columnName,
                                 SQLDataType dataType = SQLDataType.INT,
                                 int? length = null,
-                                List<StringConstant> enumValues = null,
                                 bool nullable = true,
                                 bool isRowId = false,
                                 ColumnEncryptionFlags encryptionFlags = ColumnEncryptionFlags.None)
             : this(new Identifier(columnName),
                    dataType,
                    length,
-                   enumValues,
                    nullable,
                    isRowId,
                    encryptionFlags)
@@ -60,7 +58,6 @@ namespace PrismaDB.QueryAST.DDL
         public ColumnDefinition(Identifier column,
                                 SQLDataType dataType = SQLDataType.INT,
                                 int? length = null,
-                                List<StringConstant> enumValues = null,
                                 bool nullable = true,
                                 bool isRowId = false,
                                 ColumnEncryptionFlags encryptionFlags = ColumnEncryptionFlags.None)
@@ -69,8 +66,7 @@ namespace PrismaDB.QueryAST.DDL
             this.DataType = dataType;
             this.EncryptionFlags = encryptionFlags;
             this.Length = length;
-            this.EnumValues = enumValues == null ? new List<StringConstant>() : 
-                              enumValues.Select(item => (StringConstant)item.Clone()).ToList();
+            this.EnumValues = new List<StringConstant>();
             this.Nullable = nullable;
             this.isRowId = isRowId;
         }

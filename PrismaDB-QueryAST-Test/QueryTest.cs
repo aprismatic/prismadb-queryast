@@ -25,7 +25,7 @@ namespace PrismaDB_QueryAST_Test
 
             Assert.False(func1.Equals(func3));
 
-            var func4 = (ScalarFunction)func3.Clone();
+            var func4 = (ScalarFunction)func2.Clone();
             func4.Parameters[0] = new StringConstant("123");
 
             Assert.False(func2.Equals(func4));
