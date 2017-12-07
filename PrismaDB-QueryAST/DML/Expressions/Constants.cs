@@ -192,4 +192,66 @@ namespace PrismaDB.QueryAST.DML
                 binvalue.Aggregate(1, unchecked((x, y) => x * y.GetHashCode())));
         }
     }
+
+    public class FloatingPointConstant : Constant
+    {
+        public Double floatvalue;
+
+        public FloatingPointConstant(Double value)
+        {
+            setValue(value, "");
+        }
+
+        public FloatingPointConstant(Double value, string ColumnName)
+        {
+            setValue(value, ColumnName);
+        }
+
+        public override void setValue(params object[] value)
+        {
+            Parent = null;
+
+            floatvalue = (Double)value[0];
+
+            if (value.Length > 1)
+                ColumnName = new Identifier((string)value[1]);
+        }
+
+        public override object Clone()
+        {
+            var clone = new FloatingPointConstant(floatvalue, ColumnName.id);
+
+            return clone;
+        }
+
+        public override object Eval(DataRow r)
+        {
+            return floatvalue;
+        }
+
+        public override List<ColumnRef> GetColumns()
+        {
+            return new List<ColumnRef>();
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.FloatingPointConstantToString(this);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is FloatingPointConstant otherIC)) return false;
+
+            return (this.ColumnName.Equals(otherIC.ColumnName))
+                && (this.floatvalue == otherIC.floatvalue);
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                ColumnName.GetHashCode() *
+                floatvalue.GetHashCode());
+        }
+    }
 }
