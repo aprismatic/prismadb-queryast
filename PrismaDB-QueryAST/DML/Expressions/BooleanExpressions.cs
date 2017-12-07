@@ -27,8 +27,11 @@ namespace PrismaDB.QueryAST.DML
         public override object Eval(DataRow r) { return !NOT; }
         public override List<ColumnRef> GetColumns() { return new List<ColumnRef>(); }
         public override string ToString() { return DialectResolver.Dialect.BooleanTrueToString(this); }
-        public override bool Equals(object other) { return (ColumnName == (other as BooleanTrue)?.ColumnName)
-                                                        && (NOT == (other as BooleanTrue)?.NOT); }
+        public override bool Equals(object other)
+        {
+            return (ColumnName == (other as BooleanTrue)?.ColumnName)
+                && (NOT == (other as BooleanTrue)?.NOT);
+        }
         public override int GetHashCode() { return unchecked(ColumnName.GetHashCode() * (NOT.GetHashCode() + 1)); }
     }
 
@@ -195,14 +198,14 @@ namespace PrismaDB.QueryAST.DML
             {
                 if (rightEval is Int32 rightInt)
                     res = (leftInt == rightInt) ? !NOT : NOT; // assume data in DataRow are in int/double
-                if (rightEval is Double rightDouble)
+                else if (rightEval is Double rightDouble)
                     res = (leftInt == rightDouble) ? !NOT : NOT; // assume data in DataRow are in int/double
             }
             else if (leftEval is Double leftDouble)
             {
                 if (rightEval is Int32 rightInt)
                     res = (leftDouble == rightInt) ? !NOT : NOT; // assume data in DataRow are in int/double
-                if (rightEval is Double rightDouble)
+                else if (rightEval is Double rightDouble)
                     res = (leftDouble == rightDouble) ? !NOT : NOT; // assume data in DataRow are in int/double
             }
             else
