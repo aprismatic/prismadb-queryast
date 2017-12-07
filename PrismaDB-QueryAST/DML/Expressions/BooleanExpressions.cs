@@ -27,10 +27,8 @@ namespace PrismaDB.QueryAST.DML
         public override object Eval(DataRow r) { return !NOT; }
         public override List<ColumnRef> GetColumns() { return new List<ColumnRef>(); }
         public override string ToString() { return DialectResolver.Dialect.BooleanTrueToString(this); }
-        public override bool Equals(object other)
-        {
-                && (NOT == (other as BooleanTrue)?.NOT);
-        }
+        public override bool Equals(object other) { return (ColumnName == (other as BooleanTrue)?.ColumnName)
+                                                        && (NOT == (other as BooleanTrue)?.NOT); }
         public override int GetHashCode() { return unchecked(ColumnName.GetHashCode() * (NOT.GetHashCode() + 1)); }
     }
 
