@@ -191,13 +191,19 @@ namespace PrismaDB.QueryAST.DML
             {
                 res = ((String)leftEval == (String)rightEval) ? !NOT : NOT;
             }
-            else if (leftEval is Int32 && rightEval is Int32)
+            else if (leftEval is Int32 leftInt)
             {
-                res = ((Int32)leftEval == (Int32)rightEval) ? !NOT : NOT; // assume data in DataRow are in int
+                if (rightEval is Int32 rightInt)
+                    res = (leftInt == rightInt) ? !NOT : NOT; // assume data in DataRow are in int/double
+                if (rightEval is Double rightDouble)
+                    res = (leftInt == rightDouble) ? !NOT : NOT; // assume data in DataRow are in int/double
             }
-            else if (leftEval is Double && rightEval is Double)
+            else if (leftEval is Double leftDouble)
             {
-                res = ((Double)leftEval == (Double)rightEval) ? !NOT : NOT; // assume data in DataRow are in int
+                if (rightEval is Int32 rightInt)
+                    res = (leftDouble == rightInt) ? !NOT : NOT; // assume data in DataRow are in int/double
+                if (rightEval is Double rightDouble)
+                    res = (leftDouble == rightDouble) ? !NOT : NOT; // assume data in DataRow are in int/double
             }
             else
             {
