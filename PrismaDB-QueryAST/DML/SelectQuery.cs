@@ -9,6 +9,7 @@ namespace PrismaDB.QueryAST.DML
         public List<TableRef> FromTables;
         public WhereClause Where;
         public uint? Limit;
+        public bool LockForUpdate;
 
         public SelectQuery()
         {
@@ -16,6 +17,7 @@ namespace PrismaDB.QueryAST.DML
             FromTables = new List<TableRef>();
             Where = new WhereClause();
             Limit = null;
+            LockForUpdate = false;
         }
 
         public SelectQuery(SelectQuery other)
@@ -29,6 +31,8 @@ namespace PrismaDB.QueryAST.DML
             Where = new WhereClause(other.Where);
 
             Limit = other.Limit;
+
+            LockForUpdate = other.LockForUpdate;
         }
 
         public override string ToString()
