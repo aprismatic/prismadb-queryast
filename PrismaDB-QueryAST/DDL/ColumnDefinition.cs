@@ -13,6 +13,7 @@ namespace PrismaDB.QueryAST.DDL
         VARCHAR,
         TEXT,
         DATETIME,
+        TIMESTAMP,
         DOUBLE,
         ENUM
     }
