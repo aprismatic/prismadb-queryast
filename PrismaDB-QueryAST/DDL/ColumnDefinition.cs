@@ -37,6 +37,7 @@ namespace PrismaDB.QueryAST.DDL
         public List<StringConstant> EnumValues;
         public bool Nullable;
         public bool isRowId;
+        public Expression DefaultValue;
 
         public ColumnDefinition()
             : this("")
@@ -47,13 +48,15 @@ namespace PrismaDB.QueryAST.DDL
                                 int? length = null,
                                 bool nullable = true,
                                 bool isRowId = false,
-                                ColumnEncryptionFlags encryptionFlags = ColumnEncryptionFlags.None)
+                                ColumnEncryptionFlags encryptionFlags = ColumnEncryptionFlags.None,
+                                Expression defaultValue = null)
             : this(new Identifier(columnName),
                    dataType,
                    length,
                    nullable,
                    isRowId,
-                   encryptionFlags)
+                   encryptionFlags,
+                   defaultValue)
         { }
 
         public ColumnDefinition(Identifier column,
@@ -61,7 +64,8 @@ namespace PrismaDB.QueryAST.DDL
                                 int? length = null,
                                 bool nullable = true,
                                 bool isRowId = false,
-                                ColumnEncryptionFlags encryptionFlags = ColumnEncryptionFlags.None)
+                                ColumnEncryptionFlags encryptionFlags = ColumnEncryptionFlags.None,
+                                Expression defaultValue = null)
         {
             this.ColumnName = column == null ? new Identifier("") : column.Clone();
             this.DataType = dataType;
@@ -70,6 +74,7 @@ namespace PrismaDB.QueryAST.DDL
             this.EnumValues = new List<StringConstant>();
             this.Nullable = nullable;
             this.isRowId = isRowId;
+            this.DefaultValue = defaultValue;
         }
 
         public ColumnDefinition(ColumnDefinition other)
@@ -81,6 +86,7 @@ namespace PrismaDB.QueryAST.DDL
             EnumValues = other.EnumValues.Select(item => (StringConstant)item.Clone()).ToList();
             Nullable = other.Nullable;
             isRowId = other.isRowId;
+            DefaultValue = other.DefaultValue;
         }
 
         public override string ToString()
@@ -103,7 +109,8 @@ namespace PrismaDB.QueryAST.DDL
                 && (Length == otherCD.Length)
                 && (EnumValues.SequenceEqual(otherCD.EnumValues))
                 && (Nullable == otherCD.Nullable)
-                && (isRowId == otherCD.isRowId);
+                && (isRowId == otherCD.isRowId)
+                && (DefaultValue == otherCD.DefaultValue);
         }
 
         public override int GetHashCode()
@@ -115,7 +122,8 @@ namespace PrismaDB.QueryAST.DDL
                 (Length == null ? 1 : Length.GetHashCode()) *
                 EnumValues.Select(x => x.GetHashCode()).Aggregate((a, b) => a * b) *
                 (1 + Nullable.GetHashCode()) *
-                (1 + isRowId.GetHashCode()));
+                (1 + isRowId.GetHashCode()) *
+                DefaultValue.GetHashCode());
         }
     }
 }
