@@ -34,6 +34,7 @@ namespace PrismaDB.QueryAST
         string ScalarFunctionToString(ScalarFunction q);
 
         string SQLDataTypeToString(SQLDataType q);
+        string ColumnEncryptionFlagsToString(ColumnEncryptionFlags q);
         string IndexModifierToString(IndexModifier q);
         string IndexTypeToString(IndexType q);
         string MySQLVariableToString(MySQLVariable q);
