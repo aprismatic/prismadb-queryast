@@ -1,9 +1,6 @@
-﻿using System;
-
-namespace PrismaDB.QueryAST.DCL
+﻿namespace PrismaDB.QueryAST.DCL
 {
-    public abstract class Command : ICloneable
+    public abstract class Command : Query
     {
-        public abstract object Clone();
     }
 }

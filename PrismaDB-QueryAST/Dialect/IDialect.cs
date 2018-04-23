@@ -1,4 +1,5 @@
-﻿using PrismaDB.QueryAST.DDL;
+﻿using PrismaDB.QueryAST.DCL;
+using PrismaDB.QueryAST.DDL;
 using PrismaDB.QueryAST.DML;
 
 namespace PrismaDB.QueryAST
@@ -39,5 +40,7 @@ namespace PrismaDB.QueryAST
         string IndexModifierToString(IndexModifier q);
         string IndexTypeToString(IndexType q);
         string MySQLVariableToString(MySQLVariable q);
+
+        string ExportSettingsCommandToString(ExportSettingsCommand c);
     }
 }
