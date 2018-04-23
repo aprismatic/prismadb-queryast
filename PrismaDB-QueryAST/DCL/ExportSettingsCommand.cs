@@ -1,19 +1,19 @@
-﻿using System;
+﻿using PrismaDB.QueryAST.DML;
 
 namespace PrismaDB.QueryAST.DCL
 {
     public class ExportSettingsCommand : Command
     {
-        public string FileUri;
+        public StringConstant FileUri;
 
         public ExportSettingsCommand()
         {
-            FileUri = "";
+            FileUri = new StringConstant("");
         }
 
         public ExportSettingsCommand(string fileUri)
         {
-            FileUri = fileUri;
+            FileUri = new StringConstant(fileUri);
         }
 
         public override string ToString()
@@ -23,7 +23,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override object Clone()
         {
-            var clone = new ExportSettingsCommand(FileUri);
+            var clone = new ExportSettingsCommand(FileUri.strvalue);
 
             return clone;
         }
