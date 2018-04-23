@@ -21,6 +21,11 @@ namespace PrismaDB.QueryAST
             return DialectResolver.Dialect.IdentifierToString(this);
         }
 
+        public string ToUnquotedString()
+        {
+            return DialectResolver.Dialect.IdentifierToUnquotedString(this);
+        }
+
         public override bool Equals(object other)
         {
             if (!(other is Identifier otherId)) return false;
