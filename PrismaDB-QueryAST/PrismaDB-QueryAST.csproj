@@ -6,6 +6,7 @@
     <Company>Nanyang Technological Unviersity</Company>
     <Product>PrismaDB-QueryAST</Product>
     <Authors>Vasily Sidorov (bazzilic)</Authors>
+    <RootNamespace>PrismaDB.QueryAST</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="PrismaDB-Commons" Version="0.1.8" />
