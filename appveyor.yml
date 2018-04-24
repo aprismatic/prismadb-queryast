@@ -16,7 +16,7 @@ before_build:
   - nuget update -self
   - nuget restore
 test_script:
-  - dotnet test .\PrismaDB-QueryAST-Test\PrismaDB-QueryAST-Test.csproj --no-build
+  - dotnet test .\AstTests\AstTests.csproj --no-build
 configuration: Release
 image: "Visual Studio 2017"
 nuget:
@@ -26,4 +26,4 @@ cache:
 environment:
   AppVeyorAPIToken:
     secure: GvygCCndEp8eiXvItooIyglWYnyfUvg4YNyaufw3N3A=
-version: "0.1.{build}"
+version: "0.2.8.{build}"

@@ -10,7 +10,7 @@ namespace PrismaDB.QueryAST.DML
         public List<TableRef> FromTables;
         public WhereClause Where;
         public uint? Limit;
-        public List<Tuple<Expression, OrderDirection>> OrderBy;
+        public OrderByClause OrderBy;
         public bool LockForUpdate;
 
         public SelectQuery()
@@ -19,7 +19,7 @@ namespace PrismaDB.QueryAST.DML
             FromTables = new List<TableRef>();
             Where = new WhereClause();
             Limit = null;
-            OrderBy = new List<Tuple<Expression, OrderDirection>>();
+            OrderBy = new OrderByClause();
             LockForUpdate = false;
         }
 
@@ -35,9 +35,7 @@ namespace PrismaDB.QueryAST.DML
 
             Limit = other.Limit;
 
-            OrderBy = new List<Tuple<Expression, OrderDirection>>(other.OrderBy.Capacity);
-            OrderBy.AddRange(other.OrderBy.Select(
-                x => new Tuple<Expression, OrderDirection>(x.Item1.Clone() as Expression, x.Item2)));
+            OrderBy = new OrderByClause(other.OrderBy);
 
             LockForUpdate = other.LockForUpdate;
         }
@@ -51,11 +49,5 @@ namespace PrismaDB.QueryAST.DML
         {
             return new SelectQuery(this);
         }
-    }
-
-    public enum OrderDirection
-    {
-        ASC,
-        DESC
     }
 }

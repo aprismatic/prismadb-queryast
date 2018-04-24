@@ -59,7 +59,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            return DialectResolver.Dialect.MySQLVariableToString(this);
+            return DialectResolver.Dialect.MySqlVariableToString(this);
         }
 
         public override bool Equals(object other)
