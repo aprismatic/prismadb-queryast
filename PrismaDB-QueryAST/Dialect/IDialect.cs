@@ -7,7 +7,6 @@ namespace PrismaDB.QueryAST
     public interface IDialect
     {
         string IdentifierToString(Identifier q);
-        string IdentifierToUnquotedString(Identifier q);
         string ColumnDefinitionToString(ColumnDefinition q);
         string CreateIndexQueryToString(CreateIndexQuery q);
         string CreateTableQueryToString(CreateTableQuery q);

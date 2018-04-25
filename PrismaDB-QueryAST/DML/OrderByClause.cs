@@ -29,6 +29,12 @@ namespace PrismaDB.QueryAST.DML
         {
             return DialectResolver.Dialect.OrderByClauseToString(this);
         }
+
+        public List<ColumnRef> GetOrderByColumns()
+        {
+            var orderByCols = OrderColumns.SelectMany(x => x.Item1.GetColumns());
+            return orderByCols.Distinct().ToList();
+        }
     }
 
     public enum OrderDirection
