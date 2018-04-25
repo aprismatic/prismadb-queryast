@@ -1,6 +1,6 @@
 ﻿namespace PrismaDB.QueryAST.DML
 {
-    public class DeleteQuery : DMLQuery
+    public class DeleteQuery : DmlQuery
     {
         public TableRef DeleteTable;
         public WhereClause Where;

@@ -1,6 +1,6 @@
 ﻿namespace PrismaDB.QueryAST.DML
 {
-    public abstract class DMLQuery : Query
+    public abstract class DmlQuery : Query
     {
     }
 }

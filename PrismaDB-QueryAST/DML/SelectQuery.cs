@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace PrismaDB.QueryAST.DML
 {
-    public class SelectQuery : DMLQuery
+    public class SelectQuery : DmlQuery
     {
         public List<Expression> SelectExpressions;
         public List<TableRef> FromTables;

@@ -10,7 +10,7 @@ namespace PrismaDB.QueryAST.DDL
         MODIFY
     }
 
-    public class AlterTableQuery : DDLQuery
+    public class AlterTableQuery : DdlQuery
     {
         public TableRef TableName;
         public AlterType AlterType;

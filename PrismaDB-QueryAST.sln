@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		nuget.config = nuget.config
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AstTests", "AstTests\AstTests.csproj", "{11BD3B3B-0ED8-4C52-A1D7-7F7E0882B852}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QueryTests", "QueryTests\QueryTests.csproj", "{11BD3B3B-0ED8-4C52-A1D7-7F7E0882B852}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

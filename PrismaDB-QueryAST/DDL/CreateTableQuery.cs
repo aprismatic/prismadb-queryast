@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace PrismaDB.QueryAST.DDL
 {
-    public class CreateTableQuery : DDLQuery
+    public class CreateTableQuery : DdlQuery
     {
         public TableRef TableName;
         public List<ColumnDefinition> ColumnDefinitions;

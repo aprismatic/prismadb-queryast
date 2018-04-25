@@ -2,7 +2,7 @@
 using PrismaDB.QueryAST.DML;
 using PrismaDB.QueryAST.DDL;
 
-namespace QueryASTTests
+namespace QueryTests
 {
     public class QueryTest
     {

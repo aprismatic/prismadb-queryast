@@ -1,10 +1,9 @@
 ﻿using PrismaDB.Commons;
 using System.Collections.Generic;
-using System.Data;
 
 namespace PrismaDB.QueryAST.DML
 {
-    public class UpdateQuery : DMLQuery
+    public class UpdateQuery : DmlQuery
     {
         public TableRef UpdateTable;
         public List<Pair<ColumnRef, Constant>> UpdateExpressions;

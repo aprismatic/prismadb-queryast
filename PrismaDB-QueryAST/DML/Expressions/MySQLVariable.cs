@@ -3,33 +3,33 @@ using System.Data;
 
 namespace PrismaDB.QueryAST.DML
 {
-    public class MySQLVariable : Expression
+    public class MySqlVariable : Expression
     {
         public Identifier VariableName;
 
-        public MySQLVariable(string variableName)
+        public MySqlVariable(string variableName)
         {
             setValue(variableName, "");
         }
 
-        public MySQLVariable(Identifier variable)
+        public MySqlVariable(Identifier variable)
             : this(variable.id)
         { }
 
-        public MySQLVariable(string variableName, string columnName)
+        public MySqlVariable(string variableName, string columnName)
         {
             setValue(variableName, columnName);
         }
 
-        public MySQLVariable(Identifier variable, string columnName)
+        public MySqlVariable(Identifier variable, string columnName)
             : this(variable.id, columnName)
         { }
 
-        public MySQLVariable(string variableName, Identifier column)
+        public MySqlVariable(string variableName, Identifier column)
             : this(variableName, column.id)
         { }
 
-        public MySQLVariable(Identifier variable, Identifier column)
+        public MySqlVariable(Identifier variable, Identifier column)
             : this(variable.id, column.id)
         { }
 
@@ -42,7 +42,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            var clone = new MySQLVariable(VariableName, ColumnName);
+            var clone = new MySqlVariable(VariableName, ColumnName);
 
             return clone;
         }
@@ -64,7 +64,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override bool Equals(object other)
         {
-            if (!(other is MySQLVariable otherVar)) return false;
+            if (!(other is MySqlVariable otherVar)) return false;
 
             return VariableName.Equals(otherVar.VariableName)
                 && ColumnName.Equals(otherVar.ColumnName);

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace PrismaDB.QueryAST.DDL
 {
-    public enum SQLDataType
+    public enum SqlDataType
     {
         INT,
         MSSQL_UNIQUEIDENTIFIER,
@@ -31,7 +31,7 @@ namespace PrismaDB.QueryAST.DDL
     public class ColumnDefinition : ICloneable
     {
         public Identifier ColumnName;
-        public SQLDataType DataType;
+        public SqlDataType DataType;
         public ColumnEncryptionFlags EncryptionFlags;
         public int? Length;
         public List<StringConstant> EnumValues;
@@ -44,7 +44,7 @@ namespace PrismaDB.QueryAST.DDL
         { }
 
         public ColumnDefinition(string columnName,
-                                SQLDataType dataType = SQLDataType.INT,
+                                SqlDataType dataType = SqlDataType.INT,
                                 int? length = null,
                                 bool nullable = true,
                                 bool isRowId = false,
@@ -60,7 +60,7 @@ namespace PrismaDB.QueryAST.DDL
         { }
 
         public ColumnDefinition(Identifier column,
-                                SQLDataType dataType = SQLDataType.INT,
+                                SqlDataType dataType = SqlDataType.INT,
                                 int? length = null,
                                 bool nullable = true,
                                 bool isRowId = false,

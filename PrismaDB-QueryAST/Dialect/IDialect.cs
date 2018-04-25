@@ -34,12 +34,12 @@ namespace PrismaDB.QueryAST
         string ConjunctiveNormalFormToString(ConjunctiveNormalForm q);
         string DisjunctionToString(Disjunction q);
         string ScalarFunctionToString(ScalarFunction q);
-        string MySqlVariableToString(MySQLVariable q);
+        string MySqlVariableToString(MySqlVariable q);
         string OrderByClauseToString(OrderByClause q);
 
         string ExportSettingsCommandToString(ExportSettingsCommand c);
 
-        string SqlDataTypeToString(SQLDataType q);
+        string SqlDataTypeToString(SqlDataType q);
         string ColumnEncryptionFlagsToString(ColumnEncryptionFlags q);
         string IndexModifierToString(IndexModifier q);
         string IndexTypeToString(IndexType q);

@@ -22,7 +22,7 @@ namespace PrismaDB.QueryAST.DDL
         DEFAULT
     }
 
-    public class CreateIndexQuery : DDLQuery
+    public class CreateIndexQuery : DdlQuery
     {
         public IndexModifier Modifier;
         public IndexType Type;

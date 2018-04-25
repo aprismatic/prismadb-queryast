@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace PrismaDB.QueryAST.DML
 {
-    public class InsertQuery : DMLQuery
+    public class InsertQuery : DmlQuery
     {
         public TableRef Into;
         public List<ColumnRef> Columns;
