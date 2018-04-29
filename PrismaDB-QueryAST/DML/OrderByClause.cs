@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace PrismaDB.QueryAST.DML
@@ -28,6 +29,12 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString()
         {
             return DialectResolver.Dialect.OrderByClauseToString(this);
+        }
+
+        public bool CheckDataRow(DataRow r)
+        {
+            var exists = OrderColumns.Any(c => (bool)c.Item1.Eval(r));
+            return exists;
         }
 
         public List<ColumnRef> GetOrderByColumns()
