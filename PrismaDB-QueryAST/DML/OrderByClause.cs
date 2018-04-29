@@ -33,8 +33,7 @@ namespace PrismaDB.QueryAST.DML
 
         public bool CheckDataRow(DataRow r)
         {
-            var exists = OrderColumns.Any(c => (bool)c.Item1.Eval(r));
-            return exists;
+            return OrderColumns.Any(c => (bool)c.Item1.Eval(r));
         }
 
         public List<ColumnRef> GetOrderByColumns()
