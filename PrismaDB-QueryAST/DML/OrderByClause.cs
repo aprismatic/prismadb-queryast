@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 
 namespace PrismaDB.QueryAST.DML
 {
     public class OrderByClause : ICloneable
     {
-        public List<Tuple<Expression, OrderDirection>> OrderColumns;
+        public List<Tuple<ColumnRef, OrderDirection>> OrderColumns;
 
         public OrderByClause()
         {
-            OrderColumns = new List<Tuple<Expression, OrderDirection>>();
+            OrderColumns = new List<Tuple<ColumnRef, OrderDirection>>();
         }
 
         public OrderByClause(OrderByClause other)
         {
-            OrderColumns = new List<Tuple<Expression, OrderDirection>>(other.OrderColumns.Capacity);
+            OrderColumns = new List<Tuple<ColumnRef, OrderDirection>>(other.OrderColumns.Capacity);
             OrderColumns.AddRange(other.OrderColumns.Select(
-                x => new Tuple<Expression, OrderDirection>(x.Item1.Clone() as Expression, x.Item2)));
+                x => new Tuple<ColumnRef, OrderDirection>(x.Item1.Clone() as ColumnRef, x.Item2)));
         }
 
         public object Clone()
@@ -29,11 +28,6 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString()
         {
             return DialectResolver.Dialect.OrderByClauseToString(this);
-        }
-
-        public bool CheckDataRow(DataRow r)
-        {
-            return OrderColumns.Any(c => (bool)c.Item1.Eval(r));
         }
 
         public List<ColumnRef> GetOrderByColumns()
