@@ -1,0 +1,65 @@
+﻿using System.Collections.Generic;
+using System.Data;
+
+namespace PrismaDB.QueryAST.DML
+{
+    public class AllColumns : Expression
+    {
+        public TableRef Table;
+
+        public AllColumns(string tableName)
+        {
+            setValue(tableName);
+        }
+
+        public AllColumns()
+            : this("")
+        { }
+
+        public AllColumns(TableRef table)
+            : this()
+        {
+            Table = table.Clone();
+        }
+
+        public override void setValue(params object[] value)
+        {
+            Parent = null;
+            Table = new TableRef((string)value[0]);
+        }
+
+        public override object Clone()
+        {
+            var clone = new AllColumns(Table);
+
+            return clone;
+        }
+
+        public override object Eval(DataRow r)
+        {
+            return r[ToString()];
+        }
+
+        public override List<ColumnRef> GetColumns()
+        {
+            return new List<ColumnRef>();
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.AllColumnsToString(this);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is AllColumns otherCR)) return false;
+
+            return Table.Equals(otherCR.Table);
+        }
+
+        public override int GetHashCode()
+        {
+            return Table.GetHashCode();
+        }
+    }
+}
