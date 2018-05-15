@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace PrismaDB.QueryAST.DML
@@ -37,7 +38,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Eval(DataRow r)
         {
-            return r[ToString()];
+            throw new ApplicationException("AllColumns should not be in a WHERE clause.");
         }
 
         public override List<ColumnRef> GetColumns()
