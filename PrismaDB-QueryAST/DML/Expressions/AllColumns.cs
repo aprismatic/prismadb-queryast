@@ -43,7 +43,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns()
         {
-            return new List<ColumnRef>();
+            throw new ApplicationException("AllColumns needs to be replaced with corresponding ColumnRefs in table.");
         }
 
         public override string ToString()
