@@ -1,4 +1,5 @@
-﻿using PrismaDB.QueryAST.DCL;
+﻿using System.Globalization;
+using PrismaDB.QueryAST.DCL;
 using PrismaDB.QueryAST.DDL;
 using PrismaDB.QueryAST.DML;
 
@@ -35,6 +36,7 @@ namespace PrismaDB.QueryAST
         string ScalarFunctionToString(ScalarFunction q);
         string MySqlVariableToString(MySqlVariable q);
         string OrderByClauseToString(OrderByClause q);
+        string AllColumnsToString(AllColumns q);
 
         string ExportSettingsCommandToString(ExportSettingsCommand c);
 
