@@ -220,4 +220,86 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
     }
+
+    public class BooleanIsNull : BooleanExpression
+    {
+        public Expression left;
+
+        public BooleanIsNull(Expression left, bool not = false)
+        {
+            setValue(not, left);
+        }
+
+        public BooleanIsNull(Expression left, bool not, Identifier columnname)
+        {
+            setValue(not, left, columnname);
+        }
+
+        public BooleanIsNull(Expression left, Identifier columnname)
+        {
+            setValue(false, left, columnname);
+        }
+
+        public override void setValue(params object[] value)
+        {
+            switch (value.Length)
+            {
+                case 1:
+                    NOT = false;
+                    left = (Expression) value[1];
+                    break;
+                case 2:
+                    NOT = (bool) value[0];
+                    left = (Expression) value[1];
+                    break;
+                case 3:
+                    NOT = (bool) value[0];
+                    left = (Expression) value[1];
+                    ColumnName = (Identifier) value[2];
+                    break;
+                default:
+                    throw new ArgumentException("BooleanIsNull.setValue expects one to three arguments");
+            }
+        }
+
+        public override object Clone()
+        {
+            var left_clone = (Expression) left.Clone();
+            var colid = (Identifier) ColumnName.Clone();
+            return new BooleanIsNull(left_clone, NOT, colid);
+        }
+
+        public override object Eval(DataRow r)
+        {
+            var leftres = left.Eval(r);
+            return NOT ? leftres != null : leftres == null;
+        }
+
+        public override List<ColumnRef> GetColumns()
+        {
+            return left.GetColumns();
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.BooleanIsNullToString(this);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is BooleanIsNull otherBIN)) return false;
+
+            return (NOT != otherBIN.NOT)
+                && (left.Equals(otherBIN.left))
+                && (ColumnName.Equals(otherBIN.ColumnName));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                (NOT.GetHashCode() + 1) *
+                left.GetHashCode() *
+                ColumnName.GetHashCode());
+        }
+    }
 }

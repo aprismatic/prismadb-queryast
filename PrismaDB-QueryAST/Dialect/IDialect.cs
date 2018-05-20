@@ -45,5 +45,7 @@ namespace PrismaDB.QueryAST
         string IndexModifierToString(IndexModifier q);
         string IndexTypeToString(IndexType q);
         string OrderDirectionToString(OrderDirection q);
+        string NullConstantToString(NullConstant q);
+        string BooleanIsNullToString(BooleanIsNull q);
     }
 }

@@ -1,6 +1,7 @@
-﻿using Xunit;
-using PrismaDB.QueryAST.DML;
+﻿using PrismaDB.QueryAST;
 using PrismaDB.QueryAST.DDL;
+using PrismaDB.QueryAST.DML;
+using Xunit;
 
 namespace QueryTests
 {
@@ -80,6 +81,19 @@ namespace QueryTests
 
             Assert.True(str1.Equals(str2));
             Assert.True(int1.Equals(int2));
+        }
+
+        [Fact(DisplayName = "NULLs")]
+        public void TestNulls()
+        {
+            var a = new NullConstant();
+            var b = new NullConstant();
+
+            Assert.True(a.Equals(b));
+            a.ColumnName = new Identifier("fasdf");
+            Assert.True(a.Equals(b));
+            Assert.True(b.Equals(a));
+            Assert.True(a.GetHashCode() == b.GetHashCode());
         }
     }
 }

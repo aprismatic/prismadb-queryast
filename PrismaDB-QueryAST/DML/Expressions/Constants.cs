@@ -254,4 +254,39 @@ namespace PrismaDB.QueryAST.DML
                 floatvalue.GetHashCode());
         }
     }
+
+    public class NullConstant : Constant
+    {
+        public override object Clone()
+        {
+            return new NullConstant();
+        }
+
+        public override void setValue(params object[] value) { }
+
+        public override object Eval(DataRow r)
+        {
+            throw new NotImplementedException("NULL constant should not be used in WHERE clause like that."); // TODO: reconsider
+        }
+
+        public override List<ColumnRef> GetColumns()
+        {
+            return new List<ColumnRef>();
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.NullConstantToString(this);
+        }
+
+        public override bool Equals(object other)
+        {
+            return other is NullConstant;
+        }
+
+        public override int GetHashCode()
+        {
+            return 1;
+        }
+    }
 }
