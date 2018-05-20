@@ -90,7 +90,13 @@ namespace QueryTests
             var b = new NullConstant();
 
             Assert.True(a.Equals(b));
+            Assert.True(b.Equals(a));
+            Assert.True(a.GetHashCode() == b.GetHashCode());
             a.ColumnName = new Identifier("fasdf");
+            Assert.False(a.Equals(b));
+            Assert.False(b.Equals(a));
+            Assert.False(a.GetHashCode() == b.GetHashCode());
+            b.ColumnName = new Identifier("fasdf");
             Assert.True(a.Equals(b));
             Assert.True(b.Equals(a));
             Assert.True(a.GetHashCode() == b.GetHashCode());

@@ -257,12 +257,27 @@ namespace PrismaDB.QueryAST.DML
 
     public class NullConstant : Constant
     {
-        public override object Clone()
+        public NullConstant(Identifier colname = null)
         {
-            return new NullConstant();
+            setValue(colname);
         }
 
-        public override void setValue(params object[] value) { }
+        public override object Clone()
+        {
+            return new NullConstant(ColumnName.Clone());
+        }
+
+        public override void setValue(params object[] value)
+        {
+            switch (value.Length)
+            {
+                case 1:
+                    ColumnName = value[0] as Identifier ?? new Identifier("");
+                    break;
+                default:
+                    throw new ArgumentException("NullConstant.setValue expects zero or one arguments");
+            }
+        }
 
         public override object Eval(DataRow r)
         {
@@ -281,12 +296,15 @@ namespace PrismaDB.QueryAST.DML
 
         public override bool Equals(object other)
         {
-            return other is NullConstant;
+            if (!(other is NullConstant otherNC)) return false;
+
+            return ColumnName.Equals(otherNC.ColumnName);
         }
 
         public override int GetHashCode()
         {
-            return 1;
+            return unchecked(
+                ColumnName.GetHashCode());
         }
     }
 }
