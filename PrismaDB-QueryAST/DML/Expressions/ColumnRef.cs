@@ -6,7 +6,7 @@ namespace PrismaDB.QueryAST.DML
     public class ColumnRef : Expression
     {
         public TableRef Table;
-        public Identifier Column;
+        public Identifier ColumnName;
 
         public ColumnRef(string tableName, string columnName, string aliasName)
         {
@@ -21,8 +21,8 @@ namespace PrismaDB.QueryAST.DML
             : this("", columnName, columnName)
         { }
 
-        public ColumnRef(Identifier column)
-            : this("", column.id, column.id)
+        public ColumnRef(Identifier columnName)
+            : this("", columnName.id, columnName.id)
         { }
 
         public ColumnRef(TableRef table, string columnName)
@@ -31,12 +31,12 @@ namespace PrismaDB.QueryAST.DML
             Table = table.Clone();
         }
 
-        public ColumnRef(string tableName, Identifier column)
-            : this(tableName, column.id, column.id)
+        public ColumnRef(string tableName, Identifier columnName)
+            : this(tableName, columnName.id, columnName.id)
         { }
 
-        public ColumnRef(TableRef table, Identifier column, Identifier alias)
-            : this(column.id, alias.id)
+        public ColumnRef(TableRef table, Identifier columnName, Identifier alias)
+            : this(columnName.id, alias.id)
         {
             Table = table.Clone();
         }
@@ -45,13 +45,13 @@ namespace PrismaDB.QueryAST.DML
         {
             Parent = null;
             Table = new TableRef((string)value[0]);
-            Column = new Identifier((string)value[1]);
+            ColumnName = new Identifier((string)value[1]);
             Alias = new Identifier((string)value[2]);
         }
 
         public override object Clone()
         {
-            var clone = new ColumnRef(Table, Column, Alias);
+            var clone = new ColumnRef(Table, ColumnName, Alias);
 
             return clone;
         }
@@ -79,7 +79,7 @@ namespace PrismaDB.QueryAST.DML
             if (!(other is ColumnRef otherCR)) return false;
 
             return Alias.Equals(otherCR.Alias)
-                && Column.Equals(otherCR.Column)
+                && ColumnName.Equals(otherCR.ColumnName)
                 && Table.Equals(otherCR.Table);
         }
 
@@ -87,7 +87,7 @@ namespace PrismaDB.QueryAST.DML
         {
             return unchecked(
                 Alias.GetHashCode() *
-                Column.GetHashCode() *
+                ColumnName.GetHashCode() *
                 Table.GetHashCode());
         }
     }
