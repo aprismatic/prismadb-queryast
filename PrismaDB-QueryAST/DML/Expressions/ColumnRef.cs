@@ -13,8 +13,8 @@ namespace PrismaDB.QueryAST.DML
             setValue(tableName, columnName, aliasName);
         }
 
-        public ColumnRef(string columnName, string aliasName)
-            : this("", columnName, aliasName)
+        public ColumnRef(string tableName, string columnName)
+            : this(tableName, columnName, columnName)
         { }
 
         public ColumnRef(string columnName)
@@ -35,9 +35,15 @@ namespace PrismaDB.QueryAST.DML
             : this(tableName, columnName.id, columnName.id)
         { }
 
-        public ColumnRef(TableRef table, Identifier columnName, Identifier alias)
-            : this(columnName.id, alias.id)
+        public ColumnRef(TableRef table, Identifier columnName)
+            : this(columnName.id)
         {
+            Table = table.Clone();
+        }
+
+        public ColumnRef(TableRef table, Identifier columnName, Identifier alias)
+        {
+            setValue("", columnName.id, alias.id);
             Table = table.Clone();
         }
 
