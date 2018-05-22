@@ -7,7 +7,7 @@ namespace PrismaDB.QueryAST.DML
 {
     public class ScalarFunction : Expression
     {
-        public Identifier FunctionName;
+        public Identifier Function;
         public List<Expression> Parameters;
 
         public ScalarFunction(string functionName)
@@ -20,14 +20,14 @@ namespace PrismaDB.QueryAST.DML
             setValue(new Identifier(functionName), new Identifier(aliasName), new List<Expression>());
         }
 
-        public ScalarFunction(Identifier functionName)
+        public ScalarFunction(Identifier function)
         {
-            setValue(functionName, new Identifier(""), new List<Expression>());
+            setValue(function, new Identifier(""), new List<Expression>());
         }
 
-        public ScalarFunction(Identifier functionName, Identifier aliasName)
+        public ScalarFunction(Identifier function, Identifier alias)
         {
-            setValue(functionName, aliasName, new List<Expression>());
+            setValue(function, alias, new List<Expression>());
         }
 
         public ScalarFunction(string functionName, List<Expression> parameters)
@@ -40,19 +40,19 @@ namespace PrismaDB.QueryAST.DML
             setValue(new Identifier(functionName), new Identifier(aliasName), parameters);
         }
 
-        public ScalarFunction(Identifier functionName, List<Expression> parameters)
+        public ScalarFunction(Identifier function, List<Expression> parameters)
         {
-            setValue(functionName, new Identifier(""), parameters);
+            setValue(function, new Identifier(""), parameters);
         }
 
-        public ScalarFunction(Identifier functionName, Identifier aliasName, List<Expression> parameters)
+        public ScalarFunction(Identifier function, Identifier alias, List<Expression> parameters)
         {
-            setValue(functionName, aliasName, parameters);
+            setValue(function, alias, parameters);
         }
 
         public override object Clone()
         {
-            var clone = new ScalarFunction(FunctionName, Alias, Parameters);
+            var clone = new ScalarFunction(Function, Alias, Parameters);
 
             return clone;
         }
@@ -60,7 +60,7 @@ namespace PrismaDB.QueryAST.DML
         public override bool Equals(object other)
         {
             if (!(other is ScalarFunction otherF)) return false;
-            return (FunctionName.Equals(otherF.FunctionName)) &&
+            return (Function.Equals(otherF.Function)) &&
                    (Alias.Equals(otherF.Alias)) &&
                    (Parameters.SequenceEqual(otherF.Parameters));
         }
@@ -77,14 +77,14 @@ namespace PrismaDB.QueryAST.DML
 
         public override int GetHashCode()
         {
-            return unchecked(FunctionName.GetHashCode() * Alias.GetHashCode() *
+            return unchecked(Function.GetHashCode() * Alias.GetHashCode() *
                 Parameters.Select(x => x.GetHashCode()).Aggregate((a, b) => a * b));
         }
 
         public override void setValue(params object[] value)
         {
             Parent = null;
-            FunctionName = (Identifier)value[0];
+            Function = (Identifier)value[0];
             Alias = new Identifier("");
             Parameters = new List<Expression>();
 

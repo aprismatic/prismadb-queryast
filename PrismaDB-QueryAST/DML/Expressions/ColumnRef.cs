@@ -13,6 +13,10 @@ namespace PrismaDB.QueryAST.DML
             setValue(tableName, columnName, aliasName);
         }
 
+        public ColumnRef(string columnName, string aliasName)
+            : this("", columnName, aliasName)
+        { }
+
         public ColumnRef(string columnName)
             : this("", columnName, columnName)
         { }
@@ -31,8 +35,8 @@ namespace PrismaDB.QueryAST.DML
             : this(tableName, column.id, column.id)
         { }
 
-        public ColumnRef(TableRef table, Identifier column)
-            : this(column.id)
+        public ColumnRef(TableRef table, Identifier column, Identifier alias)
+            : this(column.id, alias.id)
         {
             Table = table.Clone();
         }
@@ -47,7 +51,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            var clone = new ColumnRef(Table, Alias);
+            var clone = new ColumnRef(Table, Column, Alias);
 
             return clone;
         }
