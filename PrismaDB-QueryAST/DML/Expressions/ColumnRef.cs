@@ -14,15 +14,15 @@ namespace PrismaDB.QueryAST.DML
         }
 
         public ColumnRef(string tableName, string columnName)
-            : this(tableName, columnName, columnName)
+            : this(tableName, columnName, "")
         { }
 
         public ColumnRef(string columnName)
-            : this("", columnName, columnName)
+            : this("", columnName, "")
         { }
 
         public ColumnRef(Identifier columnName)
-            : this("", columnName.id, columnName.id)
+            : this("", columnName.id, "")
         { }
 
         public ColumnRef(TableRef table, string columnName)
@@ -32,7 +32,7 @@ namespace PrismaDB.QueryAST.DML
         }
 
         public ColumnRef(string tableName, Identifier columnName)
-            : this(tableName, columnName.id, columnName.id)
+            : this(tableName, columnName.id, "")
         { }
 
         public ColumnRef(TableRef table, Identifier columnName)
