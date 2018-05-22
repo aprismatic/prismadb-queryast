@@ -36,9 +36,9 @@ namespace PrismaDB.QueryAST.DML
             setValue(left, right, "");
         }
 
-        public Addition(Expression left, Expression right, string ColumnName)
+        public Addition(Expression left, Expression right, string aliasName)
         {
-            setValue(left, right, ColumnName);
+            setValue(left, right, aliasName);
         }
 
         public override void setValue(params object[] value)
@@ -50,7 +50,7 @@ namespace PrismaDB.QueryAST.DML
             right = (Expression)value[1];
 
             if (value.Length > 2)
-                ColumnName = new Identifier((string)value[2]);
+                Alias = new Identifier((string)value[2]);
         }
 
         public override object Clone()
@@ -58,7 +58,7 @@ namespace PrismaDB.QueryAST.DML
             var left_clone = left.Clone() as Expression;
             var right_clone = right.Clone() as Expression;
 
-            var clone = new Addition(left_clone, right_clone, ColumnName.id);
+            var clone = new Addition(left_clone, right_clone, Alias.id);
 
             return clone;
         }
@@ -85,7 +85,7 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is Addition otherA)) return false;
 
-            return (this.ColumnName == otherA.ColumnName)
+            return (this.Alias == otherA.Alias)
                 && (this.left.Equals(otherA.left))
                 && (this.right.Equals(otherA.right));
         }
@@ -93,7 +93,7 @@ namespace PrismaDB.QueryAST.DML
         public override int GetHashCode()
         {
             return unchecked(
-                ColumnName.GetHashCode() *
+                Alias.GetHashCode() *
                 left.GetHashCode() *
                 right.GetHashCode());
         }
@@ -106,9 +106,9 @@ namespace PrismaDB.QueryAST.DML
             setValue(left, right, "");
         }
 
-        public Multiplication(Expression left, Expression right, string ColumnName)
+        public Multiplication(Expression left, Expression right, string aliasName)
         {
-            setValue(left, right, ColumnName);
+            setValue(left, right, aliasName);
         }
 
         public override void setValue(params object[] value)
@@ -120,7 +120,7 @@ namespace PrismaDB.QueryAST.DML
             right = (Expression)value[1];
 
             if (value.Length > 2)
-                ColumnName = new Identifier((string)value[2]);
+                Alias = new Identifier((string)value[2]);
         }
 
         public override object Clone()
@@ -128,7 +128,7 @@ namespace PrismaDB.QueryAST.DML
             var left_clone = left.Clone();
             var right_clone = right.Clone();
 
-            var clone = new Multiplication(left_clone as Expression, right_clone as Expression, ColumnName.id);
+            var clone = new Multiplication(left_clone as Expression, right_clone as Expression, Alias.id);
 
             return clone;
         }
@@ -155,7 +155,7 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is Multiplication otherM)) return false;
 
-            return (this.ColumnName == otherM.ColumnName)
+            return (this.Alias == otherM.Alias)
                 && (this.left.Equals(otherM.left))
                 && (this.right.Equals(otherM.right));
         }
@@ -163,7 +163,7 @@ namespace PrismaDB.QueryAST.DML
         public override int GetHashCode()
         {
             return unchecked(
-                ColumnName.GetHashCode() *
+                Alias.GetHashCode() *
                 left.GetHashCode() *
                 right.GetHashCode());
         }
@@ -178,9 +178,9 @@ namespace PrismaDB.QueryAST.DML
             setValue(left, right, N, "");
         }
 
-        public PaillierAddition(Expression left, Expression right, Expression N, string ColumnName)
+        public PaillierAddition(Expression left, Expression right, Expression N, string aliasName)
         {
-            setValue(left, right, N, ColumnName);
+            setValue(left, right, N, aliasName);
         }
 
         public override void setValue(params object[] value)
@@ -194,7 +194,7 @@ namespace PrismaDB.QueryAST.DML
             N = (Expression)value[2];
 
             if (value.Length > 3)
-                ColumnName = new Identifier((string)value[3]);
+                Alias = new Identifier((string)value[3]);
         }
 
         public override object Clone()
@@ -203,7 +203,7 @@ namespace PrismaDB.QueryAST.DML
             var right_clone = right.Clone() as Expression;
             var N_clone = N.Clone() as Expression;
 
-            var clone = new PaillierAddition(left_clone, right_clone, N_clone, ColumnName.id);
+            var clone = new PaillierAddition(left_clone, right_clone, N_clone, Alias.id);
 
             return clone;
         }
@@ -227,7 +227,7 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is PaillierAddition otherPA)) return false;
 
-            return (this.ColumnName == otherPA.ColumnName)
+            return (this.Alias == otherPA.Alias)
                 && (this.left.Equals(otherPA.left))
                 && (this.right.Equals(otherPA.right))
                 && (this.N.Equals(otherPA.N));
@@ -236,7 +236,7 @@ namespace PrismaDB.QueryAST.DML
         public override int GetHashCode()
         {
             return unchecked(
-                ColumnName.GetHashCode() *
+                Alias.GetHashCode() *
                 left.GetHashCode() *
                 right.GetHashCode() *
                 N.GetHashCode());
@@ -252,9 +252,9 @@ namespace PrismaDB.QueryAST.DML
             setValue(left, right, P, "");
         }
 
-        public ElGamalMultiplication(Expression left, Expression right, Expression P, string ColumnName)
+        public ElGamalMultiplication(Expression left, Expression right, Expression P, string aliasName)
         {
-            setValue(left, right, P, ColumnName);
+            setValue(left, right, P, aliasName);
         }
 
         public override void setValue(params object[] value)
@@ -268,7 +268,7 @@ namespace PrismaDB.QueryAST.DML
             P = (Expression)value[2];
 
             if (value.Length > 3)
-                ColumnName = new Identifier((string)value[3]);
+                Alias = new Identifier((string)value[3]);
         }
 
         public override object Clone()
@@ -277,7 +277,7 @@ namespace PrismaDB.QueryAST.DML
             var right_clone = right.Clone() as Expression;
             var P_clone = P.Clone() as Expression;
 
-            var clone = new ElGamalMultiplication(left_clone, right_clone, P_clone, ColumnName.id);
+            var clone = new ElGamalMultiplication(left_clone, right_clone, P_clone, Alias.id);
 
             return clone;
         }
@@ -301,7 +301,7 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is ElGamalMultiplication otherEGM)) return false;
 
-            return (this.ColumnName == otherEGM.ColumnName)
+            return (this.Alias == otherEGM.Alias)
                 && (this.left.Equals(otherEGM.left))
                 && (this.right.Equals(otherEGM.right))
                 && (this.P.Equals(otherEGM.P));
@@ -310,7 +310,7 @@ namespace PrismaDB.QueryAST.DML
         public override int GetHashCode()
         {
             return unchecked(
-                ColumnName.GetHashCode() *
+                Alias.GetHashCode() *
                 left.GetHashCode() *
                 right.GetHashCode() *
                 P.GetHashCode());

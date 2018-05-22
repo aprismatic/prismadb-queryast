@@ -6,18 +6,23 @@ namespace PrismaDB.QueryAST.DML
     public class ColumnRef : Expression
     {
         public TableRef Table;
+        public Identifier ColumnName;
 
-        public ColumnRef(string tableName, string columnName)
+        public ColumnRef(string tableName, string columnName, string aliasName)
         {
-            setValue(tableName, columnName);
+            setValue(tableName, columnName, aliasName);
         }
 
-        public ColumnRef(string columnName)
-            : this("", columnName)
+        public ColumnRef(string columnName, string aliasName)
+            : this("", columnName, aliasName)
         { }
 
-        public ColumnRef(Identifier column)
-            : this("", column.id)
+        public ColumnRef(string columnName)
+            : this("", columnName, columnName)
+        { }
+
+        public ColumnRef(Identifier columnName)
+            : this("", columnName.id, columnName.id)
         { }
 
         public ColumnRef(TableRef table, string columnName)
@@ -26,12 +31,12 @@ namespace PrismaDB.QueryAST.DML
             Table = table.Clone();
         }
 
-        public ColumnRef(string tableName, Identifier column)
-            : this(tableName, column.id)
+        public ColumnRef(string tableName, Identifier columnName)
+            : this(tableName, columnName.id, columnName.id)
         { }
 
-        public ColumnRef(TableRef table, Identifier column)
-            : this(column.id)
+        public ColumnRef(TableRef table, Identifier columnName, Identifier alias)
+            : this(columnName.id, alias.id)
         {
             Table = table.Clone();
         }
@@ -41,11 +46,12 @@ namespace PrismaDB.QueryAST.DML
             Parent = null;
             Table = new TableRef((string)value[0]);
             ColumnName = new Identifier((string)value[1]);
+            Alias = new Identifier((string)value[2]);
         }
 
         public override object Clone()
         {
-            var clone = new ColumnRef(Table, ColumnName);
+            var clone = new ColumnRef(Table, ColumnName, Alias);
 
             return clone;
         }
@@ -72,13 +78,15 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is ColumnRef otherCR)) return false;
 
-            return ColumnName.Equals(otherCR.ColumnName)
+            return Alias.Equals(otherCR.Alias)
+                && ColumnName.Equals(otherCR.ColumnName)
                 && Table.Equals(otherCR.Table);
         }
 
         public override int GetHashCode()
         {
             return unchecked(
+                Alias.GetHashCode() *
                 ColumnName.GetHashCode() *
                 Table.GetHashCode());
         }

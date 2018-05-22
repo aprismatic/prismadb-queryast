@@ -6,7 +6,7 @@ namespace PrismaDB.QueryAST.DML
 {
     public abstract class Expression : ICloneable
     {
-        public Identifier ColumnName;
+        public Identifier Alias;
 
         public Expression Parent;
 

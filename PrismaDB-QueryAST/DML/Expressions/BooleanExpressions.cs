@@ -27,9 +27,9 @@ namespace PrismaDB.QueryAST.DML
         public override object Eval(DataRow r) { return !NOT; }
         public override List<ColumnRef> GetColumns() { return new List<ColumnRef>(); }
         public override string ToString() { return DialectResolver.Dialect.BooleanTrueToString(this); }
-        public override bool Equals(object other) { return (ColumnName == (other as BooleanTrue)?.ColumnName)
+        public override bool Equals(object other) { return (Alias == (other as BooleanTrue)?.Alias)
                                                         && (NOT == (other as BooleanTrue)?.NOT); }
-        public override int GetHashCode() { return unchecked(ColumnName.GetHashCode() * (NOT.GetHashCode() + 1)); }
+        public override int GetHashCode() { return unchecked(Alias.GetHashCode() * (NOT.GetHashCode() + 1)); }
     }
 
     public class BooleanIn : BooleanExpression
@@ -39,7 +39,7 @@ namespace PrismaDB.QueryAST.DML
 
         public BooleanIn()
         {
-            ColumnName = new Identifier("");
+            Alias = new Identifier("");
             Column = new ColumnRef("");
             InValues = new List<Constant>();
             NOT = false;
@@ -77,7 +77,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Eval(DataRow r)  // TODO: Check for correctness
         {
-            return InValues.Select(x => x.ToString()).Contains(r[Column.ColumnName.id].ToString()) ? !NOT : NOT;
+            return InValues.Select(x => x.ToString()).Contains(r[Column.Alias.id].ToString()) ? !NOT : NOT;
         }
 
         public override List<ColumnRef> GetColumns()
@@ -98,7 +98,7 @@ namespace PrismaDB.QueryAST.DML
             if (!(other is BooleanIn otherBI)) return false;
 
             return (this.NOT != otherBI.NOT)
-                && (this.ColumnName == otherBI.ColumnName)
+                && (this.Alias == otherBI.Alias)
                 && (this.Column.Equals(otherBI.Column))
                 && (this.InValues.All(x => otherBI.InValues.Exists(y => x.Equals(y))));
         }
@@ -107,7 +107,7 @@ namespace PrismaDB.QueryAST.DML
         {
             return unchecked(
                 (NOT.GetHashCode() + 1) *
-                ColumnName.GetHashCode() *
+                Alias.GetHashCode() *
                 Column.GetHashCode() *
                 InValues.Aggregate(1, (x, y) => unchecked(x * y.GetHashCode())));
         }
@@ -166,7 +166,7 @@ namespace PrismaDB.QueryAST.DML
             if (!(other is BooleanEquals otherBE)) return false;
 
             return (this.NOT != otherBE.NOT)
-                && (this.ColumnName == otherBE.ColumnName)
+                && (this.Alias == otherBE.Alias)
                 && (this.left.Equals(otherBE.left))
                 && (this.right.Equals(otherBE.right));
         }
@@ -175,7 +175,7 @@ namespace PrismaDB.QueryAST.DML
         {
             return unchecked(
                 (NOT.GetHashCode() + 1) *
-                ColumnName.GetHashCode() *
+                Alias.GetHashCode() *
                 left.GetHashCode() *
                 right.GetHashCode());
         }
@@ -255,7 +255,7 @@ namespace PrismaDB.QueryAST.DML
                 case 3:
                     NOT = (bool) value[0];
                     left = (Expression) value[1];
-                    ColumnName = (Identifier) value[2];
+                    Alias = (Identifier) value[2];
                     break;
                 default:
                     throw new ArgumentException("BooleanIsNull.setValue expects one to three arguments");
@@ -265,7 +265,7 @@ namespace PrismaDB.QueryAST.DML
         public override object Clone()
         {
             var left_clone = (Expression) left.Clone();
-            var colid = (Identifier) ColumnName.Clone();
+            var colid = (Identifier) Alias.Clone();
             return new BooleanIsNull(left_clone, NOT, colid);
         }
 
@@ -291,7 +291,7 @@ namespace PrismaDB.QueryAST.DML
 
             return (NOT != otherBIN.NOT)
                 && (left.Equals(otherBIN.left))
-                && (ColumnName.Equals(otherBIN.ColumnName));
+                && (Alias.Equals(otherBIN.Alias));
         }
 
         public override int GetHashCode()
@@ -299,7 +299,7 @@ namespace PrismaDB.QueryAST.DML
             return unchecked(
                 (NOT.GetHashCode() + 1) *
                 left.GetHashCode() *
-                ColumnName.GetHashCode());
+                Alias.GetHashCode());
         }
     }
 }
