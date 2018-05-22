@@ -15,9 +15,9 @@ namespace PrismaDB.QueryAST.DML
             setValue(new Identifier(functionName), new Identifier(""), new List<Expression>());
         }
 
-        public ScalarFunction(string functionName, string columnName)
+        public ScalarFunction(string functionName, string aliasName)
         {
-            setValue(new Identifier(functionName), new Identifier(columnName), new List<Expression>());
+            setValue(new Identifier(functionName), new Identifier(aliasName), new List<Expression>());
         }
 
         public ScalarFunction(Identifier functionName)
@@ -25,9 +25,9 @@ namespace PrismaDB.QueryAST.DML
             setValue(functionName, new Identifier(""), new List<Expression>());
         }
 
-        public ScalarFunction(Identifier functionName, Identifier columnName)
+        public ScalarFunction(Identifier functionName, Identifier aliasName)
         {
-            setValue(functionName, columnName, new List<Expression>());
+            setValue(functionName, aliasName, new List<Expression>());
         }
 
         public ScalarFunction(string functionName, List<Expression> parameters)
@@ -35,9 +35,9 @@ namespace PrismaDB.QueryAST.DML
             setValue(new Identifier(functionName), new Identifier(""), parameters);
         }
 
-        public ScalarFunction(string functionName, string columnName, List<Expression> parameters)
+        public ScalarFunction(string functionName, string aliasName, List<Expression> parameters)
         {
-            setValue(new Identifier(functionName), new Identifier(columnName), parameters);
+            setValue(new Identifier(functionName), new Identifier(aliasName), parameters);
         }
 
         public ScalarFunction(Identifier functionName, List<Expression> parameters)
@@ -45,14 +45,14 @@ namespace PrismaDB.QueryAST.DML
             setValue(functionName, new Identifier(""), parameters);
         }
 
-        public ScalarFunction(Identifier functionName, Identifier columnName, List<Expression> parameters)
+        public ScalarFunction(Identifier functionName, Identifier aliasName, List<Expression> parameters)
         {
-            setValue(functionName, columnName, parameters);
+            setValue(functionName, aliasName, parameters);
         }
 
         public override object Clone()
         {
-            var clone = new ScalarFunction(FunctionName, ColumnName, Parameters);
+            var clone = new ScalarFunction(FunctionName, Alias, Parameters);
 
             return clone;
         }
@@ -61,7 +61,7 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is ScalarFunction otherF)) return false;
             return (FunctionName.Equals(otherF.FunctionName)) &&
-                   (ColumnName.Equals(otherF.ColumnName)) &&
+                   (Alias.Equals(otherF.Alias)) &&
                    (Parameters.SequenceEqual(otherF.Parameters));
         }
 
@@ -77,7 +77,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override int GetHashCode()
         {
-            return unchecked(FunctionName.GetHashCode() * ColumnName.GetHashCode() *
+            return unchecked(FunctionName.GetHashCode() * Alias.GetHashCode() *
                 Parameters.Select(x => x.GetHashCode()).Aggregate((a, b) => a * b));
         }
 
@@ -85,14 +85,14 @@ namespace PrismaDB.QueryAST.DML
         {
             Parent = null;
             FunctionName = (Identifier)value[0];
-            ColumnName = new Identifier("");
+            Alias = new Identifier("");
             Parameters = new List<Expression>();
 
             if (value.Length > 1)
             {
                 if (value[1].GetType() == typeof(Identifier))
                 {
-                    ColumnName = (Identifier)value[1];
+                    Alias = (Identifier)value[1];
                 }
                 else
                 {

@@ -16,9 +16,9 @@ namespace PrismaDB.QueryAST.DML
             setValue(value, "");
         }
 
-        public IntConstant(Int32 value, string ColumnName)
+        public IntConstant(Int32 value, string aliasName)
         {
-            setValue(value, ColumnName);
+            setValue(value, aliasName);
         }
 
         public override void setValue(params object[] value)
@@ -28,12 +28,12 @@ namespace PrismaDB.QueryAST.DML
             intvalue = (Int32)value[0];
 
             if (value.Length > 1)
-                ColumnName = new Identifier((string)value[1]);
+                Alias = new Identifier((string)value[1]);
         }
 
         public override object Clone()
         {
-            var clone = new IntConstant(intvalue, ColumnName.id);
+            var clone = new IntConstant(intvalue, Alias.id);
 
             return clone;
         }
@@ -57,14 +57,14 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is IntConstant otherIC)) return false;
 
-            return (this.ColumnName.Equals(otherIC.ColumnName))
+            return (this.Alias.Equals(otherIC.Alias))
                 && (this.intvalue == otherIC.intvalue);
         }
 
         public override int GetHashCode()
         {
             return unchecked(
-                ColumnName.GetHashCode() *
+                Alias.GetHashCode() *
                 intvalue.GetHashCode());
         }
     }
@@ -78,9 +78,9 @@ namespace PrismaDB.QueryAST.DML
             setValue(strvalue, "");
         }
 
-        public StringConstant(string strvalue, string ColumnName)
+        public StringConstant(string strvalue, string aliasName)
         {
-            setValue(strvalue, ColumnName);
+            setValue(strvalue, aliasName);
         }
 
         public override void setValue(params object[] value)
@@ -90,12 +90,12 @@ namespace PrismaDB.QueryAST.DML
             strvalue = (string)((string)value[0]).Clone();
 
             if (value.Length > 1)
-                ColumnName = new Identifier((string)value[1]);
+                Alias = new Identifier((string)value[1]);
         }
 
         public override object Clone()
         {
-            var clone = new StringConstant(strvalue, ColumnName.id);
+            var clone = new StringConstant(strvalue, Alias.id);
 
             return clone;
         }
@@ -119,14 +119,14 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is StringConstant otherSC)) return false;
 
-            return (this.ColumnName.Equals(otherSC.ColumnName))
+            return (this.Alias.Equals(otherSC.Alias))
                 && (this.strvalue == otherSC.strvalue);
         }
 
         public override int GetHashCode()
         {
             return unchecked(
-                ColumnName.GetHashCode() *
+                Alias.GetHashCode() *
                 strvalue.GetHashCode());
         }
     }
@@ -140,9 +140,9 @@ namespace PrismaDB.QueryAST.DML
             setValue(binvalue, "");
         }
 
-        public BinaryConstant(byte[] binvalue, string ColumnName)
+        public BinaryConstant(byte[] binvalue, string aliasName)
         {
-            setValue(binvalue, ColumnName);
+            setValue(binvalue, aliasName);
         }
 
         public override void setValue(params object[] value)
@@ -152,12 +152,12 @@ namespace PrismaDB.QueryAST.DML
             binvalue = (byte[])((byte[])value[0]).Clone();
 
             if (value.Length > 1)
-                ColumnName = new Identifier((string)value[1]);
+                Alias = new Identifier((string)value[1]);
         }
 
         public override object Clone()
         {
-            var clone = new BinaryConstant(binvalue, ColumnName.id);
+            var clone = new BinaryConstant(binvalue, Alias.id);
 
             return clone;
         }
@@ -181,14 +181,14 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is BinaryConstant otherBC)) return false;
 
-            return (this.ColumnName.Equals(otherBC.ColumnName))
+            return (this.Alias.Equals(otherBC.Alias))
                 && (this.binvalue.SequenceEqual(otherBC.binvalue));
         }
 
         public override int GetHashCode()
         {
             return unchecked(
-                ColumnName.GetHashCode() *
+                Alias.GetHashCode() *
                 binvalue.Aggregate(1, unchecked((x, y) => x * y.GetHashCode())));
         }
     }
@@ -214,12 +214,12 @@ namespace PrismaDB.QueryAST.DML
             floatvalue = (Double)value[0];
 
             if (value.Length > 1)
-                ColumnName = new Identifier((string)value[1]);
+                Alias = new Identifier((string)value[1]);
         }
 
         public override object Clone()
         {
-            var clone = new FloatingPointConstant(floatvalue, ColumnName.id);
+            var clone = new FloatingPointConstant(floatvalue, Alias.id);
 
             return clone;
         }
@@ -243,28 +243,28 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is FloatingPointConstant otherIC)) return false;
 
-            return (this.ColumnName.Equals(otherIC.ColumnName))
+            return (this.Alias.Equals(otherIC.Alias))
                 && (this.floatvalue == otherIC.floatvalue);
         }
 
         public override int GetHashCode()
         {
             return unchecked(
-                ColumnName.GetHashCode() *
+                Alias.GetHashCode() *
                 floatvalue.GetHashCode());
         }
     }
 
     public class NullConstant : Constant
     {
-        public NullConstant(Identifier colname = null)
+        public NullConstant(Identifier aliasName = null)
         {
-            setValue(colname);
+            setValue(aliasName);
         }
 
         public override object Clone()
         {
-            return new NullConstant(ColumnName.Clone());
+            return new NullConstant(Alias.Clone());
         }
 
         public override void setValue(params object[] value)
@@ -272,7 +272,7 @@ namespace PrismaDB.QueryAST.DML
             switch (value.Length)
             {
                 case 1:
-                    ColumnName = value[0] as Identifier ?? new Identifier("");
+                    Alias = value[0] as Identifier ?? new Identifier("");
                     break;
                 default:
                     throw new ArgumentException("NullConstant.setValue expects zero or one arguments");
@@ -298,13 +298,13 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is NullConstant otherNC)) return false;
 
-            return ColumnName.Equals(otherNC.ColumnName);
+            return Alias.Equals(otherNC.Alias);
         }
 
         public override int GetHashCode()
         {
             return unchecked(
-                ColumnName.GetHashCode());
+                Alias.GetHashCode());
         }
     }
 }

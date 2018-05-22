@@ -6,18 +6,19 @@ namespace PrismaDB.QueryAST.DML
     public class ColumnRef : Expression
     {
         public TableRef Table;
+        public Identifier Column;
 
-        public ColumnRef(string tableName, string columnName)
+        public ColumnRef(string tableName, string columnName, string aliasName)
         {
-            setValue(tableName, columnName);
+            setValue(tableName, columnName, aliasName);
         }
 
         public ColumnRef(string columnName)
-            : this("", columnName)
+            : this("", columnName, columnName)
         { }
 
         public ColumnRef(Identifier column)
-            : this("", column.id)
+            : this("", column.id, column.id)
         { }
 
         public ColumnRef(TableRef table, string columnName)
@@ -27,7 +28,7 @@ namespace PrismaDB.QueryAST.DML
         }
 
         public ColumnRef(string tableName, Identifier column)
-            : this(tableName, column.id)
+            : this(tableName, column.id, column.id)
         { }
 
         public ColumnRef(TableRef table, Identifier column)
@@ -40,12 +41,13 @@ namespace PrismaDB.QueryAST.DML
         {
             Parent = null;
             Table = new TableRef((string)value[0]);
-            ColumnName = new Identifier((string)value[1]);
+            Column = new Identifier((string)value[1]);
+            Alias = new Identifier((string)value[2]);
         }
 
         public override object Clone()
         {
-            var clone = new ColumnRef(Table, ColumnName);
+            var clone = new ColumnRef(Table, Alias);
 
             return clone;
         }
@@ -72,14 +74,16 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is ColumnRef otherCR)) return false;
 
-            return ColumnName.Equals(otherCR.ColumnName)
+            return Alias.Equals(otherCR.Alias)
+                && Column.Equals(otherCR.Column)
                 && Table.Equals(otherCR.Table);
         }
 
         public override int GetHashCode()
         {
             return unchecked(
-                ColumnName.GetHashCode() *
+                Alias.GetHashCode() *
+                Column.GetHashCode() *
                 Table.GetHashCode());
         }
     }
