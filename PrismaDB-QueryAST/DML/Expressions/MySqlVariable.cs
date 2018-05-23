@@ -57,6 +57,11 @@ namespace PrismaDB.QueryAST.DML
             return new List<ColumnRef>();
         }
 
+        public override string DisplayName()
+        {
+            return Alias.id;
+        }
+
         public override string ToString()
         {
             return DialectResolver.Dialect.MySqlVariableToString(this);

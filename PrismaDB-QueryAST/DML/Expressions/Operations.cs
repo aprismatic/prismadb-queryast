@@ -76,6 +76,11 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
+        public override string DisplayName()
+        {
+            return Alias.id;
+        }
+
         public override string ToString()
         {
             return DialectResolver.Dialect.AdditionToString(this);
@@ -144,6 +149,11 @@ namespace PrismaDB.QueryAST.DML
             res.AddRange(left.GetColumns());
             res.AddRange(right.GetColumns());
             return res;
+        }
+
+        public override string DisplayName()
+        {
+            return Alias.id;
         }
 
         public override string ToString()
@@ -218,6 +228,11 @@ namespace PrismaDB.QueryAST.DML
             throw new NotImplementedException("This method should not be called.");
         }
 
+        public override string DisplayName()
+        {
+            return Alias.id;
+        }
+
         public override string ToString()
         {
             return DialectResolver.Dialect.PaillierAdditionToString(this);
@@ -290,6 +305,11 @@ namespace PrismaDB.QueryAST.DML
         public override List<ColumnRef> GetColumns()
         {
             throw new NotImplementedException("This method should not be called.");
+        }
+
+        public override string DisplayName()
+        {
+            return Alias.id;
         }
 
         public override string ToString()

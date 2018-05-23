@@ -48,6 +48,11 @@ namespace PrismaDB.QueryAST.DML
             return new List<ColumnRef>();
         }
 
+        public override string DisplayName()
+        {
+            return Alias.id;
+        }
+
         public override string ToString()
         {
             return DialectResolver.Dialect.IntConstantToString(this);
@@ -108,6 +113,11 @@ namespace PrismaDB.QueryAST.DML
         public override List<ColumnRef> GetColumns()
         {
             return new List<ColumnRef>();
+        }
+
+        public override string DisplayName()
+        {
+            return Alias.id;
         }
 
         public override string ToString()
@@ -172,6 +182,11 @@ namespace PrismaDB.QueryAST.DML
             throw new NotImplementedException("This method should not be called.");
         }
 
+        public override string DisplayName()
+        {
+            return Alias.id;
+        }
+
         public override string ToString()
         {
             return DialectResolver.Dialect.BinaryConstantToString(this);
@@ -234,6 +249,11 @@ namespace PrismaDB.QueryAST.DML
             return new List<ColumnRef>();
         }
 
+        public override string DisplayName()
+        {
+            return Alias.id;
+        }
+
         public override string ToString()
         {
             return DialectResolver.Dialect.FloatingPointConstantToString(this);
@@ -287,6 +307,11 @@ namespace PrismaDB.QueryAST.DML
         public override List<ColumnRef> GetColumns()
         {
             return new List<ColumnRef>();
+        }
+
+        public override string DisplayName()
+        {
+            return Alias.id;
         }
 
         public override string ToString()
