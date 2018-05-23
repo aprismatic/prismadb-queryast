@@ -4,7 +4,7 @@ using PrismaDB.QueryAST.DML;
 
 namespace PrismaDB.QueryAST.Result
 {
-    public class DataColumn
+    public class ResultColumnHeader
     {
         private Expression _expression;
         private ColumnDefinition _columnDefinition;
@@ -60,22 +60,22 @@ namespace PrismaDB.QueryAST.Result
             }
         }
 
-        public DataColumn()
+        public ResultColumnHeader()
         {
             ColumnName = "";
         }
 
-        public DataColumn(string columnName)
+        public ResultColumnHeader(string columnName)
         {
             ColumnName = columnName;
         }
 
-        public DataColumn(Expression exp)
+        public ResultColumnHeader(Expression exp)
         {
             Expression = exp;
         }
 
-        public DataColumn(Expression exp, ColumnDefinition columnDef)
+        public ResultColumnHeader(Expression exp, ColumnDefinition columnDef)
             : this(exp)
         {
             ColumnDefinition = columnDef;

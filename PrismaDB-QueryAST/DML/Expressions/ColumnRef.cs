@@ -62,7 +62,7 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
             return r.Get(this);
         }

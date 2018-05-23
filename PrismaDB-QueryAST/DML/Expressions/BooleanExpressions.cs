@@ -24,7 +24,7 @@ namespace PrismaDB.QueryAST.DML
                 throw new ArgumentException("BooleanTrue.setValue expects no more than one argument");
         }
         public override object Clone() { return new BooleanTrue(NOT); }
-        public override object Eval(DataRow r) { return !NOT; }
+        public override object Eval(ResultRow r) { return !NOT; }
         public override List<ColumnRef> GetColumns() { return new List<ColumnRef>(); }
         public override string ToString() { return DialectResolver.Dialect.BooleanTrueToString(this); }
         public override bool Equals(object other) { return (Alias == (other as BooleanTrue)?.Alias)
@@ -75,7 +75,7 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override object Eval(DataRow r)  // TODO: Check for correctness
+        public override object Eval(ResultRow r)  // TODO: Check for correctness
         {
             return InValues.Select(x => x.ToString()).Contains(r.Get(Column).ToString()) ? !NOT : NOT;
         }
@@ -180,7 +180,7 @@ namespace PrismaDB.QueryAST.DML
                 right.GetHashCode());
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
             var leftEval = left.Eval(r);
             var rightEval = right.Eval(r);
@@ -269,7 +269,7 @@ namespace PrismaDB.QueryAST.DML
             return new BooleanIsNull(left_clone, NOT, colid);
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
             var leftres = left.Eval(r);
             return NOT ? leftres != null : leftres == null;

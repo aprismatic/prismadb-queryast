@@ -5,31 +5,28 @@ using PrismaDB.QueryAST.DML;
 
 namespace PrismaDB.QueryAST.Result
 {
-    public class DataTable
+    public class ResultTable
     {
-        private List<DataColumn> _columns;
-        private List<DataRow> _rows;
+        private List<ResultRow> _rows;
 
-        public List<DataColumn> Columns => _columns;
-        public List<DataRow> Rows => _rows;
-
+        public ResultColumnList Columns { get; }
+        public List<ResultRow> Rows => _rows;
         public string TableName { get; set; }
 
-
-        public DataTable()
+        public ResultTable()
         {
-            _columns = new List<DataColumn>();
-            _rows = new List<DataRow>();
+            Columns = new ResultColumnList(this);
+            _rows = new List<ResultRow>();
         }
 
-        public DataTable(string tableName) : this()
+        public ResultTable(string tableName) : this()
         {
             TableName = tableName;
         }
 
-        public DataRow NewRow()
+        public ResultRow NewRow()
         {
-            return new DataRow(this);
+            return new ResultRow(this);
         }
 
         public void Sort(IEnumerable<Pair<string, OrderDirection>> orderColumns)

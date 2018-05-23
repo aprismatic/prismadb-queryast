@@ -65,7 +65,7 @@ namespace PrismaDB.QueryAST.DML
                    (Parameters.SequenceEqual(otherF.Parameters));
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
             throw new NotImplementedException("Functions can't currently be evaluated on proxy side.");
         }

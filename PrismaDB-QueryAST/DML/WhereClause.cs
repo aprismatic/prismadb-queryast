@@ -31,7 +31,7 @@ namespace PrismaDB.QueryAST.DML
             return DialectResolver.Dialect.WhereClauseToString(this);
         }
 
-        public bool CheckDataRow(DataRow r)
+        public bool CheckDataRow(ResultRow r)
         {
             foreach (var eachAND in CNF.AND)
             {
