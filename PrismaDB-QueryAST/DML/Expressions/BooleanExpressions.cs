@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
+using PrismaDB.QueryAST.Result;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -77,7 +77,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Eval(DataRow r)  // TODO: Check for correctness
         {
-            return InValues.Select(x => x.ToString()).Contains(r[Column.Alias.id].ToString()) ? !NOT : NOT;
+            return InValues.Select(x => x.ToString()).Contains(r.Get(Column).ToString()) ? !NOT : NOT;
         }
 
         public override List<ColumnRef> GetColumns()
