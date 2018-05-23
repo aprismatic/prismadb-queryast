@@ -55,7 +55,7 @@ namespace PrismaDB.QueryAST.Result
                         DataType = typeof(String);
                         break;
                     default:
-                        throw new ApplicationException("Datatype not supported in DataTable.");
+                        throw new ApplicationException("DataType not supported in DataTable.");
                 }
             }
         }
