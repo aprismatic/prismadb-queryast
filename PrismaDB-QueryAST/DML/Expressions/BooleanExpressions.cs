@@ -26,11 +26,6 @@ namespace PrismaDB.QueryAST.DML
         public override object Clone() { return new BooleanTrue(NOT); }
         public override object Eval(ResultRow r) { return !NOT; }
         public override List<ColumnRef> GetColumns() { return new List<ColumnRef>(); }
-        public override string DisplayName()
-        {
-            return Alias.id;
-        }
-
         public override string ToString() { return DialectResolver.Dialect.BooleanTrueToString(this); }
         public override bool Equals(object other) { return (Alias == (other as BooleanTrue)?.Alias)
                                                         && (NOT == (other as BooleanTrue)?.NOT); }
@@ -91,11 +86,6 @@ namespace PrismaDB.QueryAST.DML
             {
                 (ColumnRef)(Column.Clone())
             };
-        }
-
-        public override string DisplayName()
-        {
-            return Alias.id;
         }
 
         public override string ToString()
@@ -164,11 +154,6 @@ namespace PrismaDB.QueryAST.DML
             var clone = new BooleanEquals(left_clone, right_clone, NOT);
 
             return clone;
-        }
-
-        public override string DisplayName()
-        {
-            return Alias.id;
         }
 
         public override string ToString()
@@ -293,11 +278,6 @@ namespace PrismaDB.QueryAST.DML
         public override List<ColumnRef> GetColumns()
         {
             return left.GetColumns();
-        }
-
-        public override string DisplayName()
-        {
-            return Alias.id;
         }
 
         public override string ToString()

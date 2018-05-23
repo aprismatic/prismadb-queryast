@@ -75,11 +75,6 @@ namespace PrismaDB.QueryAST.DML
             };
         }
 
-        public override string DisplayName()
-        {
-            return Alias.id.Length == 0 ? ColumnName.id : Alias.id;
-        }
-
         public override string ToString()
         {
             return DialectResolver.Dialect.ColumnRefToString(this);

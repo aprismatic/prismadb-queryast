@@ -18,8 +18,6 @@ namespace PrismaDB.QueryAST.DML
 
         public abstract List<ColumnRef> GetColumns();
 
-        public abstract string DisplayName();
-
         public abstract override string ToString();
 
         public abstract override bool Equals(object other);
