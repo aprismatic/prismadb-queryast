@@ -26,6 +26,7 @@ namespace PrismaDB.QueryAST.Result
         public ColumnDefinition ColumnDefinition
         {
             get => _columnDefinition;
+
             set
             {
                 _columnDefinition = value;
