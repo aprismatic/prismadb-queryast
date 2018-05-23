@@ -19,7 +19,10 @@ namespace PrismaDB.QueryAST.Result
             set
             {
                 _expression = value;
-                ColumnName = value.DisplayName();
+                if (value is ColumnRef colRef)
+                    ColumnName = colRef.DisplayName();
+                else
+                    ColumnName = value.Alias.id;
             }
         }
 

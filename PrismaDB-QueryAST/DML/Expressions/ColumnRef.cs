@@ -96,5 +96,18 @@ namespace PrismaDB.QueryAST.DML
                 ColumnName.GetHashCode() *
                 Table.GetHashCode());
         }
+
+        public string DisplayName()
+        {
+            return Alias.id.Length == 0 ? ColumnName.id : Alias.id;
+        }
+
+        public void AppendColumnName(string value)
+        {
+            ColumnName.id += value;
+
+            if (Alias.id.Length != 0)
+                Alias.id += value;
+        }
     }
 }
