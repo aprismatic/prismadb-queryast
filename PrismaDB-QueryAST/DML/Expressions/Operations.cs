@@ -85,7 +85,7 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is Addition otherA)) return false;
 
-            return (this.Alias == otherA.Alias)
+            return (this.Alias.Equals(otherA.Alias))
                 && (this.left.Equals(otherA.left))
                 && (this.right.Equals(otherA.right));
         }
@@ -155,7 +155,7 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is Multiplication otherM)) return false;
 
-            return (this.Alias == otherM.Alias)
+            return (this.Alias.Equals(otherM.Alias))
                 && (this.left.Equals(otherM.left))
                 && (this.right.Equals(otherM.right));
         }
@@ -227,7 +227,7 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is PaillierAddition otherPA)) return false;
 
-            return (this.Alias == otherPA.Alias)
+            return (this.Alias.Equals(otherPA.Alias))
                 && (this.left.Equals(otherPA.left))
                 && (this.right.Equals(otherPA.right))
                 && (this.N.Equals(otherPA.N));
@@ -301,7 +301,7 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is ElGamalMultiplication otherEGM)) return false;
 
-            return (this.Alias == otherEGM.Alias)
+            return (this.Alias.Equals(otherEGM.Alias))
                 && (this.left.Equals(otherEGM.left))
                 && (this.right.Equals(otherEGM.right))
                 && (this.P.Equals(otherEGM.P));
