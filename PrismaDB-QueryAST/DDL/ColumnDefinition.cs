@@ -110,7 +110,7 @@ namespace PrismaDB.QueryAST.DDL
                 && (EnumValues.SequenceEqual(otherCD.EnumValues))
                 && (Nullable == otherCD.Nullable)
                 && (isRowId == otherCD.isRowId)
-                && (DefaultValue.Equals(otherCD.DefaultValue));
+                && (Equals(DefaultValue, otherCD.DefaultValue));
         }
 
         public override int GetHashCode()
