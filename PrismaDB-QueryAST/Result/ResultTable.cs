@@ -31,13 +31,10 @@ namespace PrismaDB.QueryAST.Result
             return new ResultRow(this);
         }
 
-        public void Trim()
+        public void RemoveMetadata()
         {
-            foreach (var col in Columns)
-            {
-                col.ColumnDefinition = null;
-                col.Expression = null;
-            }
+            foreach (var col in Columns.Headers)
+                col.RemoveMetadata();
         }
 
         public void Sort(IEnumerable<Pair<string, OrderDirection>> orderColumns)

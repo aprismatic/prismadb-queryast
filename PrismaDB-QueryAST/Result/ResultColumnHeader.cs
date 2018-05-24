@@ -105,5 +105,11 @@ namespace PrismaDB.QueryAST.Result
         {
             MaxLength = maxLength;
         }
+
+        public void RemoveMetadata()
+        {
+            _expression = null;
+            _columnDefinition = null;
+        }
     }
 }
