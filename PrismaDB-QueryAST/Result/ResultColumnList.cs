@@ -17,6 +17,16 @@ namespace PrismaDB.QueryAST.Result
             Headers = new List<ResultColumnHeader>();
         }
 
+        public int Count()
+        {
+            return Headers.Count();
+        }
+
+        public ResultColumnHeader Get(int index)
+        {
+            return Headers[index];
+        }
+
         public void Add(ResultColumnHeader column)
         {
             if (_table.Rows.Count > 0)
