@@ -79,21 +79,12 @@ namespace PrismaDB.QueryAST.Result
             dataTable.Load(reader);
 
             foreach (DataColumn column in dataTable.Columns)
-            {
-                var colHeader = new ResultColumnHeader
-                {
-                    ColumnName = column.ColumnName,
-                    DataType = column.DataType,
-                    MaxLength = column.MaxLength
-                };
-                Columns.Add(colHeader);
-            }
+                Columns.Add(column.ColumnName, column.DataType, column.MaxLength);
 
             foreach (DataRow row in dataTable.Rows)
             {
                 var resRow = this.NewRow();
-                foreach (var val in row.ItemArray)
-                    resRow.Add(val);
+                resRow.Add(row.ItemArray);
                 Rows.Add(resRow);
             }
         }

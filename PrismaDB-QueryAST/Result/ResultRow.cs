@@ -100,5 +100,11 @@ namespace PrismaDB.QueryAST.Result
                 throw new ApplicationException("Items in row has reached the number of columns in table.");
             Items.Add(value);
         }
+
+        public void Add(IEnumerable<object> valList)
+        {
+            foreach (var val in valList)
+                Add(val);
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace PrismaDB.QueryAST.Result
 
         public string ColumnName { get; set; }
         public Type DataType { get; set; }
-        public int MaxLength { get; set; }
+        public int? MaxLength { get; set; }
 
         public Expression Expression
         {
@@ -61,49 +61,32 @@ namespace PrismaDB.QueryAST.Result
             }
         }
 
-        public ResultColumnHeader()
-        {
-            ColumnName = "";
-        }
+        public ResultColumnHeader() : this("") { }
 
-        public ResultColumnHeader(string columnName)
+        public ResultColumnHeader(string columnName, Type dataType = null, int? maxLength = null)
         {
             ColumnName = columnName;
+            DataType = dataType;
+            MaxLength = maxLength;
         }
 
-        public ResultColumnHeader(Expression exp)
+        public ResultColumnHeader(Expression exp, Type dataType = null, int? maxLength = null)
         {
             Expression = exp;
-        }
-
-        public ResultColumnHeader(Expression exp, Type dataType)
-            : this(exp)
-        {
-            DataType = dataType;
-        }
-
-        public ResultColumnHeader(Expression exp, Type dataType, int maxLength)
-            : this(exp, dataType)
-        {
             MaxLength = maxLength;
+
+            if (dataType != null)
+                DataType = dataType;
         }
 
-        public ResultColumnHeader(Expression exp, ColumnDefinition columnDef)
-            : this(exp)
+        public ResultColumnHeader(Expression exp, ColumnDefinition columnDef, Type dataType = null, int? maxLength = null)
         {
+            Expression = exp;
             ColumnDefinition = columnDef;
-        }
-
-        public ResultColumnHeader(Expression exp, Type dataType, ColumnDefinition columnDef)
-            : this(exp, columnDef)
-        {
-            DataType = dataType;
-        }
-
-        public ResultColumnHeader(Expression exp, Type dataType, int maxLength, ColumnDefinition columnDef)
-            : this(exp, dataType, columnDef)
-        {
             MaxLength = maxLength;
+
+            if (dataType != null)
+                DataType = dataType;
         }
 
         public void RemoveMetadata()

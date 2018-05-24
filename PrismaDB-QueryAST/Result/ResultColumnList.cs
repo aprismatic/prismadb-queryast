@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using PrismaDB.QueryAST.DDL;
 using PrismaDB.QueryAST.DML;
 
 namespace PrismaDB.QueryAST.Result
@@ -30,7 +31,7 @@ namespace PrismaDB.QueryAST.Result
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable<ResultColumnHeader>) Headers).GetEnumerator();
+            return ((IEnumerable<ResultColumnHeader>)Headers).GetEnumerator();
         }
 
         public IEnumerator<ResultColumnHeader> GetEnumerator()
@@ -43,6 +44,26 @@ namespace PrismaDB.QueryAST.Result
             if (_table.Rows.Count > 0)
                 throw new ApplicationException("Table is not empty.");
             Headers.Add(column);
+        }
+
+        public void Add()
+        {
+            Add(new ResultColumnHeader());
+        }
+
+        public void Add(string columnName, Type dataType = null, int? maxLength = null)
+        {
+            Add(new ResultColumnHeader(columnName, dataType, maxLength));
+        }
+
+        public void Add(Expression exp, Type dataType = null, int? maxLength = null)
+        {
+            Add(new ResultColumnHeader(exp, dataType, maxLength));
+        }
+
+        public void Add(Expression exp, ColumnDefinition columnDef, Type dataType = null, int? maxLength = null)
+        {
+            Add(new ResultColumnHeader(exp, columnDef, dataType, maxLength));
         }
 
         public void Remove(ResultColumnHeader column)
