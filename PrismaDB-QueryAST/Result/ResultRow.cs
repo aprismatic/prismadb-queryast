@@ -74,6 +74,16 @@ namespace PrismaDB.QueryAST.Result
             }
         }
 
+        public object this[ResultColumnHeader header]
+        {
+            get => Items[_table.Columns.Headers.IndexOf(header)];
+
+            set
+            {
+                Items[_table.Columns.Headers.IndexOf(header)] = value;
+            }
+        }
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable<object>)Items).GetEnumerator();
