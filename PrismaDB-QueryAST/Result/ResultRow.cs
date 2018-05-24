@@ -18,6 +18,11 @@ namespace PrismaDB.QueryAST.Result
             Items = new List<object>(_table.Columns.Headers.Count);
         }
 
+        public int Count()
+        {
+            return Items.Count();
+        }
+
         public void Add(object value)
         {
             if (Items.Count >= _table.Columns.Headers.Count)
