@@ -27,7 +27,7 @@ namespace PrismaDB.QueryAST.DML
         public override object Eval(ResultRow r) { return !NOT; }
         public override List<ColumnRef> GetColumns() { return new List<ColumnRef>(); }
         public override string ToString() { return DialectResolver.Dialect.BooleanTrueToString(this); }
-        public override bool Equals(object other) { return (Alias == (other as BooleanTrue)?.Alias)
+        public override bool Equals(object other) { return (Alias.Equals((other as BooleanTrue)?.Alias))
                                                         && (NOT == (other as BooleanTrue)?.NOT); }
         public override int GetHashCode() { return unchecked(Alias.GetHashCode() * (NOT.GetHashCode() + 1)); }
     }
@@ -98,7 +98,7 @@ namespace PrismaDB.QueryAST.DML
             if (!(other is BooleanIn otherBI)) return false;
 
             return (this.NOT != otherBI.NOT)
-                && (this.Alias == otherBI.Alias)
+                && (this.Alias.Equals(otherBI.Alias))
                 && (this.Column.Equals(otherBI.Column))
                 && (this.InValues.All(x => otherBI.InValues.Exists(y => x.Equals(y))));
         }
@@ -166,7 +166,7 @@ namespace PrismaDB.QueryAST.DML
             if (!(other is BooleanEquals otherBE)) return false;
 
             return (this.NOT != otherBE.NOT)
-                && (this.Alias == otherBE.Alias)
+                && (this.Alias.Equals(otherBE.Alias))
                 && (this.left.Equals(otherBE.left))
                 && (this.right.Equals(otherBE.right));
         }

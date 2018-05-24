@@ -101,14 +101,5 @@ namespace QueryTests
             Assert.True(b.Equals(a));
             Assert.True(a.GetHashCode() == b.GetHashCode());
         }
-
-        [Fact(DisplayName = "Equals")]
-        public void EqualsTest()
-        {
-            var mul1 = new Multiplication(new ColumnRef("tt", "a"), new ColumnRef("tt", "b"), "MUL");
-            var mul2 = new Multiplication(new ColumnRef("tt", "a"), new ColumnRef("tt", "b"), "MUL");
-
-            Assert.Equal(mul1, mul2);
-        }
     }
 }
