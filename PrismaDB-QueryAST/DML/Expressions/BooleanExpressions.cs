@@ -77,7 +77,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Eval(ResultRow r)  // TODO: Check for correctness
         {
-            return InValues.Select(x => x.ToString()).Contains(r.Get(Column).ToString()) ? !NOT : NOT;
+            return InValues.Select(x => x.ToString()).Contains(r[Column].ToString()) ? !NOT : NOT;
         }
 
         public override List<ColumnRef> GetColumns()

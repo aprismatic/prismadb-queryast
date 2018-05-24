@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PrismaDB.QueryAST.DML;
 
 namespace PrismaDB.QueryAST.Result
 {
-    public class ResultColumnList
+    public class ResultColumnList : IEnumerable<ResultColumnHeader>
     {
         private readonly ResultTable _table;
 
@@ -17,24 +18,24 @@ namespace PrismaDB.QueryAST.Result
             Headers = new List<ResultColumnHeader>();
         }
 
-        public int Count()
+        public int Count => Headers.Count;
+
+        public ResultColumnHeader this[int index] => Headers[index];
+
+        public ResultColumnHeader this[string columnName] =>
+            this[Headers.IndexOf(Headers.Single(x => x.ColumnName.Equals(columnName)))];
+
+        public ResultColumnHeader this[Expression exp] =>
+            this[Headers.IndexOf(Headers.Single(x => x.Expression.Equals(exp)))];
+
+        public IEnumerator<ResultColumnHeader> GetEnumerator()
         {
-            return Headers.Count();
+            return ((IEnumerable<ResultColumnHeader>) Headers).GetEnumerator();
         }
 
-        public ResultColumnHeader Get(int index)
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            return Headers[index];
-        }
-
-        public ResultColumnHeader Get(string columnName)
-        {
-            return Get(Headers.IndexOf(Headers.Single(x => x.ColumnName.Equals(columnName))));
-        }
-
-        public ResultColumnHeader Get(Expression exp)
-        {
-            return Get(Headers.IndexOf(Headers.Single(x => x.Expression.Equals(exp))));
+            return ((IEnumerable<ResultColumnHeader>) Headers).GetEnumerator();
         }
 
         public void Add(ResultColumnHeader column)
@@ -62,9 +63,7 @@ namespace PrismaDB.QueryAST.Result
         public void Remove(int index)
         {
             foreach (var row in _table.Rows)
-            {
                 row.Items.RemoveAt(index);
-            }
             Headers.RemoveAt(index);
         }
     }

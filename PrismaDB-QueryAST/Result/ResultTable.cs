@@ -36,10 +36,10 @@ namespace PrismaDB.QueryAST.Result
                 switch (orderPair.Second)
                 {
                     case OrderDirection.ASC:
-                        _rows = _rows.OrderBy(x => x.Get(orderPair.First)).ToList();
+                        _rows = _rows.OrderBy(x => x[orderPair.First]).ToList();
                         break;
                     case OrderDirection.DESC:
-                        _rows = _rows.OrderByDescending(x => x.Get(orderPair.First)).ToList();
+                        _rows = _rows.OrderByDescending(x => x[orderPair.First]).ToList();
                         break;
                 }
             }
@@ -52,10 +52,10 @@ namespace PrismaDB.QueryAST.Result
                 switch (orderPair.Second)
                 {
                     case OrderDirection.ASC:
-                        _rows = _rows.OrderBy(x => x.Get(orderPair.First)).ToList();
+                        _rows = _rows.OrderBy(x => x[orderPair.First]).ToList();
                         break;
                     case OrderDirection.DESC:
-                        _rows = _rows.OrderByDescending(x => x.Get(orderPair.First)).ToList();
+                        _rows = _rows.OrderByDescending(x => x[orderPair.First]).ToList();
                         break;
                 }
             }

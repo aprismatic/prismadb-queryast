@@ -49,7 +49,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Eval(ResultRow r)
         {
-            return r.Get(this);
+            return r[this];
         }
 
         public override List<ColumnRef> GetColumns()
