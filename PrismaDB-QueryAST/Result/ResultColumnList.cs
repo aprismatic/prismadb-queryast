@@ -27,6 +27,16 @@ namespace PrismaDB.QueryAST.Result
             return Headers[index];
         }
 
+        public ResultColumnHeader Get(string columnName)
+        {
+            return Get(Headers.IndexOf(Headers.Single(x => x.ColumnName.Equals(columnName))));
+        }
+
+        public ResultColumnHeader Get(Expression exp)
+        {
+            return Get(Headers.IndexOf(Headers.Single(x => x.Expression.Equals(exp))));
+        }
+
         public void Add(ResultColumnHeader column)
         {
             if (_table.Rows.Count > 0)
