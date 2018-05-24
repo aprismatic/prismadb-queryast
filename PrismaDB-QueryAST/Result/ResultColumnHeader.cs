@@ -49,7 +49,6 @@ namespace PrismaDB.QueryAST.Result
                     case SqlDataType.DOUBLE:
                         DataType = typeof(Double);
                         break;
-                    case SqlDataType.VARBINARY:
                     case SqlDataType.VARCHAR:
                     case SqlDataType.TEXT:
                     case SqlDataType.TIMESTAMP:
