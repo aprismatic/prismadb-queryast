@@ -96,15 +96,15 @@ namespace PrismaDB.QueryAST.Result
         }
 
         public ResultColumnHeader(Expression exp, Type dataType, ColumnDefinition columnDef)
-            : this(exp, dataType)
+            : this(exp, columnDef)
         {
-            ColumnDefinition = columnDef;
+            DataType = dataType;
         }
 
         public ResultColumnHeader(Expression exp, Type dataType, int maxLength, ColumnDefinition columnDef)
-            : this(exp, dataType, maxLength)
+            : this(exp, dataType, columnDef)
         {
-            ColumnDefinition = columnDef;
+            MaxLength = maxLength;
         }
     }
 }
