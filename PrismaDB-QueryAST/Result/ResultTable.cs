@@ -29,6 +29,15 @@ namespace PrismaDB.QueryAST.Result
             return new ResultRow(this);
         }
 
+        public void Trim()
+        {
+            foreach (var col in Columns)
+            {
+                col.ColumnDefinition = null;
+                col.Expression = null;
+            }
+        }
+
         public void Sort(IEnumerable<Pair<string, OrderDirection>> orderColumns)
         {
             foreach (var orderPair in orderColumns.Reverse())
@@ -45,7 +54,7 @@ namespace PrismaDB.QueryAST.Result
             }
         }
 
-        public void Sort(IEnumerable<Pair<ColumnRef, OrderDirection>> orderColumns)
+        public void Sort(IEnumerable<Pair<Expression, OrderDirection>> orderColumns)
         {
             foreach (var orderPair in orderColumns.Reverse())
             {

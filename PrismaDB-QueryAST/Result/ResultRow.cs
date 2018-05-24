@@ -7,7 +7,7 @@ using PrismaDB.QueryAST.DML;
 
 namespace PrismaDB.QueryAST.Result
 {
-    public class ResultRow : IEnumerable
+    public class ResultRow : IEnumerable<object>
     {
         private readonly ResultTable _table;
 
@@ -19,7 +19,7 @@ namespace PrismaDB.QueryAST.Result
             Items = new List<object>(_table.Columns.Headers.Count);
         }
 
-        public int Count => Items.Count;
+        public int Count => this.Count();
 
         public object this[int index]
         {
@@ -74,9 +74,14 @@ namespace PrismaDB.QueryAST.Result
             }
         }
 
-        public IEnumerator GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable) Items).GetEnumerator();
+            return ((IEnumerable<object>)Items).GetEnumerator();
+        }
+
+        public IEnumerator<object> GetEnumerator()
+        {
+            return ((IEnumerable<object>)Items).GetEnumerator();
         }
 
         public void Add(object value)

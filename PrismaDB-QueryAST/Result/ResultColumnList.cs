@@ -18,7 +18,7 @@ namespace PrismaDB.QueryAST.Result
             Headers = new List<ResultColumnHeader>();
         }
 
-        public int Count => Headers.Count;
+        public int Count => this.Count();
 
         public ResultColumnHeader this[int index] => Headers[index];
 
@@ -28,14 +28,14 @@ namespace PrismaDB.QueryAST.Result
         public ResultColumnHeader this[Expression exp] =>
             this[Headers.IndexOf(Headers.Single(x => x.Expression.Equals(exp)))];
 
-        public IEnumerator<ResultColumnHeader> GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable<ResultColumnHeader>) Headers).GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        public IEnumerator<ResultColumnHeader> GetEnumerator()
         {
-            return ((IEnumerable<ResultColumnHeader>) Headers).GetEnumerator();
+            return ((IEnumerable<ResultColumnHeader>)Headers).GetEnumerator();
         }
 
         public void Add(ResultColumnHeader column)
