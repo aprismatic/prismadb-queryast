@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using PrismaDB.QueryAST.Result;
+using System.Collections.Generic;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -47,9 +47,9 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
-            return r[ToString()];
+            return r.Get(this);
         }
 
         public override List<ColumnRef> GetColumns()

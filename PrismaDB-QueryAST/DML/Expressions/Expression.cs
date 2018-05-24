@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using PrismaDB.QueryAST.Result;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -14,7 +14,7 @@ namespace PrismaDB.QueryAST.DML
 
         public abstract object Clone();
 
-        public abstract object Eval(DataRow r);
+        public abstract object Eval(ResultRow r);
 
         public abstract List<ColumnRef> GetColumns();
 

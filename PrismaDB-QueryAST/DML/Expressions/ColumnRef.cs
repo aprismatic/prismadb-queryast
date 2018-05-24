@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using PrismaDB.QueryAST.Result;
+using System.Collections.Generic;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -62,9 +62,9 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
-            return r[ToString()];
+            return r.Get(this);
         }
 
         public override List<ColumnRef> GetColumns()
@@ -95,6 +95,19 @@ namespace PrismaDB.QueryAST.DML
                 Alias.GetHashCode() *
                 ColumnName.GetHashCode() *
                 Table.GetHashCode());
+        }
+
+        public string DisplayName()
+        {
+            return Alias.id.Length == 0 ? ColumnName.id : Alias.id;
+        }
+
+        public void AppendColumnName(string value)
+        {
+            ColumnName.id += value;
+
+            if (Alias.id.Length != 0)
+                Alias.id += value;
         }
     }
 }

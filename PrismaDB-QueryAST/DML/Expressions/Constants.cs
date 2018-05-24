@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
+using PrismaDB.QueryAST.Result;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -38,7 +38,7 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
             return intvalue;
         }
@@ -100,7 +100,7 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
             return strvalue;
         }
@@ -162,7 +162,7 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
             throw new NotImplementedException("This method should not be called.");
         }
@@ -224,7 +224,7 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
             return floatvalue;
         }
@@ -279,7 +279,7 @@ namespace PrismaDB.QueryAST.DML
             }
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
             throw new NotImplementedException("NULL constant should not be used in WHERE clause like that."); // TODO: reconsider
         }

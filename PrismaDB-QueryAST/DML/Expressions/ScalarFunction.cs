@@ -1,6 +1,6 @@
-﻿using System;
+﻿using PrismaDB.QueryAST.Result;
+using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 
 namespace PrismaDB.QueryAST.DML
@@ -65,7 +65,7 @@ namespace PrismaDB.QueryAST.DML
                    (Parameters.SequenceEqual(otherF.Parameters));
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
             throw new NotImplementedException("Functions can't currently be evaluated on proxy side.");
         }

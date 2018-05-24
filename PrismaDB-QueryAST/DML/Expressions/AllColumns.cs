@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using PrismaDB.QueryAST.Result;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -36,7 +36,7 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
             throw new ApplicationException("AllColumns should not be in a WHERE clause.");
         }

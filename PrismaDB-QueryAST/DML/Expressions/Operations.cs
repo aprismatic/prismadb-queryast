@@ -1,6 +1,6 @@
-﻿using System;
+﻿using PrismaDB.QueryAST.Result;
+using System;
 using System.Collections.Generic;
-using System.Data;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -63,7 +63,7 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
             return (int)left.Eval(r) + (int)right.Eval(r);
         }
@@ -133,7 +133,7 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
             return (int)left.Eval(r) * (int)right.Eval(r);
         }
@@ -208,7 +208,7 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
             throw new NotImplementedException("This method should not be called.");
         }
@@ -282,7 +282,7 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(DataRow r)
+        public override object Eval(ResultRow r)
         {
             throw new NotImplementedException("This method should not be called.");
         }
