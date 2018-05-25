@@ -47,5 +47,8 @@ namespace PrismaDB.QueryAST
         string OrderDirectionToString(OrderDirection q);
         string NullConstantToString(NullConstant q);
         string BooleanIsNullToString(BooleanIsNull q);
+        string SumAggregationFunctionToString(SumAggregationFunction q);
+        string CountAggregationFunctionToString(CountAggregationFunction q);
+        string AvgAggregationFunctionToString(AvgAggregationFunction q);
     }
 }

@@ -111,4 +111,56 @@ namespace PrismaDB.QueryAST.DML
             return DialectResolver.Dialect.ScalarFunctionToString(this);
         }
     }
+
+
+    public class SumAggregationFunction : ScalarFunction
+    {
+        public SumAggregationFunction(string functionName) : base(functionName) { }
+        public SumAggregationFunction(string functionName, string aliasName) : base(functionName, aliasName) { }
+        public SumAggregationFunction(Identifier functionName) : base(functionName) { }
+        public SumAggregationFunction(Identifier functionName, Identifier alias) : base(functionName, alias) { }
+        public SumAggregationFunction(string functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public SumAggregationFunction(string functionName, string aliasName, List<Expression> parameters) : base(functionName, aliasName, parameters) { }
+        public SumAggregationFunction(Identifier functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public SumAggregationFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.SumAggregationFunctionToString(this);
+        }
+    }
+
+    public class CountAggregationFunction : ScalarFunction
+    {
+        public CountAggregationFunction(string functionName) : base(functionName) { }
+        public CountAggregationFunction(string functionName, string aliasName) : base(functionName, aliasName) { }
+        public CountAggregationFunction(Identifier functionName) : base(functionName) { }
+        public CountAggregationFunction(Identifier functionName, Identifier alias) : base(functionName, alias) { }
+        public CountAggregationFunction(string functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public CountAggregationFunction(string functionName, string aliasName, List<Expression> parameters) : base(functionName, aliasName, parameters) { }
+        public CountAggregationFunction(Identifier functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public CountAggregationFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.CountAggregationFunctionToString(this);
+        }
+    }
+
+    public class AvgAggregationFunction : ScalarFunction
+    {
+        public AvgAggregationFunction(string functionName) : base(functionName) { }
+        public AvgAggregationFunction(string functionName, string aliasName) : base(functionName, aliasName) { }
+        public AvgAggregationFunction(Identifier functionName) : base(functionName) { }
+        public AvgAggregationFunction(Identifier functionName, Identifier alias) : base(functionName, alias) { }
+        public AvgAggregationFunction(string functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public AvgAggregationFunction(string functionName, string aliasName, List<Expression> parameters) : base(functionName, aliasName, parameters) { }
+        public AvgAggregationFunction(Identifier functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public AvgAggregationFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.AvgAggregationFunctionToString(this);
+        }
+    }
 }
