@@ -17,29 +17,70 @@ namespace QueryTests
             var func2 = new ScalarFunction("func");
             func2.Parameters.Add(new IntConstant(1));
             func2.Parameters.Add(new StringConstant("abc"));
-            Assert.True(func1.Equals(func2));
+            Assert.Equal(func1, func2);
 
             var func3 = new ScalarFunction("func");
             func3.Parameters.Add(new StringConstant("abc"));
             func3.Parameters.Add(new IntConstant(1));
-            Assert.False(func1.Equals(func3));
+            Assert.NotEqual(func1, func3);
 
             var func4 = (ScalarFunction)func2.Clone();
             func4.Parameters[0] = new StringConstant("123");
 
-            Assert.False(func2.Equals(func4));
+            Assert.NotEqual(func2, func4);
 
             var func5 = new ScalarFunction("func");
-            Assert.False(func1.Equals(func5));
+            Assert.NotEqual(func1, func5);
 
             var func6 = new ScalarFunction("func");
             func6.Parameters.Add(new IntConstant(1));
-            Assert.False(func1.Equals(func6));
+            Assert.NotEqual(func1, func6);
 
             var func7 = new ScalarFunction("func");
             func7.Parameters.Add(new ColumnRef("tt", "col"));
             Assert.Single(func7.GetColumns());
             Assert.Equal(new ColumnRef("tt", "col"), func7.GetColumns()[0]);
+        }
+
+        [Fact(DisplayName = "Functions' Equals")]
+        public void FunctionsEquals()
+        {
+            {
+                var func = new SumAggregationFunction("fn");
+                func.Parameters.Add(new ColumnRef("a"));
+
+                var func2 = new SumAggregationFunction("fn");
+                Assert.NotEqual(func, func2);
+                func2.Parameters.Add(new ColumnRef("a"));
+                Assert.Equal(func, func2);
+
+                var func3 = func.Clone() as SumAggregationFunction;
+                Assert.Equal(func, func3);
+            }
+            {
+                var func = new CountAggregationFunction("fn");
+                func.Parameters.Add(new ColumnRef("a"));
+
+                var func2 = new CountAggregationFunction("fn");
+                Assert.NotEqual(func, func2);
+                func2.Parameters.Add(new ColumnRef("a"));
+                Assert.Equal(func, func2);
+
+                var func3 = func.Clone() as CountAggregationFunction;
+                Assert.Equal(func, func3);
+            }
+            {
+                var func = new AvgAggregationFunction("fn");
+                func.Parameters.Add(new ColumnRef("a"));
+
+                var func2 = new AvgAggregationFunction("fn");
+                Assert.NotEqual(func, func2);
+                func2.Parameters.Add(new ColumnRef("a"));
+                Assert.Equal(func, func2);
+
+                var func3 = func.Clone() as AvgAggregationFunction;
+                Assert.Equal(func, func3);
+            }
         }
 
         [Fact(DisplayName = "ColumnDefinition")]

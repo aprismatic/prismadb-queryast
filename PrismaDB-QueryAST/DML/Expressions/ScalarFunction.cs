@@ -125,6 +125,21 @@ namespace PrismaDB.QueryAST.DML
         public SumAggregationFunction(Identifier functionName, List<Expression> parameters) : base(functionName, parameters) { }
         public SumAggregationFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
 
+        public override object Clone()
+        {
+            var clone = new SumAggregationFunction(FunctionName, Alias, Parameters);
+
+            return clone;
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is SumAggregationFunction otherF)) return false;
+            return (FunctionName.Equals(otherF.FunctionName)) &&
+                   (Alias.Equals(otherF.Alias)) &&
+                   (Parameters.SequenceEqual(otherF.Parameters));
+        }
+
         public override string ToString()
         {
             return DialectResolver.Dialect.SumAggregationFunctionToString(this);
@@ -141,6 +156,21 @@ namespace PrismaDB.QueryAST.DML
         public CountAggregationFunction(string functionName, string aliasName, List<Expression> parameters) : base(functionName, aliasName, parameters) { }
         public CountAggregationFunction(Identifier functionName, List<Expression> parameters) : base(functionName, parameters) { }
         public CountAggregationFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+
+        public override object Clone()
+        {
+            var clone = new CountAggregationFunction(FunctionName, Alias, Parameters);
+
+            return clone;
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is CountAggregationFunction otherF)) return false;
+            return (FunctionName.Equals(otherF.FunctionName)) &&
+                   (Alias.Equals(otherF.Alias)) &&
+                   (Parameters.SequenceEqual(otherF.Parameters));
+        }
 
         public override string ToString()
         {
@@ -159,6 +189,21 @@ namespace PrismaDB.QueryAST.DML
         public AvgAggregationFunction(Identifier functionName, List<Expression> parameters) : base(functionName, parameters) { }
         public AvgAggregationFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
 
+        public override object Clone()
+        {
+            var clone = new AvgAggregationFunction(FunctionName, Alias, Parameters);
+
+            return clone;
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is AvgAggregationFunction otherF)) return false;
+            return (FunctionName.Equals(otherF.FunctionName)) &&
+                   (Alias.Equals(otherF.Alias)) &&
+                   (Parameters.SequenceEqual(otherF.Parameters));
+        }
+
         public override string ToString()
         {
             return DialectResolver.Dialect.AvgAggregationFunctionToString(this);
@@ -175,6 +220,21 @@ namespace PrismaDB.QueryAST.DML
         public PaillierAggregationSumFunction(string functionName, string aliasName, List<Expression> parameters) : base(functionName, aliasName, parameters) { }
         public PaillierAggregationSumFunction(Identifier functionName, List<Expression> parameters) : base(functionName, parameters) { }
         public PaillierAggregationSumFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+
+        public override object Clone()
+        {
+            var clone = new PaillierAggregationSumFunction(FunctionName, Alias, Parameters);
+
+            return clone;
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is PaillierAggregationSumFunction otherF)) return false;
+            return (FunctionName.Equals(otherF.FunctionName)) &&
+                   (Alias.Equals(otherF.Alias)) &&
+                   (Parameters.SequenceEqual(otherF.Parameters));
+        }
 
         public override string ToString()
         {
