@@ -163,4 +163,21 @@ namespace PrismaDB.QueryAST.DML
             return DialectResolver.Dialect.AvgAggregationFunctionToString(this);
         }
     }
+
+    public class PaillierAggregationSumFunction : ScalarFunction
+    {
+        public PaillierAggregationSumFunction(string functionName) : base(functionName) { }
+        public PaillierAggregationSumFunction(string functionName, string aliasName) : base(functionName, aliasName) { }
+        public PaillierAggregationSumFunction(Identifier functionName) : base(functionName) { }
+        public PaillierAggregationSumFunction(Identifier functionName, Identifier alias) : base(functionName, alias) { }
+        public PaillierAggregationSumFunction(string functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public PaillierAggregationSumFunction(string functionName, string aliasName, List<Expression> parameters) : base(functionName, aliasName, parameters) { }
+        public PaillierAggregationSumFunction(Identifier functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public PaillierAggregationSumFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.PaillierAggregationSumFunctionToString(this);
+        }
+    }
 }
