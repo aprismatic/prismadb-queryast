@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -72,7 +73,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns()
         {
-            return new List<ColumnRef>();
+            return Parameters.SelectMany(x => x.GetColumns()).ToList();
         }
 
         public override int GetHashCode()

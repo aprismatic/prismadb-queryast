@@ -33,8 +33,13 @@ namespace QueryTests
             Assert.False(func1.Equals(func5));
 
             var func6 = new ScalarFunction("func");
-            func1.Parameters.Add(new IntConstant(1));
+            func6.Parameters.Add(new IntConstant(1));
             Assert.False(func1.Equals(func6));
+
+            var func7 = new ScalarFunction("func");
+            func7.Parameters.Add(new ColumnRef("tt", "col"));
+            Assert.Single(func7.GetColumns());
+            Assert.Equal(new ColumnRef("tt", "col"), func7.GetColumns()[0]);
         }
 
         [Fact(DisplayName = "ColumnDefinition")]
