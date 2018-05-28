@@ -4,7 +4,7 @@ using PrismaDB.QueryAST.Result;
 
 namespace PrismaDB.QueryAST.DML
 {
-    public class WhereClause
+    public class WhereClause : Clause
     {
         public ConjunctiveNormalForm CNF;
 
@@ -26,6 +26,11 @@ namespace PrismaDB.QueryAST.DML
             CNF = new ConjunctiveNormalForm(other.CNF);
         }
 
+        public override object Clone()
+        {
+            return new WhereClause(this);
+        }
+
         public override string ToString()
         {
             return DialectResolver.Dialect.WhereClauseToString(this);
@@ -43,7 +48,7 @@ namespace PrismaDB.QueryAST.DML
             return true;
         }
 
-        public List<ColumnRef> GetWhereColumns()
+        public override List<ColumnRef> GetColumns()
         {
             var whereCols = new List<ColumnRef>();
             foreach (var eachBE in CNF.AND.SelectMany(eachAND => eachAND.OR))

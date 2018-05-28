@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace PrismaDB.QueryAST.DML
 {
-    public class OrderByClause : ICloneable
+    public class OrderByClause : Clause
     {
         public List<Pair<ColumnRef, OrderDirection>> OrderColumns;
 
@@ -21,7 +21,7 @@ namespace PrismaDB.QueryAST.DML
                 x => new Pair<ColumnRef, OrderDirection>(x.First.Clone() as ColumnRef, x.Second)));
         }
 
-        public object Clone()
+        public override object Clone()
         {
             return new OrderByClause(this);
         }
@@ -31,7 +31,7 @@ namespace PrismaDB.QueryAST.DML
             return DialectResolver.Dialect.OrderByClauseToString(this);
         }
 
-        public List<ColumnRef> GetOrderByColumns()
+        public override List<ColumnRef> GetColumns()
         {
             var orderByCols = OrderColumns.SelectMany(x => x.First.GetColumns());
             return orderByCols.Distinct().ToList();

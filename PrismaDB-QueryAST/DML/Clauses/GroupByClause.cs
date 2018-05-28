@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace PrismaDB.QueryAST.DML
 {
-    public class GroupByClause : ICloneable
+    public class GroupByClause : Clause
     {
         public List<ColumnRef> GroupColumns;
 
@@ -19,7 +18,7 @@ namespace PrismaDB.QueryAST.DML
             GroupColumns.AddRange(other.GroupColumns);
         }
 
-        public object Clone()
+        public override object Clone()
         {
             return new GroupByClause(this);
         }
@@ -29,7 +28,7 @@ namespace PrismaDB.QueryAST.DML
             return DialectResolver.Dialect.GroupByClauseToString(this);
         }
 
-        public List<ColumnRef> GetGroupByColumns()
+        public override List<ColumnRef> GetColumns()
         {
             return GroupColumns.Distinct().ToList();
         }
