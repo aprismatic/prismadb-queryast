@@ -25,6 +25,8 @@ namespace PrismaDB.QueryAST
         string FloatingPointConstantToString(FloatingPointConstant q);
         string AdditionToString(Addition q);
         string MultiplicationToString(Multiplication q);
+        string GreaterThanToString(GreaterThan q);
+        string LessThanToString(LessThan q);
         string PaillierAdditionToString(PaillierAddition q);
         string ElGamalMultiplicationToString(ElGamalMultiplication q);
         string ColumnRefToString(ColumnRef q);
@@ -36,6 +38,7 @@ namespace PrismaDB.QueryAST
         string ScalarFunctionToString(ScalarFunction q);
         string MySqlVariableToString(MySqlVariable q);
         string OrderByClauseToString(OrderByClause q);
+        string GroupByClauseToString(GroupByClause q);
         string AllColumnsToString(AllColumns q);
 
         string ExportSettingsCommandToString(ExportSettingsCommand c);
