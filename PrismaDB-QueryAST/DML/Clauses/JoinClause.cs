@@ -38,10 +38,12 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns()
         {
-            var joinCols = new List<ColumnRef>();
-            joinCols.Add(FirstColumn);
-            joinCols.Add(SecondColumn);
-            return joinCols.Distinct().ToList();
+            var res = new List<ColumnRef>
+            {
+                FirstColumn,
+                SecondColumn
+            };
+            return res;
         }
     }
 
