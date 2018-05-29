@@ -221,6 +221,214 @@ namespace PrismaDB.QueryAST.DML
         }
     }
 
+    public class BooleanGreaterThan : BooleanExpression
+    {
+        public Expression left, right;
+
+        public BooleanGreaterThan(Expression left, Expression right)
+        {
+            setValue(left, right);
+        }
+
+        public BooleanGreaterThan(Expression left, Expression right, bool NOT)
+        {
+            setValue(left, right, NOT);
+        }
+
+        public override void setValue(params object[] value)
+        {
+            if (value.Length == 0)
+                throw new ArgumentException("BooleanGreaterThan.setValue expects at least one argument");
+            else if (value.Length == 1)
+                NOT = (bool)value[0];
+            else if (value.Length == 2)
+            {
+                left = (Expression)value[0];
+                right = (Expression)value[1];
+            }
+            else
+            {
+                left = (Expression)value[0];
+                right = (Expression)value[1];
+                NOT = (bool)value[2];
+            }
+        }
+
+        public override object Clone()
+        {
+            var left_clone = left.Clone() as Expression;
+            var right_clone = right.Clone() as Expression;
+
+            var clone = new BooleanGreaterThan(left_clone, right_clone, NOT);
+
+            return clone;
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.BooleanGreaterThanToString(this);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is BooleanGreaterThan otherBG)) return false;
+
+            return (this.NOT != otherBG.NOT)
+                && (this.Alias.Equals(otherBG.Alias))
+                && (this.left.Equals(otherBG.left))
+                && (this.right.Equals(otherBG.right));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                (NOT.GetHashCode() + 1) *
+                Alias.GetHashCode() *
+                left.GetHashCode() *
+                right.GetHashCode());
+        }
+
+        public override object Eval(ResultRow r)
+        {
+            var leftEval = left.Eval(r);
+            var rightEval = right.Eval(r);
+
+            if (leftEval is Int32 leftInt)
+            {
+                if (rightEval is Int32 rightInt)
+                    return (leftInt > rightInt) ? !NOT : NOT; // assume data in DataRow are in int/double
+                else if (rightEval is Double rightDouble)
+                    return (leftInt > rightDouble) ? !NOT : NOT; // assume data in DataRow are in int/double
+            }
+            else if (leftEval is Double leftDouble)
+            {
+                if (rightEval is Int32 rightInt)
+                    return (leftDouble > rightInt) ? !NOT : NOT; // assume data in DataRow are in int/double
+                else if (rightEval is Double rightDouble)
+                    return (leftDouble > rightDouble) ? !NOT : NOT; // assume data in DataRow are in int/double
+            }
+
+            throw new ApplicationException(
+                 "Left and right expressions of BooleanGreaterThan are not of the same type.\n" +
+                $"Left expression is \"{left}\" of type {left.GetType()}\n" +
+                $"Left expression evaluates to \"{leftEval}\" of type {leftEval.GetType()}\n" +
+                $"Right expression is \"{right}\" of type {right.GetType()}\n" +
+                $"Right expression evaluates to \"{rightEval}\" of type {rightEval.GetType()}");
+        }
+
+        public override List<ColumnRef> GetColumns()
+        {
+            var res = new List<ColumnRef>();
+            res.AddRange(left.GetColumns());
+            res.AddRange(right.GetColumns());
+            return res;
+        }
+    }
+
+    public class BooleanLessThan : BooleanExpression
+    {
+        public Expression left, right;
+
+        public BooleanLessThan(Expression left, Expression right)
+        {
+            setValue(left, right);
+        }
+
+        public BooleanLessThan(Expression left, Expression right, bool NOT)
+        {
+            setValue(left, right, NOT);
+        }
+
+        public override void setValue(params object[] value)
+        {
+            if (value.Length == 0)
+                throw new ArgumentException("BooleanLessThan.setValue expects at least one argument");
+            else if (value.Length == 1)
+                NOT = (bool)value[0];
+            else if (value.Length == 2)
+            {
+                left = (Expression)value[0];
+                right = (Expression)value[1];
+            }
+            else
+            {
+                left = (Expression)value[0];
+                right = (Expression)value[1];
+                NOT = (bool)value[2];
+            }
+        }
+
+        public override object Clone()
+        {
+            var left_clone = left.Clone() as Expression;
+            var right_clone = right.Clone() as Expression;
+
+            var clone = new BooleanLessThan(left_clone, right_clone, NOT);
+
+            return clone;
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.BooleanLessThanToString(this);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is BooleanLessThan otherBL)) return false;
+
+            return (this.NOT != otherBL.NOT)
+                && (this.Alias.Equals(otherBL.Alias))
+                && (this.left.Equals(otherBL.left))
+                && (this.right.Equals(otherBL.right));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                (NOT.GetHashCode() + 1) *
+                Alias.GetHashCode() *
+                left.GetHashCode() *
+                right.GetHashCode());
+        }
+
+        public override object Eval(ResultRow r)
+        {
+            var leftEval = left.Eval(r);
+            var rightEval = right.Eval(r);
+
+            if (leftEval is Int32 leftInt)
+            {
+                if (rightEval is Int32 rightInt)
+                    return (leftInt < rightInt) ? !NOT : NOT; // assume data in DataRow are in int/double
+                else if (rightEval is Double rightDouble)
+                    return (leftInt < rightDouble) ? !NOT : NOT; // assume data in DataRow are in int/double
+            }
+            else if (leftEval is Double leftDouble)
+            {
+                if (rightEval is Int32 rightInt)
+                    return (leftDouble < rightInt) ? !NOT : NOT; // assume data in DataRow are in int/double
+                else if (rightEval is Double rightDouble)
+                    return (leftDouble < rightDouble) ? !NOT : NOT; // assume data in DataRow are in int/double
+            }
+
+            throw new ApplicationException(
+                 "Left and right expressions of BooleanLessThan are not of the same type.\n" +
+                $"Left expression is \"{left}\" of type {left.GetType()}\n" +
+                $"Left expression evaluates to \"{leftEval}\" of type {leftEval.GetType()}\n" +
+                $"Right expression is \"{right}\" of type {right.GetType()}\n" +
+                $"Right expression evaluates to \"{rightEval}\" of type {rightEval.GetType()}");
+        }
+
+        public override List<ColumnRef> GetColumns()
+        {
+            var res = new List<ColumnRef>();
+            res.AddRange(left.GetColumns());
+            res.AddRange(right.GetColumns());
+            return res;
+        }
+    }
+
     public class BooleanIsNull : BooleanExpression
     {
         public Expression left;

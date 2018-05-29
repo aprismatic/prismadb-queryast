@@ -10,7 +10,9 @@ namespace PrismaDB.QueryAST.DML
         public List<TableRef> FromTables;
         public WhereClause Where;
         public uint? Limit;
+        public List<JoinClause> Joins;
         public OrderByClause OrderBy;
+        public GroupByClause GroupBy;
         public bool LockForUpdate;
 
         public SelectQuery()
@@ -19,7 +21,9 @@ namespace PrismaDB.QueryAST.DML
             FromTables = new List<TableRef>();
             Where = new WhereClause();
             Limit = null;
+            Joins = new List<JoinClause>();
             OrderBy = new OrderByClause();
+            GroupBy = new GroupByClause();
             LockForUpdate = false;
         }
 
@@ -35,7 +39,12 @@ namespace PrismaDB.QueryAST.DML
 
             Limit = other.Limit;
 
+            Joins = new List<JoinClause>(other.Joins.Capacity);
+            Joins.AddRange(other.Joins.Select(x => x.Clone() as JoinClause));
+
             OrderBy = new OrderByClause(other.OrderBy);
+
+            GroupBy = new GroupByClause(other.GroupBy);
 
             LockForUpdate = other.LockForUpdate;
         }

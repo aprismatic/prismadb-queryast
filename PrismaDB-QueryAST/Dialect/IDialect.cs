@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using PrismaDB.QueryAST.DCL;
+﻿using PrismaDB.QueryAST.DCL;
 using PrismaDB.QueryAST.DDL;
 using PrismaDB.QueryAST.DML;
 
@@ -25,18 +24,28 @@ namespace PrismaDB.QueryAST
         string FloatingPointConstantToString(FloatingPointConstant q);
         string AdditionToString(Addition q);
         string MultiplicationToString(Multiplication q);
-        string PaillierAdditionToString(PaillierAddition q);
-        string ElGamalMultiplicationToString(ElGamalMultiplication q);
         string ColumnRefToString(ColumnRef q);
         string BooleanTrueToString(BooleanTrue q);
         string BooleanInToString(BooleanIn q);
         string BooleanEqualsToString(BooleanEquals q);
+        string BooleanGreaterThanToString(BooleanGreaterThan q);
+        string BooleanLessThanToString(BooleanLessThan q);
         string ConjunctiveNormalFormToString(ConjunctiveNormalForm q);
         string DisjunctionToString(Disjunction q);
         string ScalarFunctionToString(ScalarFunction q);
         string MySqlVariableToString(MySqlVariable q);
         string OrderByClauseToString(OrderByClause q);
+        string GroupByClauseToString(GroupByClause q);
+        string JoinClauseToString(JoinClause q);
         string AllColumnsToString(AllColumns q);
+        string NullConstantToString(NullConstant q);
+        string BooleanIsNullToString(BooleanIsNull q);
+        string PaillierAdditionFunctionToString(PaillierAdditionFunction q);
+        string ElGamalMultiplicationFunctionToString(ElGamalMultiplicationFunction q);
+        string SumAggregationFunctionToString(SumAggregationFunction q);
+        string CountAggregationFunctionToString(CountAggregationFunction q);
+        string AvgAggregationFunctionToString(AvgAggregationFunction q);
+        string PaillierAggregationSumFunctionToString(PaillierAggregationSumFunction q);
 
         string ExportSettingsCommandToString(ExportSettingsCommand c);
 
@@ -45,11 +54,6 @@ namespace PrismaDB.QueryAST
         string IndexModifierToString(IndexModifier q);
         string IndexTypeToString(IndexType q);
         string OrderDirectionToString(OrderDirection q);
-        string NullConstantToString(NullConstant q);
-        string BooleanIsNullToString(BooleanIsNull q);
-        string SumAggregationFunctionToString(SumAggregationFunction q);
-        string CountAggregationFunctionToString(CountAggregationFunction q);
-        string AvgAggregationFunctionToString(AvgAggregationFunction q);
-        string PaillierAggregationSumFunctionToString(PaillierAggregationSumFunction q);
+        string JoinTypeToString(JoinType q);
     }
 }

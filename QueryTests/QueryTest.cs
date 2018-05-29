@@ -81,6 +81,28 @@ namespace QueryTests
                 var func3 = func.Clone() as AvgAggregationFunction;
                 Assert.Equal(func, func3);
             }
+            {
+                var func = new PaillierAdditionFunction("fn", new ColumnRef("a"), new ColumnRef("b"), new BinaryConstant(new byte[] { 0x00 }));
+
+                var func2 = new PaillierAdditionFunction("fn", new ColumnRef("a"), new ColumnRef("b"), new BinaryConstant(new byte[] { 0x00 }), "alias");
+                Assert.NotEqual(func, func2);
+                func.Alias.id = "alias";
+                Assert.Equal(func, func2);
+
+                var func3 = func.Clone() as PaillierAdditionFunction;
+                Assert.Equal(func, func3);
+            }
+            {
+                var func = new ElGamalMultiplicationFunction("fn", new ColumnRef("a"), new ColumnRef("b"), new BinaryConstant(new byte[] { 0x00 }));
+
+                var func2 = new ElGamalMultiplicationFunction("fn", new ColumnRef("a"), new ColumnRef("b"), new BinaryConstant(new byte[] { 0x00 }), "alias");
+                Assert.NotEqual(func, func2);
+                func.Alias.id = "alias";
+                Assert.Equal(func, func2);
+
+                var func3 = func.Clone() as ElGamalMultiplicationFunction;
+                Assert.Equal(func, func3);
+            }
         }
 
         [Fact(DisplayName = "ColumnDefinition")]
