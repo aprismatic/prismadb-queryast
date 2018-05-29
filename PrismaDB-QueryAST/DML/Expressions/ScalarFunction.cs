@@ -53,9 +53,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            var clone = new ScalarFunction(FunctionName, Alias, Parameters);
-
-            return clone;
+            return new ScalarFunction(FunctionName, Alias, Parameters);
         }
 
         public override bool Equals(object other)
@@ -142,9 +140,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            var clone = new PaillierAdditionFunction(FunctionName, Alias, Parameters);
-
-            return clone;
+            return new PaillierAdditionFunction(FunctionName, Alias, Parameters);
         }
 
         public override bool Equals(object other)
@@ -190,9 +186,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            var clone = new ElGamalMultiplicationFunction(FunctionName, Alias, Parameters);
-
-            return clone;
+            return new ElGamalMultiplicationFunction(FunctionName, Alias, Parameters);
         }
 
         public override bool Equals(object other)
@@ -222,9 +216,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            var clone = new SumAggregationFunction(FunctionName, Alias, Parameters);
-
-            return clone;
+            return new SumAggregationFunction(FunctionName, Alias, Parameters);
         }
 
         public override bool Equals(object other)
@@ -254,9 +246,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            var clone = new CountAggregationFunction(FunctionName, Alias, Parameters);
-
-            return clone;
+            return new CountAggregationFunction(FunctionName, Alias, Parameters);
         }
 
         public override bool Equals(object other)
@@ -286,9 +276,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            var clone = new AvgAggregationFunction(FunctionName, Alias, Parameters);
-
-            return clone;
+            return new AvgAggregationFunction(FunctionName, Alias, Parameters);
         }
 
         public override bool Equals(object other)
@@ -318,9 +306,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            var clone = new PaillierAggregationSumFunction(FunctionName, Alias, Parameters);
-
-            return clone;
+            return new PaillierAggregationSumFunction(FunctionName, Alias, Parameters);
         }
 
         public override bool Equals(object other)
