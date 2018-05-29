@@ -50,6 +50,9 @@ namespace PrismaDB.QueryAST.DML
     public enum JoinType
     {
         INNER,
-        LEFT
+        LEFT,
+        RIGHT,
+        OUTER,
+        CROSS
     }
 }
