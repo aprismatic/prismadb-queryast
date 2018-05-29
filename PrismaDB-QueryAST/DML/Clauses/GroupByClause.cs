@@ -30,7 +30,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns()
         {
-            return GroupColumns.Distinct().ToList();
+            return GroupColumns;
         }
     }
 }

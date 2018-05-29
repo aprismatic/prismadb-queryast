@@ -33,8 +33,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns()
         {
-            var orderByCols = OrderColumns.SelectMany(x => x.First.GetColumns());
-            return orderByCols.Distinct().ToList();
+            return OrderColumns.SelectMany(x => x.First.GetColumns()) as List<ColumnRef>;
         }
     }
 
