@@ -15,7 +15,7 @@ namespace PrismaDB.QueryAST.DML
             JoinTable = new TableRef("");
             FirstColumn = new ColumnRef("");
             SecondColumn = new ColumnRef("");
-            JoinType = JoinType.LEFT;
+            JoinType = JoinType.INNER;
         }
 
         public JoinClause(JoinClause other)
@@ -49,6 +49,7 @@ namespace PrismaDB.QueryAST.DML
 
     public enum JoinType
     {
+        INNER,
         LEFT
     }
 }
