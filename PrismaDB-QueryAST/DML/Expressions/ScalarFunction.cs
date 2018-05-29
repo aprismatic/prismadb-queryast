@@ -113,6 +113,101 @@ namespace PrismaDB.QueryAST.DML
         }
     }
 
+    public class PaillierAdditionFunction : ScalarFunction
+    {
+        public PaillierAdditionFunction(string functionName) : base(functionName) { }
+        public PaillierAdditionFunction(string functionName, string aliasName) : base(functionName, aliasName) { }
+        public PaillierAdditionFunction(Identifier functionName) : base(functionName) { }
+        public PaillierAdditionFunction(Identifier functionName, Identifier alias) : base(functionName, alias) { }
+        public PaillierAdditionFunction(string functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public PaillierAdditionFunction(string functionName, string aliasName, List<Expression> parameters) : base(functionName, aliasName, parameters) { }
+        public PaillierAdditionFunction(Identifier functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public PaillierAdditionFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+
+        public PaillierAdditionFunction(string functionName, Expression left, Expression right, Expression N)
+            : this(functionName)
+        {
+            Parameters.Add(left);
+            Parameters.Add(right);
+            Parameters.Add(N);
+        }
+
+        public PaillierAdditionFunction(string functionName, Expression left, Expression right, Expression N, string aliasName)
+            : this(functionName, aliasName)
+        {
+            Parameters.Add(left);
+            Parameters.Add(right);
+            Parameters.Add(N);
+        }
+
+        public override object Clone()
+        {
+            var clone = new PaillierAdditionFunction(FunctionName, Alias, Parameters);
+
+            return clone;
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is PaillierAdditionFunction otherF)) return false;
+            return (FunctionName.Equals(otherF.FunctionName)) &&
+                   (Alias.Equals(otherF.Alias)) &&
+                   (Parameters.SequenceEqual(otherF.Parameters));
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.PaillierAdditionFunctionToString(this);
+        }
+    }
+
+    public class ElGamalMultiplicationFunction : ScalarFunction
+    {
+        public ElGamalMultiplicationFunction(string functionName) : base(functionName) { }
+        public ElGamalMultiplicationFunction(string functionName, string aliasName) : base(functionName, aliasName) { }
+        public ElGamalMultiplicationFunction(Identifier functionName) : base(functionName) { }
+        public ElGamalMultiplicationFunction(Identifier functionName, Identifier alias) : base(functionName, alias) { }
+        public ElGamalMultiplicationFunction(string functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public ElGamalMultiplicationFunction(string functionName, string aliasName, List<Expression> parameters) : base(functionName, aliasName, parameters) { }
+        public ElGamalMultiplicationFunction(Identifier functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public ElGamalMultiplicationFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+
+        public ElGamalMultiplicationFunction(string functionName, Expression left, Expression right, Expression P)
+            : this(functionName)
+        {
+            Parameters.Add(left);
+            Parameters.Add(right);
+            Parameters.Add(P);
+        }
+
+        public ElGamalMultiplicationFunction(string functionName, Expression left, Expression right, Expression P, string aliasName)
+            : this(functionName, aliasName)
+        {
+            Parameters.Add(left);
+            Parameters.Add(right);
+            Parameters.Add(P);
+        }
+
+        public override object Clone()
+        {
+            var clone = new ElGamalMultiplicationFunction(FunctionName, Alias, Parameters);
+
+            return clone;
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is ElGamalMultiplicationFunction otherF)) return false;
+            return (FunctionName.Equals(otherF.FunctionName)) &&
+                   (Alias.Equals(otherF.Alias)) &&
+                   (Parameters.SequenceEqual(otherF.Parameters));
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.ElGamalMultiplicationFunctionToString(this);
+        }
+    }
 
     public class SumAggregationFunction : ScalarFunction
     {
