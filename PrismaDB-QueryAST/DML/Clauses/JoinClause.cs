@@ -38,11 +38,13 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns()
         {
-            var res = new List<ColumnRef>
-            {
-                FirstColumn,
-                SecondColumn
-            };
+
+            var res = new List<ColumnRef>();
+            if (FirstColumn.ColumnName.id == "" || SecondColumn.ColumnName.id == "")
+                return res;
+
+            res.Add(FirstColumn);
+            res.Add(SecondColumn);
             return res;
         }
     }
