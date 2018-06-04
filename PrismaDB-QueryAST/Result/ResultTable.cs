@@ -74,26 +74,17 @@ namespace PrismaDB.QueryAST.Result
             if (Rows.Count > 0 || Columns.Count > 0)
                 throw new ApplicationException("ResultTable is not empty.");
 
-            var schemaTable = reader.GetSchemaTable();
+            // TODO: Change to GetSchemaTable(), probably better performance
+            var dataTable = new DataTable();
+            dataTable.Load(reader);
 
-            foreach (DataRow dataRow in schemaTable.Rows)
+            foreach (DataColumn column in dataTable.Columns)
+                Columns.Add(column.ColumnName, column.DataType, column.MaxLength);
+
+            foreach (DataRow row in dataTable.Rows)
             {
-                var resColumn = new ResultColumnHeader
-                {
-                    ColumnName = dataRow["ColumnName"].ToString(),
-                    DataType = Type.GetType(dataRow["DataType"].ToString())
-                };
-
-                Columns.Add(resColumn);
-            }
-
-            while (reader.Read())
-            {
-                var resRow = NewRow();
-
-                for (var i = 0; i < Columns.Count; i++)
-                    resRow[i] = reader[i];
-
+                var resRow = this.NewRow();
+                resRow.Add(row.ItemArray);
                 Rows.Add(resRow);
             }
         }
