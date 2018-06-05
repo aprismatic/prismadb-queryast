@@ -9,6 +9,7 @@
     <RootNamespace>PrismaDB.QueryAST</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="PrismaDB-Commons" Version="0.1.8" />
   </ItemGroup>
 </Project>

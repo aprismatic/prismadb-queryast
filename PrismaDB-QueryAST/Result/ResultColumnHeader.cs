@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 using PrismaDB.QueryAST.DDL;
 using PrismaDB.QueryAST.DML;
 
@@ -10,9 +12,17 @@ namespace PrismaDB.QueryAST.Result
         private ColumnDefinition _columnDefinition;
 
         public string ColumnName { get; set; }
-        public Type DataType { get; set; }
-        public int? MaxLength { get; set; }
 
+        [JsonIgnore]
+        [XmlIgnore]
+        public int? MaxLength { get; set; }
+        
+        [JsonIgnore]
+        [XmlIgnore]
+        public Type DataType { get; set; }
+
+        [JsonIgnore]
+        [XmlIgnore]
         public Expression Expression
         {
             get => _expression;
@@ -27,6 +37,8 @@ namespace PrismaDB.QueryAST.Result
             }
         }
 
+        [JsonIgnore]
+        [XmlIgnore]
         public ColumnDefinition ColumnDefinition
         {
             get => _columnDefinition;

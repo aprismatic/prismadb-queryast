@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Xml.Serialization;
 using PrismaDB.Commons;
 using PrismaDB.QueryAST.DML;
 
@@ -12,7 +13,10 @@ namespace PrismaDB.QueryAST.Result
         private List<ResultRow> _rows;
 
         public ResultColumnList Columns { get; }
+
+        [XmlIgnore]
         public List<ResultRow> Rows => _rows;
+
         public string TableName { get; set; }
 
         public ResultTable()
