@@ -13,6 +13,8 @@ namespace PrismaDB.QueryAST.Result
 
         internal List<object> Items { get; }
 
+        protected ResultRow() { }
+
         internal ResultRow(ResultTable table)
         {
             _table = table;

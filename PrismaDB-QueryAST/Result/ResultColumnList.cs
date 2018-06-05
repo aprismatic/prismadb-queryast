@@ -13,6 +13,8 @@ namespace PrismaDB.QueryAST.Result
 
         internal List<ResultColumnHeader> Headers { get; }
 
+        protected ResultColumnList() { }
+
         internal ResultColumnList(ResultTable table)
         {
             _table = table;
