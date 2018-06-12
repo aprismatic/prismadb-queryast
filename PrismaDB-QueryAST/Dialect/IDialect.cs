@@ -13,6 +13,7 @@ namespace PrismaDB.QueryAST
         string AlterTableQueryToString(AlterTableQuery q);
         string AlteredColumnToString(AlteredColumn q);
         string TableRefToString(TableRef q);
+        string DatabaseRefToString(DatabaseRef q);
         string WhereClauseToString(WhereClause q);
         string UpdateQueryToString(UpdateQuery q);
         string SelectQueryToString(SelectQuery q);
