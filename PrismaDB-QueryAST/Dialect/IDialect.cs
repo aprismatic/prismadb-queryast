@@ -47,6 +47,7 @@ namespace PrismaDB.QueryAST
         string CountAggregationFunctionToString(CountAggregationFunction q);
         string AvgAggregationFunctionToString(AvgAggregationFunction q);
         string PaillierAggregationSumFunctionToString(PaillierAggregationSumFunction q);
+        string UseStatementToString(UseStatement q);
 
         string ExportSettingsCommandToString(ExportSettingsCommand c);
 
