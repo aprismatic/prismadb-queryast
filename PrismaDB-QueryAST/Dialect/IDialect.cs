@@ -13,6 +13,7 @@ namespace PrismaDB.QueryAST
         string AlterTableQueryToString(AlterTableQuery q);
         string AlteredColumnToString(AlteredColumn q);
         string TableRefToString(TableRef q);
+        string DatabaseRefToString(DatabaseRef q);
         string WhereClauseToString(WhereClause q);
         string UpdateQueryToString(UpdateQuery q);
         string SelectQueryToString(SelectQuery q);
@@ -46,6 +47,7 @@ namespace PrismaDB.QueryAST
         string CountAggregationFunctionToString(CountAggregationFunction q);
         string AvgAggregationFunctionToString(AvgAggregationFunction q);
         string PaillierAggregationSumFunctionToString(PaillierAggregationSumFunction q);
+        string UseStatementToString(UseStatement q);
 
         string ExportSettingsCommandToString(ExportSettingsCommand c);
 
