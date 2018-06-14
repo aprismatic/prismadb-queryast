@@ -25,7 +25,8 @@ namespace PrismaDB.QueryAST.DDL
         Store = 1,
         IntegerAddition = 2,
         IntegerMultiplication = 4,
-        Search = 8
+        Search = 8,
+        Range = 16
     }
 
     public class ColumnDefinition : ICloneable
