@@ -52,6 +52,9 @@ namespace PrismaDB.QueryAST.Result
                     case SqlDataType.INT:
                         DataType = typeof(Int32);
                         break;
+                    case SqlDataType.BIGINT:
+                        DataType = typeof(Int64);
+                        break;
                     case SqlDataType.MSSQL_UNIQUEIDENTIFIER:
                         DataType = typeof(Guid);
                         break;
