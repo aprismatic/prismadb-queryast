@@ -189,19 +189,45 @@ namespace PrismaDB.QueryAST.DML
             {
                 return ((String)leftEval == (String)rightEval) ? !NOT : NOT;
             }
-            else if (leftEval is Int32 leftInt)
+
+            // assume data in DataRow are in int/bigint/double
+            switch (leftEval)
             {
-                if (rightEval is Int32 rightInt)
-                    return (leftInt == rightInt) ? !NOT : NOT; // assume data in DataRow are in int/double
-                else if (rightEval is Double rightDouble)
-                    return (leftInt == rightDouble) ? !NOT : NOT; // assume data in DataRow are in int/double
-            }
-            else if (leftEval is Double leftDouble)
-            {
-                if (rightEval is Int32 rightInt)
-                    return (leftDouble == rightInt) ? !NOT : NOT; // assume data in DataRow are in int/double
-                else if (rightEval is Double rightDouble)
-                    return (leftDouble == rightDouble) ? !NOT : NOT; // assume data in DataRow are in int/double
+                case Int32 leftInt:
+                    switch (rightEval)
+                    {
+                        case Int32 rightInt:
+                            return (leftInt == rightInt) ? !NOT : NOT;
+                        case Int64 rightBigInt:
+                            return (leftInt == rightBigInt) ? !NOT : NOT;
+                        case Double rightDouble:
+                            return (leftInt == rightDouble) ? !NOT : NOT;
+                    }
+                    break;
+
+                case Int64 leftBigInt:
+                    switch (rightEval)
+                    {
+                        case Int32 rightInt:
+                            return (leftBigInt == rightInt) ? !NOT : NOT;
+                        case Int64 rightBigInt:
+                            return (leftBigInt == rightBigInt) ? !NOT : NOT;
+                        case Double rightDouble:
+                            return (leftBigInt == rightDouble) ? !NOT : NOT;
+                    }
+                    break;
+
+                case Double leftDouble:
+                    switch (rightEval)
+                    {
+                        case Int32 rightInt:
+                            return (leftDouble == rightInt) ? !NOT : NOT;
+                        case Int64 rightBigInt:
+                            return (leftDouble == rightBigInt) ? !NOT : NOT;
+                        case Double rightDouble:
+                            return (leftDouble == rightDouble) ? !NOT : NOT;
+                    }
+                    break;
             }
 
             throw new ApplicationException(
@@ -293,19 +319,44 @@ namespace PrismaDB.QueryAST.DML
             var leftEval = left.Eval(r);
             var rightEval = right.Eval(r);
 
-            if (leftEval is Int32 leftInt)
+            // assume data in DataRow are in int/bigint/double
+            switch (leftEval)
             {
-                if (rightEval is Int32 rightInt)
-                    return (leftInt > rightInt) ? !NOT : NOT; // assume data in DataRow are in int/double
-                else if (rightEval is Double rightDouble)
-                    return (leftInt > rightDouble) ? !NOT : NOT; // assume data in DataRow are in int/double
-            }
-            else if (leftEval is Double leftDouble)
-            {
-                if (rightEval is Int32 rightInt)
-                    return (leftDouble > rightInt) ? !NOT : NOT; // assume data in DataRow are in int/double
-                else if (rightEval is Double rightDouble)
-                    return (leftDouble > rightDouble) ? !NOT : NOT; // assume data in DataRow are in int/double
+                case Int32 leftInt:
+                    switch (rightEval)
+                    {
+                        case Int32 rightInt:
+                            return (leftInt > rightInt) ? !NOT : NOT;
+                        case Int64 rightBigInt:
+                            return (leftInt > rightBigInt) ? !NOT : NOT;
+                        case Double rightDouble:
+                            return (leftInt > rightDouble) ? !NOT : NOT;
+                    }
+                    break;
+
+                case Int64 leftBigInt:
+                    switch (rightEval)
+                    {
+                        case Int32 rightInt:
+                            return (leftBigInt > rightInt) ? !NOT : NOT;
+                        case Int64 rightBigInt:
+                            return (leftBigInt > rightBigInt) ? !NOT : NOT;
+                        case Double rightDouble:
+                            return (leftBigInt > rightDouble) ? !NOT : NOT;
+                    }
+                    break;
+
+                case Double leftDouble:
+                    switch (rightEval)
+                    {
+                        case Int32 rightInt:
+                            return (leftDouble > rightInt) ? !NOT : NOT;
+                        case Int64 rightBigInt:
+                            return (leftDouble > rightBigInt) ? !NOT : NOT;
+                        case Double rightDouble:
+                            return (leftDouble > rightDouble) ? !NOT : NOT;
+                    }
+                    break;
             }
 
             throw new ApplicationException(
@@ -397,19 +448,44 @@ namespace PrismaDB.QueryAST.DML
             var leftEval = left.Eval(r);
             var rightEval = right.Eval(r);
 
-            if (leftEval is Int32 leftInt)
+            // assume data in DataRow are in int/bigint/double
+            switch (leftEval)
             {
-                if (rightEval is Int32 rightInt)
-                    return (leftInt < rightInt) ? !NOT : NOT; // assume data in DataRow are in int/double
-                else if (rightEval is Double rightDouble)
-                    return (leftInt < rightDouble) ? !NOT : NOT; // assume data in DataRow are in int/double
-            }
-            else if (leftEval is Double leftDouble)
-            {
-                if (rightEval is Int32 rightInt)
-                    return (leftDouble < rightInt) ? !NOT : NOT; // assume data in DataRow are in int/double
-                else if (rightEval is Double rightDouble)
-                    return (leftDouble < rightDouble) ? !NOT : NOT; // assume data in DataRow are in int/double
+                case Int32 leftInt:
+                    switch (rightEval)
+                    {
+                        case Int32 rightInt:
+                            return (leftInt < rightInt) ? !NOT : NOT;
+                        case Int64 rightBigInt:
+                            return (leftInt < rightBigInt) ? !NOT : NOT;
+                        case Double rightDouble:
+                            return (leftInt < rightDouble) ? !NOT : NOT;
+                    }
+                    break;
+
+                case Int64 leftBigInt:
+                    switch (rightEval)
+                    {
+                        case Int32 rightInt:
+                            return (leftBigInt < rightInt) ? !NOT : NOT;
+                        case Int64 rightBigInt:
+                            return (leftBigInt < rightBigInt) ? !NOT : NOT;
+                        case Double rightDouble:
+                            return (leftBigInt < rightDouble) ? !NOT : NOT;
+                    }
+                    break;
+
+                case Double leftDouble:
+                    switch (rightEval)
+                    {
+                        case Int32 rightInt:
+                            return (leftDouble < rightInt) ? !NOT : NOT;
+                        case Int64 rightBigInt:
+                            return (leftDouble < rightBigInt) ? !NOT : NOT;
+                        case Double rightDouble:
+                            return (leftDouble < rightDouble) ? !NOT : NOT;
+                    }
+                    break;
             }
 
             throw new ApplicationException(
