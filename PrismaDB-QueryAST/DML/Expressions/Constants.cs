@@ -69,6 +69,68 @@ namespace PrismaDB.QueryAST.DML
         }
     }
 
+    public class BigIntConstant : Constant
+    {
+        public Int64 intvalue;
+
+        public BigIntConstant(Int64 value)
+        {
+            setValue(value, "");
+        }
+
+        public BigIntConstant(Int64 value, string aliasName)
+        {
+            setValue(value, aliasName);
+        }
+
+        public override void setValue(params object[] value)
+        {
+            Parent = null;
+
+            intvalue = (Int64)value[0];
+
+            if (value.Length > 1)
+                Alias = new Identifier((string)value[1]);
+        }
+
+        public override object Clone()
+        {
+            var clone = new BigIntConstant(intvalue, Alias.id);
+
+            return clone;
+        }
+
+        public override object Eval(ResultRow r)
+        {
+            return intvalue;
+        }
+
+        public override List<ColumnRef> GetColumns()
+        {
+            return new List<ColumnRef>();
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.BigIntConstantToString(this);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is BigIntConstant otherIC)) return false;
+
+            return (this.Alias.Equals(otherIC.Alias))
+                   && (this.intvalue == otherIC.intvalue);
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                Alias.GetHashCode() *
+                intvalue.GetHashCode());
+        }
+    }
+
     public class StringConstant : Constant
     {
         public string strvalue;
