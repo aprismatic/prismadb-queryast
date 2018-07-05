@@ -9,14 +9,14 @@ namespace PrismaDB.QueryAST.DML
 
     public class IntConstant : Constant
     {
-        public Int32 intvalue;
+        public Int64 intvalue;
 
-        public IntConstant(Int32 value)
+        public IntConstant(Int64 value)
         {
             setValue(value, "");
         }
 
-        public IntConstant(Int32 value, string aliasName)
+        public IntConstant(Int64 value, string aliasName)
         {
             setValue(value, aliasName);
         }
@@ -25,7 +25,7 @@ namespace PrismaDB.QueryAST.DML
         {
             Parent = null;
 
-            intvalue = (Int32)value[0];
+            intvalue = (Int64)value[0];
 
             if (value.Length > 1)
                 Alias = new Identifier((string)value[1]);
@@ -59,68 +59,6 @@ namespace PrismaDB.QueryAST.DML
 
             return (this.Alias.Equals(otherIC.Alias))
                 && (this.intvalue == otherIC.intvalue);
-        }
-
-        public override int GetHashCode()
-        {
-            return unchecked(
-                Alias.GetHashCode() *
-                intvalue.GetHashCode());
-        }
-    }
-
-    public class BigIntConstant : Constant
-    {
-        public Int64 intvalue;
-
-        public BigIntConstant(Int64 value)
-        {
-            setValue(value, "");
-        }
-
-        public BigIntConstant(Int64 value, string aliasName)
-        {
-            setValue(value, aliasName);
-        }
-
-        public override void setValue(params object[] value)
-        {
-            Parent = null;
-
-            intvalue = (Int64)value[0];
-
-            if (value.Length > 1)
-                Alias = new Identifier((string)value[1]);
-        }
-
-        public override object Clone()
-        {
-            var clone = new BigIntConstant(intvalue, Alias.id);
-
-            return clone;
-        }
-
-        public override object Eval(ResultRow r)
-        {
-            return intvalue;
-        }
-
-        public override List<ColumnRef> GetColumns()
-        {
-            return new List<ColumnRef>();
-        }
-
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.BigIntConstantToString(this);
-        }
-
-        public override bool Equals(object other)
-        {
-            if (!(other is BigIntConstant otherIC)) return false;
-
-            return (this.Alias.Equals(otherIC.Alias))
-                   && (this.intvalue == otherIC.intvalue);
         }
 
         public override int GetHashCode()
@@ -257,14 +195,14 @@ namespace PrismaDB.QueryAST.DML
 
     public class FloatingPointConstant : Constant
     {
-        public Double floatvalue;
+        public Decimal floatvalue;
 
-        public FloatingPointConstant(Double value)
+        public FloatingPointConstant(Decimal value)
         {
             setValue(value, "");
         }
 
-        public FloatingPointConstant(Double value, string ColumnName)
+        public FloatingPointConstant(Decimal value, string ColumnName)
         {
             setValue(value, ColumnName);
         }
@@ -273,7 +211,7 @@ namespace PrismaDB.QueryAST.DML
         {
             Parent = null;
 
-            floatvalue = (Double)value[0];
+            floatvalue = (Decimal)value[0];
 
             if (value.Length > 1)
                 Alias = new Identifier((string)value[1]);

@@ -8,6 +8,8 @@ namespace PrismaDB.QueryAST.DDL
     public enum SqlDataType
     {
         INT,
+        SMALLINT,
+        TINYINT,
         BIGINT,
         MSSQL_UNIQUEIDENTIFIER,
         VARBINARY,
