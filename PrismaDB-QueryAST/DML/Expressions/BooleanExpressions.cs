@@ -190,29 +190,8 @@ namespace PrismaDB.QueryAST.DML
                 return ((String)leftEval == (String)rightEval) ? !NOT : NOT;
             }
 
-            // Assume data in DataRow are in Int64/Decimal
-            switch (leftEval)
-            {
-                case Int64 leftInt:
-                    switch (rightEval)
-                    {
-                        case Int64 rightInt:
-                            return (leftInt == rightInt) ? !NOT : NOT;
-                        case Decimal rightDecimal:
-                            return (leftInt == rightDecimal) ? !NOT : NOT;
-                    }
-                    break;
-
-                case Decimal leftDecimal:
-                    switch (rightEval)
-                    {
-                        case Int64 rightInt:
-                            return (leftDecimal == rightInt) ? !NOT : NOT;
-                        case Decimal rightDecimal:
-                            return (leftDecimal == rightDecimal) ? !NOT : NOT;
-                    }
-                    break;
-            }
+            // Assume data in DataRow are numeric
+            return (Convert.ToDecimal(leftEval) == Convert.ToDecimal(rightEval)) ? !NOT : NOT;
 
             throw new ApplicationException(
                  "Left and right expressions of BooleanEquals are not of the same type.\n" +
@@ -303,29 +282,8 @@ namespace PrismaDB.QueryAST.DML
             var leftEval = left.Eval(r);
             var rightEval = right.Eval(r);
 
-            // Assume data in DataRow are in Int64/Decimal
-            switch (leftEval)
-            {
-                case Int64 leftInt:
-                    switch (rightEval)
-                    {
-                        case Int64 rightInt:
-                            return (leftInt > rightInt) ? !NOT : NOT;
-                        case Decimal rightDecimal:
-                            return (leftInt > rightDecimal) ? !NOT : NOT;
-                    }
-                    break;
-
-                case Decimal leftDecimal:
-                    switch (rightEval)
-                    {
-                        case Int64 rightInt:
-                            return (leftDecimal > rightInt) ? !NOT : NOT;
-                        case Decimal rightDecimal:
-                            return (leftDecimal > rightDecimal) ? !NOT : NOT;
-                    }
-                    break;
-            }
+            // Assume data in DataRow are numeric
+            return (Convert.ToDecimal(leftEval) > Convert.ToDecimal(rightEval)) ? !NOT : NOT;
 
             throw new ApplicationException(
                  "Left and right expressions of BooleanGreaterThan are not of the same type.\n" +
@@ -416,29 +374,8 @@ namespace PrismaDB.QueryAST.DML
             var leftEval = left.Eval(r);
             var rightEval = right.Eval(r);
 
-            // Assume data in DataRow are in Int64/Decimal
-            switch (leftEval)
-            {
-                case Int64 leftInt:
-                    switch (rightEval)
-                    {
-                        case Int64 rightInt:
-                            return (leftInt < rightInt) ? !NOT : NOT;
-                        case Decimal rightDecimal:
-                            return (leftInt < rightDecimal) ? !NOT : NOT;
-                    }
-                    break;
-
-                case Decimal leftDecimal:
-                    switch (rightEval)
-                    {
-                        case Int64 rightInt:
-                            return (leftDecimal < rightInt) ? !NOT : NOT;
-                        case Decimal rightDecimal:
-                            return (leftDecimal < rightDecimal) ? !NOT : NOT;
-                    }
-                    break;
-            }
+            // Assume data in DataRow are numeric
+            return (Convert.ToDecimal(leftEval) < Convert.ToDecimal(rightEval)) ? !NOT : NOT;
 
             throw new ApplicationException(
                  "Left and right expressions of BooleanLessThan are not of the same type.\n" +
