@@ -53,7 +53,7 @@ namespace PrismaDB.QueryAST.Result
                         DataType = typeof(Int32);
                         break;
                     case SqlDataType.TINYINT:
-                        DataType = typeof(Byte);
+                        DataType = typeof(SByte);
                         break;
                     case SqlDataType.SMALLINT:
                         DataType = typeof(Int16);
