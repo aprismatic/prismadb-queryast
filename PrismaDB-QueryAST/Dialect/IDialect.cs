@@ -20,7 +20,6 @@ namespace PrismaDB.QueryAST
         string DeleteQueryToString(DeleteQuery q);
         string InsertQueryToString(InsertQuery q);
         string IntConstantToString(IntConstant q);
-        string BigIntConstantToString(BigIntConstant q);
         string BinaryConstantToString(BinaryConstant q);
         string StringConstantToString(StringConstant q);
         string FloatingPointConstantToString(FloatingPointConstant q);
