@@ -11,6 +11,10 @@ namespace PrismaDB.QueryAST.DML
         public Identifier FunctionName;
         public List<Expression> Parameters;
 
+        public ScalarFunction()
+            : this("")
+        { }
+
         public ScalarFunction(string functionName)
         {
             setValue(new Identifier(functionName), new Identifier(""), new List<Expression>());
