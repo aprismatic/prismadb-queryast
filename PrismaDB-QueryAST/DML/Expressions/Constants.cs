@@ -11,6 +11,10 @@ namespace PrismaDB.QueryAST.DML
     {
         public Int64 intvalue;
 
+        public IntConstant()
+            : this(0)
+        { }
+
         public IntConstant(Int64 value)
         {
             setValue(value, "");
@@ -72,6 +76,10 @@ namespace PrismaDB.QueryAST.DML
     public class StringConstant : Constant
     {
         public string strvalue;
+
+        public StringConstant()
+            : this("")
+        { }
 
         public StringConstant(string strvalue)
         {
@@ -135,6 +143,10 @@ namespace PrismaDB.QueryAST.DML
     {
         public byte[] binvalue;
 
+        public BinaryConstant()
+            : this(new byte[0])
+        { }
+
         public BinaryConstant(byte[] binvalue)
         {
             setValue(binvalue, "");
@@ -197,6 +209,10 @@ namespace PrismaDB.QueryAST.DML
     {
         public Decimal floatvalue;
 
+        public FloatingPointConstant()
+            : this(0)
+        { }
+
         public FloatingPointConstant(Decimal value)
         {
             setValue(value, "");
@@ -257,14 +273,18 @@ namespace PrismaDB.QueryAST.DML
 
     public class NullConstant : Constant
     {
-        public NullConstant(Identifier aliasName = null)
+        public NullConstant()
+            : this("")
+        { }
+
+        public NullConstant(string aliasName)
         {
             setValue(aliasName);
         }
 
         public override object Clone()
         {
-            return new NullConstant(Alias.Clone());
+            return new NullConstant(Alias.id);
         }
 
         public override void setValue(params object[] value)
@@ -272,7 +292,7 @@ namespace PrismaDB.QueryAST.DML
             switch (value.Length)
             {
                 case 1:
-                    Alias = value[0] as Identifier ?? new Identifier("");
+                    Alias = new Identifier((string)value[0]);
                     break;
                 default:
                     throw new ArgumentException("NullConstant.setValue expects zero or one arguments");
