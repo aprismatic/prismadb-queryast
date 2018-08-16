@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using Newtonsoft.Json;
 
 namespace PrismaDB.QueryAST
 {
@@ -42,6 +44,8 @@ namespace PrismaDB.QueryAST
 
         public class IdentifierTypeConverter : TypeConverter
         {
+            private const string IdKey = "Id";
+
             public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
             {
                 return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
@@ -51,7 +55,8 @@ namespace PrismaDB.QueryAST
             {
                 if (value is string s)
                 {
-                    return new Identifier(s);
+                    var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(s);
+                    return new Identifier(dict[IdKey]);
                 }
                 return base.ConvertFrom(context, culture, value);
             }
@@ -60,8 +65,12 @@ namespace PrismaDB.QueryAST
             {
                 if (destinationType == typeof(string))
                 {
-                    var tr = (Identifier)value;
-                    return tr.id;
+                    var identifier = (Identifier)value;
+                    var dict = new Dictionary<string, string>
+                    {
+                        [IdKey] = identifier.id
+                    };
+                    return JsonConvert.SerializeObject(dict);
                 }
                 return base.ConvertTo(context, culture, value, destinationType);
             }

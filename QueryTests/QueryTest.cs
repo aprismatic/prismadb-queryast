@@ -261,8 +261,8 @@ namespace QueryTests
 
             var newTableDict = JsonConvert.DeserializeObject<Dictionary<TableRef, Dictionary<Identifier, ColumnDefinition>>>(json, deserializerSettings);
 
-            Assert.True(tableDict[new TableRef("tbl1")][new Identifier("col1")].ColumnName.Equals(newTableDict[new TableRef("tbl1")][new Identifier("col1")].ColumnName));
-            Assert.True(tableDict[new TableRef("tbl1")][new Identifier("col2")].ColumnName.Equals(newTableDict[new TableRef("tbl1")][new Identifier("col2")].ColumnName));
+            Assert.Equal(tableDict[new TableRef("tbl1")][new Identifier("col1")], newTableDict[new TableRef("tbl1")][new Identifier("col1")]);
+            Assert.Equal(tableDict[new TableRef("tbl1")][new Identifier("col2")], newTableDict[new TableRef("tbl1")][new Identifier("col2")]);
         }
 
         internal class MyContractResolver : DefaultContractResolver
