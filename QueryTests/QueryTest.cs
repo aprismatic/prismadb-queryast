@@ -1,7 +1,15 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using PrismaDB.QueryAST;
 using PrismaDB.QueryAST.DDL;
 using PrismaDB.QueryAST.DML;
@@ -87,9 +95,11 @@ namespace QueryTests
                 Assert.Equal(func, func3);
             }
             {
-                var func = new PaillierAdditionFunction("fn", new ColumnRef("a"), new ColumnRef("b"), new BinaryConstant(new byte[] { 0x00 }));
+                var func = new PaillierAdditionFunction("fn", new ColumnRef("a"), new ColumnRef("b"),
+                    new BinaryConstant(new byte[] { 0x00 }));
 
-                var func2 = new PaillierAdditionFunction("fn", new ColumnRef("a"), new ColumnRef("b"), new BinaryConstant(new byte[] { 0x00 }), "alias");
+                var func2 = new PaillierAdditionFunction("fn", new ColumnRef("a"), new ColumnRef("b"),
+                    new BinaryConstant(new byte[] { 0x00 }), "alias");
                 Assert.NotEqual(func, func2);
                 func.Alias.id = "alias";
                 Assert.Equal(func, func2);
@@ -98,9 +108,11 @@ namespace QueryTests
                 Assert.Equal(func, func3);
             }
             {
-                var func = new ElGamalMultiplicationFunction("fn", new ColumnRef("a"), new ColumnRef("b"), new BinaryConstant(new byte[] { 0x00 }));
+                var func = new ElGamalMultiplicationFunction("fn", new ColumnRef("a"), new ColumnRef("b"),
+                    new BinaryConstant(new byte[] { 0x00 }));
 
-                var func2 = new ElGamalMultiplicationFunction("fn", new ColumnRef("a"), new ColumnRef("b"), new BinaryConstant(new byte[] { 0x00 }), "alias");
+                var func2 = new ElGamalMultiplicationFunction("fn", new ColumnRef("a"), new ColumnRef("b"),
+                    new BinaryConstant(new byte[] { 0x00 }), "alias");
                 Assert.NotEqual(func, func2);
                 func.Alias.id = "alias";
                 Assert.Equal(func, func2);
@@ -175,8 +187,8 @@ namespace QueryTests
             Assert.True(a.GetHashCode() == b.GetHashCode());
         }
 
-        [Fact(DisplayName = "Serialization")]
-        public void TestSerialization()
+        [Fact(DisplayName = "ResultTable Serialization")]
+        public void TestResultTableSerialization()
         {
             var table = new ResultTable();
             table.Columns.Add(new ResultColumnHeader("a", typeof(int)));
@@ -210,7 +222,61 @@ namespace QueryTests
 
             Assert.NotNull(xmlRes);
             Assert.NotNull(jsonRes);
+        }
 
+        [Fact(DisplayName = "ColumnDefinition Serialization")]
+        public void TestColumnDefinitionSerialization()
+        {
+            var colDefDict = new Dictionary<Identifier, ColumnDefinition>
+            {
+                {
+                    new Identifier("col1"),
+                    new ColumnDefinition("col1", SqlDataType.INT, null, true, false, ColumnEncryptionFlags.Store,
+                        new NullConstant())
+                },
+                {
+                    new Identifier("col2"),
+                    new ColumnDefinition("col2", SqlDataType.DATETIME, null, false, false, ColumnEncryptionFlags.Store,
+                        new ScalarFunction("CURRENT_TIMESTAMP"))
+                }
+            };
+
+            var tableDict =
+                new Dictionary<TableRef, Dictionary<Identifier, ColumnDefinition>> {{new TableRef("tbl1"), colDefDict}};
+            
+            var serializerSettings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects,
+                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
+                Formatting = Newtonsoft.Json.Formatting.Indented,
+                ContractResolver = new MyContractResolver()
+            };
+
+            var json = JsonConvert.SerializeObject(tableDict, serializerSettings);
+
+            var deserializerSettings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects
+            };
+
+            var newTableDict = JsonConvert.DeserializeObject<Dictionary<TableRef, Dictionary<Identifier, ColumnDefinition>>>(json, deserializerSettings);
+
+            Assert.True(tableDict[new TableRef("tbl1")][new Identifier("col1")].ColumnName.Equals(newTableDict[new TableRef("tbl1")][new Identifier("col1")].ColumnName));
+            Assert.True(tableDict[new TableRef("tbl1")][new Identifier("col2")].ColumnName.Equals(newTableDict[new TableRef("tbl1")][new Identifier("col2")].ColumnName));
+        }
+
+        internal class MyContractResolver : DefaultContractResolver
+        {
+            protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
+            {
+                var props = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                    .Select(p => base.CreateProperty(p, memberSerialization))
+                    .Union(type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                        .Select(f => base.CreateProperty(f, memberSerialization)))
+                    .ToList();
+                props.ForEach(p => { p.Writable = true; p.Readable = true; });
+                return props;
+            }
         }
     }
 }
