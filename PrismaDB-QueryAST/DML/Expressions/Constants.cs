@@ -274,7 +274,7 @@ namespace PrismaDB.QueryAST.DML
     public class NullConstant : Constant
     {
         public NullConstant()
-            : this(null)
+            : this("")
         { }
 
         public NullConstant(string aliasName)

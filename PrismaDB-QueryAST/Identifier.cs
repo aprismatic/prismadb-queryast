@@ -6,6 +6,10 @@ namespace PrismaDB.QueryAST
     {
         public string id;
 
+        public Identifier()
+            : this("")
+        { }
+
         public Identifier(string newId)
         {
             id = newId;
