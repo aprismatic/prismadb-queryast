@@ -45,7 +45,7 @@ namespace PrismaDB.QueryAST
 
         public class TableRefTypeConverter : TypeConverter
         {
-            private const string TableIdKey = "Table.id";
+            private const string TableIdKey = "TableId";
             private const string IsTempTableKey = "IsTempTable";
 
             public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
