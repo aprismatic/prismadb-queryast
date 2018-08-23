@@ -113,6 +113,80 @@ namespace PrismaDB.QueryAST.DML
         }
     }
 
+    public class BooleanIs : BooleanExpression
+    {
+        public ColumnRef Column;
+
+        public BooleanIs()
+        {
+            Alias = new Identifier("");
+            Column = new ColumnRef("");
+            NOT = false;
+        }
+
+        public BooleanIs(ColumnRef column)
+            : this()
+        {
+            Column = (ColumnRef)column.Clone();
+        }
+
+        public BooleanIs(bool NOT, ColumnRef column)
+            : this(column)
+        {
+            this.NOT = NOT;
+        }
+
+        public override void setValue(params object[] value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override object Clone()
+        {
+            var res = new BooleanIs
+            {
+                Column = Column,
+                NOT = NOT
+            };
+            return res;
+        }
+
+        public override object Eval(ResultRow r)
+        {
+            return r[Column] == null && !NOT;
+        }
+
+        public override List<ColumnRef> GetColumns()
+        {
+            return new List<ColumnRef>()
+            {
+                (ColumnRef)(Column.Clone())
+            };
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.BooleanIsToString(this);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is BooleanIs otherBI)) return false;
+
+            return (this.NOT != otherBI.NOT)
+                   && (this.Alias.Equals(otherBI.Alias))
+                   && (this.Column.Equals(otherBI.Column));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                (NOT.GetHashCode() + 1) *
+                Alias.GetHashCode() *
+                Column.GetHashCode());
+        }
+    }
+
     public class BooleanEquals : BooleanExpression
     {
         public Expression left, right;
