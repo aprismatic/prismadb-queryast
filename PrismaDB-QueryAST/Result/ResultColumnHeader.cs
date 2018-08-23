@@ -77,7 +77,12 @@ namespace PrismaDB.QueryAST.Result
                     case SqlDataType.TEXT:
                     case SqlDataType.TIMESTAMP:
                     case SqlDataType.ENUM:
+                    case SqlDataType.DATE:          
                         DataType = typeof(String);
+                        break;
+                    case SqlDataType.VARBINARY:
+                    case SqlDataType.BLOB:
+                        DataType = typeof(byte[]);
                         break;
                     default:
                         throw new ApplicationException("DataType not supported in DataTable.");
