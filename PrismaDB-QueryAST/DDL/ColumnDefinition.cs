@@ -19,7 +19,9 @@ namespace PrismaDB.QueryAST.DDL
         BIGINT,
         SMALLINT,
         MSSQL_TINYINT,
-        MYSQL_TINYINT
+        MYSQL_TINYINT,
+        DATE,
+        BLOB
     }
 
     [Flags]

@@ -77,6 +77,8 @@ namespace PrismaDB.QueryAST.Result
                     case SqlDataType.TEXT:
                     case SqlDataType.TIMESTAMP:
                     case SqlDataType.ENUM:
+                    case SqlDataType.DATE:
+                    case SqlDataType.BLOB:
                         DataType = typeof(String);
                         break;
                     default:
