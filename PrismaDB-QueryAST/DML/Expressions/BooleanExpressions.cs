@@ -437,8 +437,8 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            var left_clone = (Expression) left.Clone();
-            var colid = (Identifier) Alias.Clone();
+            var left_clone = left.Clone() as Expression;
+            var colid = Alias?.Clone();
             return new BooleanIsNull(left_clone, NOT, colid);
         }
 

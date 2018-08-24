@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -185,6 +185,10 @@ namespace QueryTests
             Assert.True(a.Equals(b));
             Assert.True(b.Equals(a));
             Assert.True(a.GetHashCode() == b.GetHashCode());
+
+            var c = new BooleanIsNull(new ColumnRef("col1"), false);
+            var d = (BooleanIsNull)c.Clone();
+            Assert.True(c.left.Equals(d.left));
         }
 
         [Fact(DisplayName = "ResultTable Serialization")]
