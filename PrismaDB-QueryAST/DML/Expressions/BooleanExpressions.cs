@@ -445,7 +445,7 @@ namespace PrismaDB.QueryAST.DML
         public override object Eval(ResultRow r)
         {
             var leftres = left.Eval(r);
-            return NOT ? leftres != null : leftres == null;
+            return NOT ? !(leftres is DBNull) : leftres is DBNull;
         }
 
         public override List<ColumnRef> GetColumns()
