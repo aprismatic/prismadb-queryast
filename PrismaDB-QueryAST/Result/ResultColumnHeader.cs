@@ -49,13 +49,16 @@ namespace PrismaDB.QueryAST.Result
 
                 switch (_columnDefinition.DataType)
                 {
-                    case SqlDataType.INT:
+                    case SqlDataType.MSSQL_INT:
+                    case SqlDataType.MYSQL_INT:
                         DataType = typeof(Int32);
                         break;
-                    case SqlDataType.BIGINT:
+                    case SqlDataType.MSSQL_BIGINT:
+                    case SqlDataType.MYSQL_BIGINT:
                         DataType = typeof(Int64);
                         break;
-                    case SqlDataType.SMALLINT:
+                    case SqlDataType.MSSQL_SMALLINT:
+                    case SqlDataType.MYSQL_SMALLINT:
                         DataType = typeof(Int16);
                         break;
                     case SqlDataType.MSSQL_TINYINT:
@@ -67,21 +70,34 @@ namespace PrismaDB.QueryAST.Result
                     case SqlDataType.MSSQL_UNIQUEIDENTIFIER:
                         DataType = typeof(Guid);
                         break;
-                    case SqlDataType.DATETIME:
+                    case SqlDataType.MSSQL_DATETIME:
+                    case SqlDataType.MYSQL_DATETIME:
                         DataType = typeof(DateTime);
                         break;
-                    case SqlDataType.DOUBLE:
+                    case SqlDataType.MSSQL_FLOAT:
+                    case SqlDataType.MYSQL_DOUBLE:
                         DataType = typeof(Double);
                         break;
-                    case SqlDataType.VARCHAR:
-                    case SqlDataType.TEXT:
-                    case SqlDataType.TIMESTAMP:
-                    case SqlDataType.ENUM:
-                    case SqlDataType.DATE:          
+                    case SqlDataType.MSSQL_CHAR:
+                    case SqlDataType.MYSQL_CHAR:
+                    case SqlDataType.MSSQL_NCHAR:
+                    case SqlDataType.MSSQL_VARCHAR:
+                    case SqlDataType.MYSQL_VARCHAR:
+                    case SqlDataType.MSSQL_NVARCHAR:
+                    case SqlDataType.MSSQL_TEXT:
+                    case SqlDataType.MYSQL_TEXT:
+                    case SqlDataType.MSSQL_NTEXT:
+                    case SqlDataType.MYSQL_TIMESTAMP:
+                    case SqlDataType.MYSQL_ENUM:
+                    case SqlDataType.MSSQL_DATE:
+                    case SqlDataType.MYSQL_DATE:
                         DataType = typeof(String);
                         break;
-                    case SqlDataType.VARBINARY:
-                    case SqlDataType.BLOB:
+                    case SqlDataType.MSSQL_BINARY:
+                    case SqlDataType.MSSQL_VARBINARY:
+                    case SqlDataType.MYSQL_BINARY:
+                    case SqlDataType.MYSQL_VARBINARY:
+                    case SqlDataType.MYSQL_BLOB:
                         DataType = typeof(byte[]);
                         break;
                     default:

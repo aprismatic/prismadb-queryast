@@ -7,21 +7,47 @@ namespace PrismaDB.QueryAST.DDL
 {
     public enum SqlDataType
     {
-        INT,
-        MSSQL_UNIQUEIDENTIFIER,
-        VARBINARY,
-        VARCHAR,
-        TEXT,
-        DATETIME,
-        TIMESTAMP,
-        DOUBLE,
-        ENUM,
-        BIGINT,
-        SMALLINT,
-        MSSQL_TINYINT,
-        MYSQL_TINYINT,
-        DATE,
-        BLOB
+        MSSQL_INT = 0,
+        MSSQL_TINYINT = 1,
+        MSSQL_SMALLINT = 2,
+        MSSQL_BIGINT = 3,
+        MSSQL_FLOAT = 4,
+
+        MSSQL_DATE = 100,
+        MSSQL_DATETIME = 101,
+
+        MSSQL_CHAR = 200,
+        MSSQL_VARCHAR = 201,
+        MSSQL_TEXT = 202,
+        MSSQL_NCHAR = 203,
+        MSSQL_NVARCHAR = 204,
+        MSSQL_NTEXT = 205,
+
+        MSSQL_BINARY = 300,
+        MSSQL_VARBINARY = 301,
+        
+        MSSQL_UNIQUEIDENTIFIER = 400,
+        
+
+        MYSQL_INT = 1000,
+        MYSQL_TINYINT = 1001,
+        MYSQL_SMALLINT = 1002,
+        MYSQL_BIGINT = 1003,
+        MYSQL_DOUBLE = 1004,
+
+        MYSQL_DATE = 1100,
+        MYSQL_DATETIME = 1101,
+        MYSQL_TIMESTAMP = 1102,
+        
+        MYSQL_CHAR = 1200,
+        MYSQL_VARCHAR = 1201,
+        MYSQL_TEXT = 1202,
+        
+        MYSQL_BINARY = 1300,
+        MYSQL_VARBINARY = 1301,
+        MYSQL_BLOB = 1302,
+
+        MYSQL_ENUM = 1400,
     }
 
     [Flags]
@@ -52,7 +78,7 @@ namespace PrismaDB.QueryAST.DDL
         { }
 
         public ColumnDefinition(string columnName,
-                                SqlDataType dataType = SqlDataType.INT,
+                                SqlDataType dataType = SqlDataType.MSSQL_INT,
                                 int? length = null,
                                 bool nullable = true,
                                 bool isRowId = false,
@@ -70,7 +96,7 @@ namespace PrismaDB.QueryAST.DDL
         { }
 
         public ColumnDefinition(Identifier column,
-                                SqlDataType dataType = SqlDataType.INT,
+                                SqlDataType dataType = SqlDataType.MSSQL_INT,
                                 int? length = null,
                                 bool nullable = true,
                                 bool isRowId = false,

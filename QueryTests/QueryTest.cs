@@ -235,12 +235,12 @@ namespace QueryTests
             {
                 {
                     new Identifier("col1"),
-                    new ColumnDefinition("col1", SqlDataType.INT, null, true, false, ColumnEncryptionFlags.Store,
+                    new ColumnDefinition("col1", SqlDataType.MSSQL_INT, null, true, false, ColumnEncryptionFlags.Store,
                         new NullConstant())
                 },
                 {
                     new Identifier("col2"),
-                    new ColumnDefinition("col2", SqlDataType.DATETIME, null, false, false, ColumnEncryptionFlags.Store,
+                    new ColumnDefinition("col2", SqlDataType.MSSQL_DATETIME, null, false, false, ColumnEncryptionFlags.Store,
                         new ScalarFunction("CURRENT_TIMESTAMP"))
                 }
             };
