@@ -74,11 +74,11 @@ namespace PrismaDB.QueryAST.DDL
         public bool AutoIncrement;
 
         public ColumnDefinition()
-            : this("")
+            : this("", SqlDataType.MSSQL_INT)
         { }
 
         public ColumnDefinition(string columnName,
-                                SqlDataType dataType = SqlDataType.MSSQL_INT,
+                                SqlDataType dataType,
                                 int? length = null,
                                 bool nullable = true,
                                 bool isRowId = false,
@@ -96,7 +96,7 @@ namespace PrismaDB.QueryAST.DDL
         { }
 
         public ColumnDefinition(Identifier column,
-                                SqlDataType dataType = SqlDataType.MSSQL_INT,
+                                SqlDataType dataType,
                                 int? length = null,
                                 bool nullable = true,
                                 bool isRowId = false,
