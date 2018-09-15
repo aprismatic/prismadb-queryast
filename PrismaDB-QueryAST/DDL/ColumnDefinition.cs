@@ -1,4 +1,4 @@
-﻿using PrismaDB.QueryAST.DML;
+using PrismaDB.QueryAST.DML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,21 +7,47 @@ namespace PrismaDB.QueryAST.DDL
 {
     public enum SqlDataType
     {
-        INT,
-        MSSQL_UNIQUEIDENTIFIER,
-        VARBINARY,
-        VARCHAR,
-        TEXT,
-        DATETIME,
-        TIMESTAMP,
-        DOUBLE,
-        ENUM,
-        BIGINT,
-        SMALLINT,
-        MSSQL_TINYINT,
-        MYSQL_TINYINT,
-        DATE,
-        BLOB
+        MSSQL_INT = 0,
+        MSSQL_TINYINT = 1,
+        MSSQL_SMALLINT = 2,
+        MSSQL_BIGINT = 3,
+        MSSQL_FLOAT = 4,
+
+        MSSQL_DATE = 100,
+        MSSQL_DATETIME = 101,
+
+        MSSQL_CHAR = 200,
+        MSSQL_VARCHAR = 201,
+        MSSQL_TEXT = 202,
+        MSSQL_NCHAR = 203,
+        MSSQL_NVARCHAR = 204,
+        MSSQL_NTEXT = 205,
+
+        MSSQL_BINARY = 300,
+        MSSQL_VARBINARY = 301,
+        
+        MSSQL_UNIQUEIDENTIFIER = 400,
+        
+
+        MySQL_INT = 1000,
+        MySQL_TINYINT = 1001,
+        MySQL_SMALLINT = 1002,
+        MySQL_BIGINT = 1003,
+        MySQL_DOUBLE = 1004,
+
+        MySQL_DATE = 1100,
+        MySQL_DATETIME = 1101,
+        MySQL_TIMESTAMP = 1102,
+        
+        MySQL_CHAR = 1200,
+        MySQL_VARCHAR = 1201,
+        MySQL_TEXT = 1202,
+        
+        MySQL_BINARY = 1300,
+        MySQL_VARBINARY = 1301,
+        MySQL_BLOB = 1302,
+
+        MySQL_ENUM = 1400,
     }
 
     [Flags]
@@ -48,11 +74,11 @@ namespace PrismaDB.QueryAST.DDL
         public bool AutoIncrement;
 
         public ColumnDefinition()
-            : this("")
+            : this("", SqlDataType.MSSQL_INT)
         { }
 
         public ColumnDefinition(string columnName,
-                                SqlDataType dataType = SqlDataType.INT,
+                                SqlDataType dataType,
                                 int? length = null,
                                 bool nullable = true,
                                 bool isRowId = false,
@@ -70,7 +96,7 @@ namespace PrismaDB.QueryAST.DDL
         { }
 
         public ColumnDefinition(Identifier column,
-                                SqlDataType dataType = SqlDataType.INT,
+                                SqlDataType dataType,
                                 int? length = null,
                                 bool nullable = true,
                                 bool isRowId = false,
