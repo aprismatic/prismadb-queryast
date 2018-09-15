@@ -1,4 +1,4 @@
-﻿using PrismaDB.QueryAST.DML;
+using PrismaDB.QueryAST.DML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,25 +29,25 @@ namespace PrismaDB.QueryAST.DDL
         MSSQL_UNIQUEIDENTIFIER = 400,
         
 
-        MYSQL_INT = 1000,
-        MYSQL_TINYINT = 1001,
-        MYSQL_SMALLINT = 1002,
-        MYSQL_BIGINT = 1003,
-        MYSQL_DOUBLE = 1004,
+        MySQL_INT = 1000,
+        MySQL_TINYINT = 1001,
+        MySQL_SMALLINT = 1002,
+        MySQL_BIGINT = 1003,
+        MySQL_DOUBLE = 1004,
 
-        MYSQL_DATE = 1100,
-        MYSQL_DATETIME = 1101,
-        MYSQL_TIMESTAMP = 1102,
+        MySQL_DATE = 1100,
+        MySQL_DATETIME = 1101,
+        MySQL_TIMESTAMP = 1102,
         
-        MYSQL_CHAR = 1200,
-        MYSQL_VARCHAR = 1201,
-        MYSQL_TEXT = 1202,
+        MySQL_CHAR = 1200,
+        MySQL_VARCHAR = 1201,
+        MySQL_TEXT = 1202,
         
-        MYSQL_BINARY = 1300,
-        MYSQL_VARBINARY = 1301,
-        MYSQL_BLOB = 1302,
+        MySQL_BINARY = 1300,
+        MySQL_VARBINARY = 1301,
+        MySQL_BLOB = 1302,
 
-        MYSQL_ENUM = 1400,
+        MySQL_ENUM = 1400,
     }
 
     [Flags]
