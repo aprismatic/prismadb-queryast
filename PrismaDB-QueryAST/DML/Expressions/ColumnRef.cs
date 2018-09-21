@@ -71,7 +71,7 @@ namespace PrismaDB.QueryAST.DML
         {
             return new List<ColumnRef>
             {
-                (ColumnRef)Clone()
+                this
             };
         }
 

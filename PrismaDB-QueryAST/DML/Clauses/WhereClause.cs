@@ -55,7 +55,7 @@ namespace PrismaDB.QueryAST.DML
             {
                 whereCols.AddRange(eachBE.GetColumns());
             }
-            return whereCols.Distinct().ToList();
+            return whereCols;
         }
     }
 

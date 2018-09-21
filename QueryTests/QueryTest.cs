@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using PrismaDB.Commons;
 using PrismaDB.QueryAST;
 using PrismaDB.QueryAST.DDL;
 using PrismaDB.QueryAST.DML;
@@ -189,6 +190,52 @@ namespace QueryTests
             var c = new BooleanIsNull(new ColumnRef("col1"), false);
             var d = (BooleanIsNull)c.Clone();
             Assert.True(c.left.Equals(d.left));
+        }
+
+        [Fact(DisplayName = "GetColumns")]
+        public void TestGetColumns()
+        {
+            var selQuery = new SelectQuery();
+            selQuery.SelectExpressions.Add(new ColumnRef(new TableRef("t1"), "col1"));
+            selQuery.SelectExpressions.Add(new ColumnRef(new TableRef("t2"), "col2"));
+            selQuery.SelectExpressions.Add(
+                new Addition(new ColumnRef(new TableRef("t1"), "col1"),
+                             new ColumnRef(new TableRef("t1"), "col1")));
+
+            var dj = new Disjunction();
+            dj.OR.Add(new BooleanEquals(new ColumnRef(new TableRef("t1"), "col1"),
+                                        new ColumnRef(new TableRef("t2"), "col2")));
+            selQuery.Where.CNF.AND.Add(dj);
+
+            selQuery.OrderBy.OrderColumns.Add(new Pair<ColumnRef, OrderDirection>(new ColumnRef(new TableRef("t1"), "col1"), OrderDirection.ASC));
+
+            var allColumns = new List<ColumnRef>();
+            allColumns.AddRange(selQuery.SelectExpressions.SelectMany(x => x.GetColumns()));
+            allColumns.AddRange(selQuery.Joins.SelectMany(x => x.GetColumns()));
+            allColumns.AddRange(selQuery.Where.GetColumns());
+            allColumns.AddRange(selQuery.GroupBy.GetColumns());
+            allColumns.AddRange(selQuery.OrderBy.GetColumns());
+
+            foreach (var col in allColumns)
+            {
+                if (col.Table.Table.id == "t1")
+                    col.Table.Table.id = "a";
+                if (col.Table.Table.id == "t2")
+                    col.Table.Table.id = "b";
+            }
+
+            var updatedColumns = new List<ColumnRef>();
+            updatedColumns.AddRange(selQuery.SelectExpressions.SelectMany(x => x.GetColumns()));
+            updatedColumns.AddRange(selQuery.Joins.SelectMany(x => x.GetColumns()));
+            updatedColumns.AddRange(selQuery.Where.GetColumns());
+            updatedColumns.AddRange(selQuery.GroupBy.GetColumns());
+            updatedColumns.AddRange(selQuery.OrderBy.GetColumns());
+
+            Assert.DoesNotContain(new ColumnRef(new TableRef("t1"), "col1"), updatedColumns);
+            Assert.DoesNotContain(new ColumnRef(new TableRef("t2"), "col2"), updatedColumns);
+
+            Assert.Contains(new ColumnRef(new TableRef("a"), "col1"), updatedColumns);
+            Assert.Contains(new ColumnRef(new TableRef("b"), "col2"), updatedColumns);
         }
 
         [Fact(DisplayName = "ResultTable Serialization")]
