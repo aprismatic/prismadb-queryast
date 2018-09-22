@@ -71,6 +71,14 @@ namespace PrismaDB.QueryAST.DML
         {
             return new List<ColumnRef>
             {
+                (ColumnRef)Clone()
+            };
+        }
+
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            return new List<ColumnRef>
+            {
                 this
             };
         }

@@ -18,6 +18,8 @@ namespace PrismaDB.QueryAST.DML
 
         public abstract List<ColumnRef> GetColumns();
 
+        public abstract List<ColumnRef> GetNoCopyColumns();
+
         public abstract override string ToString();
 
         public abstract override bool Equals(object other);

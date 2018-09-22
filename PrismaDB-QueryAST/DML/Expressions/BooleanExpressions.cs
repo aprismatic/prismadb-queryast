@@ -26,6 +26,7 @@ namespace PrismaDB.QueryAST.DML
         public override object Clone() { return new BooleanTrue(NOT); }
         public override object Eval(ResultRow r) { return !NOT; }
         public override List<ColumnRef> GetColumns() { return new List<ColumnRef>(); }
+        public override List<ColumnRef> GetNoCopyColumns() { return new List<ColumnRef>(); }
         public override string ToString() { return DialectResolver.Dialect.BooleanTrueToString(this); }
         public override bool Equals(object other) { return (Alias.Equals((other as BooleanTrue)?.Alias))
                                                         && (NOT == (other as BooleanTrue)?.NOT); }
@@ -82,10 +83,12 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns()
         {
-            return new List<ColumnRef>()
-            {
-                Column
-            };
+            return Column.GetColumns();
+        }
+
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            return Column.GetNoCopyColumns();
         }
 
         public override string ToString()
@@ -208,6 +211,14 @@ namespace PrismaDB.QueryAST.DML
             res.AddRange(right.GetColumns());
             return res;
         }
+
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            var res = new List<ColumnRef>();
+            res.AddRange(left.GetNoCopyColumns());
+            res.AddRange(right.GetNoCopyColumns());
+            return res;
+        }
     }
 
     public class BooleanGreaterThan : BooleanExpression
@@ -298,6 +309,14 @@ namespace PrismaDB.QueryAST.DML
             var res = new List<ColumnRef>();
             res.AddRange(left.GetColumns());
             res.AddRange(right.GetColumns());
+            return res;
+        }
+
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            var res = new List<ColumnRef>();
+            res.AddRange(left.GetNoCopyColumns());
+            res.AddRange(right.GetNoCopyColumns());
             return res;
         }
     }
@@ -392,6 +411,14 @@ namespace PrismaDB.QueryAST.DML
             res.AddRange(right.GetColumns());
             return res;
         }
+
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            var res = new List<ColumnRef>();
+            res.AddRange(left.GetNoCopyColumns());
+            res.AddRange(right.GetNoCopyColumns());
+            return res;
+        }
     }
 
     public class BooleanIsNull : BooleanExpression
@@ -451,6 +478,11 @@ namespace PrismaDB.QueryAST.DML
         public override List<ColumnRef> GetColumns()
         {
             return left.GetColumns();
+        }
+
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            return left.GetNoCopyColumns();
         }
 
         public override string ToString()

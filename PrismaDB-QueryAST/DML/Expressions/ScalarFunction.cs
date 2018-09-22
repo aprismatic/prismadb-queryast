@@ -78,6 +78,11 @@ namespace PrismaDB.QueryAST.DML
             return Parameters.SelectMany(x => x.GetColumns()).ToList();
         }
 
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            return Parameters.SelectMany(x => x.GetNoCopyColumns()).ToList();
+        }
+
         public override int GetHashCode()
         {
             return unchecked(FunctionName.GetHashCode() * Alias.GetHashCode() *

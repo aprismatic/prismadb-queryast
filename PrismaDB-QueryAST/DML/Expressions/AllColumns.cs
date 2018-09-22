@@ -46,6 +46,11 @@ namespace PrismaDB.QueryAST.DML
             throw new ApplicationException("AllColumns needs to be replaced with corresponding ColumnRefs in table.");
         }
 
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            throw new ApplicationException("AllColumns needs to be replaced with corresponding ColumnRefs in table.");
+        }
+
         public override string ToString()
         {
             return DialectResolver.Dialect.AllColumnsToString(this);
