@@ -57,6 +57,11 @@ namespace PrismaDB.QueryAST.DML
             return new List<ColumnRef>();
         }
 
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            return new List<ColumnRef>();
+        }
+
         public override string ToString()
         {
             return DialectResolver.Dialect.MySqlVariableToString(this);

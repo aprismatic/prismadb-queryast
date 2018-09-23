@@ -43,8 +43,20 @@ namespace PrismaDB.QueryAST.DML
             if (FirstColumn.ColumnName.id == "" || SecondColumn.ColumnName.id == "")
                 return res;
 
-            res.Add(FirstColumn);
-            res.Add(SecondColumn);
+            res.AddRange(FirstColumn.GetColumns());
+            res.AddRange(SecondColumn.GetColumns());
+            return res;
+        }
+
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+
+            var res = new List<ColumnRef>();
+            if (FirstColumn.ColumnName.id == "" || SecondColumn.ColumnName.id == "")
+                return res;
+
+            res.AddRange(FirstColumn.GetNoCopyColumns());
+            res.AddRange(SecondColumn.GetNoCopyColumns());
             return res;
         }
     }

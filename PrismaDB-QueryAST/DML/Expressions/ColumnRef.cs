@@ -75,6 +75,14 @@ namespace PrismaDB.QueryAST.DML
             };
         }
 
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            return new List<ColumnRef>
+            {
+                this
+            };
+        }
+
         public override string ToString()
         {
             return DialectResolver.Dialect.ColumnRefToString(this);
