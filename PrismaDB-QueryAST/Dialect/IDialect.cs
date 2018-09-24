@@ -51,6 +51,9 @@ namespace PrismaDB.QueryAST
 
         string ExportSettingsCommandToString(ExportSettingsCommand c);
         string RegisterUserCommandToString(RegisterUserCommand c);
+        string UpdateKeysCommandToString(UpdateKeysCommand c);
+        string DecryptColumnCommandToString(DecryptColumnCommand c);
+        string EncryptColumnCommandToString(EncryptColumnCommand c);
 
         string SqlDataTypeToString(SqlDataType q);
         string ColumnEncryptionFlagsToString(ColumnEncryptionFlags q);
