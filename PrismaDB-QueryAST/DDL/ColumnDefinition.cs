@@ -55,8 +55,8 @@ namespace PrismaDB.QueryAST.DDL
     {
         None = 0,
         Store = 1,
-        IntegerAddition = 2,
-        IntegerMultiplication = 4,
+        Addition = 2,
+        Multiplication = 4,
         Search = 8,
         Range = 16
     }
