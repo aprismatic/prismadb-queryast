@@ -24,7 +24,9 @@ namespace PrismaDB.QueryAST
         string StringConstantToString(StringConstant q);
         string FloatingPointConstantToString(FloatingPointConstant q);
         string AdditionToString(Addition q);
+        string SubtractionToString(Subtraction q);
         string MultiplicationToString(Multiplication q);
+        string DivisionToString(Division q);
         string ColumnRefToString(ColumnRef q);
         string BooleanTrueToString(BooleanTrue q);
         string BooleanInToString(BooleanIn q);
@@ -42,7 +44,9 @@ namespace PrismaDB.QueryAST
         string NullConstantToString(NullConstant q);
         string BooleanIsNullToString(BooleanIsNull q);
         string PaillierAdditionFunctionToString(PaillierAdditionFunction q);
+        string PaillierSubtractionFunctionToString(PaillierSubtractionFunction q);
         string ElGamalMultiplicationFunctionToString(ElGamalMultiplicationFunction q);
+        string ElGamalDivisionFunctionToString(ElGamalDivisionFunction q);
         string SumAggregationFunctionToString(SumAggregationFunction q);
         string CountAggregationFunctionToString(CountAggregationFunction q);
         string AvgAggregationFunctionToString(AvgAggregationFunction q);
