@@ -166,6 +166,52 @@ namespace PrismaDB.QueryAST.DML
         }
     }
 
+    public class PaillierSubtractionFunction : ScalarFunction
+    {
+        public PaillierSubtractionFunction(string functionName) : base(functionName) { }
+        public PaillierSubtractionFunction(string functionName, string aliasName) : base(functionName, aliasName) { }
+        public PaillierSubtractionFunction(Identifier functionName) : base(functionName) { }
+        public PaillierSubtractionFunction(Identifier functionName, Identifier alias) : base(functionName, alias) { }
+        public PaillierSubtractionFunction(string functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public PaillierSubtractionFunction(string functionName, string aliasName, List<Expression> parameters) : base(functionName, aliasName, parameters) { }
+        public PaillierSubtractionFunction(Identifier functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public PaillierSubtractionFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+
+        public PaillierSubtractionFunction(string functionName, Expression left, Expression right, Expression N)
+            : this(functionName)
+        {
+            Parameters.Add(left);
+            Parameters.Add(right);
+            Parameters.Add(N);
+        }
+
+        public PaillierSubtractionFunction(string functionName, Expression left, Expression right, Expression N, string aliasName)
+            : this(functionName, aliasName)
+        {
+            Parameters.Add(left);
+            Parameters.Add(right);
+            Parameters.Add(N);
+        }
+
+        public override object Clone()
+        {
+            return new PaillierSubtractionFunction(FunctionName, Alias, Parameters);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is PaillierSubtractionFunction otherF)) return false;
+            return (FunctionName.Equals(otherF.FunctionName)) &&
+                   (Alias.Equals(otherF.Alias)) &&
+                   (Parameters.SequenceEqual(otherF.Parameters));
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.PaillierSubtractionFunctionToString(this);
+        }
+    }
+
     public class ElGamalMultiplicationFunction : ScalarFunction
     {
         public ElGamalMultiplicationFunction(string functionName) : base(functionName) { }
@@ -209,6 +255,51 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString()
         {
             return DialectResolver.Dialect.ElGamalMultiplicationFunctionToString(this);
+        }
+    }
+    public class ElGamalDivisionFunction : ScalarFunction
+    {
+        public ElGamalDivisionFunction(string functionName) : base(functionName) { }
+        public ElGamalDivisionFunction(string functionName, string aliasName) : base(functionName, aliasName) { }
+        public ElGamalDivisionFunction(Identifier functionName) : base(functionName) { }
+        public ElGamalDivisionFunction(Identifier functionName, Identifier alias) : base(functionName, alias) { }
+        public ElGamalDivisionFunction(string functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public ElGamalDivisionFunction(string functionName, string aliasName, List<Expression> parameters) : base(functionName, aliasName, parameters) { }
+        public ElGamalDivisionFunction(Identifier functionName, List<Expression> parameters) : base(functionName, parameters) { }
+        public ElGamalDivisionFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+
+        public ElGamalDivisionFunction(string functionName, Expression left, Expression right, Expression P)
+            : this(functionName)
+        {
+            Parameters.Add(left);
+            Parameters.Add(right);
+            Parameters.Add(P);
+        }
+
+        public ElGamalDivisionFunction(string functionName, Expression left, Expression right, Expression P, string aliasName)
+            : this(functionName, aliasName)
+        {
+            Parameters.Add(left);
+            Parameters.Add(right);
+            Parameters.Add(P);
+        }
+
+        public override object Clone()
+        {
+            return new ElGamalDivisionFunction(FunctionName, Alias, Parameters);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is ElGamalDivisionFunction otherF)) return false;
+            return (FunctionName.Equals(otherF.FunctionName)) &&
+                   (Alias.Equals(otherF.Alias)) &&
+                   (Parameters.SequenceEqual(otherF.Parameters));
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.ElGamalDivisionFunctionToString(this);
         }
     }
 

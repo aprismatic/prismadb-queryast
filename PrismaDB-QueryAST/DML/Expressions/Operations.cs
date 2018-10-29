@@ -107,6 +107,84 @@ namespace PrismaDB.QueryAST.DML
         }
     }
 
+    public class Subtraction : Operation
+    {
+        public Subtraction(Expression left, Expression right)
+        {
+            setValue(left, right, "");
+        }
+
+        public Subtraction(Expression left, Expression right, string aliasName)
+        {
+            setValue(left, right, aliasName);
+        }
+
+        public override void setValue(params object[] value)
+        {
+            if (value.Length < 2)
+                throw new ArgumentException("Subtraction constructor expects 2 or 3 arguments");
+
+            left = (Expression)value[0];
+            right = (Expression)value[1];
+
+            if (value.Length > 2)
+                Alias = new Identifier((string)value[2]);
+        }
+
+        public override object Clone()
+        {
+            var left_clone = left.Clone() as Expression;
+            var right_clone = right.Clone() as Expression;
+
+            var clone = new Addition(left_clone, right_clone, Alias.id);
+
+            return clone;
+        }
+
+        public override object Eval(ResultRow r)
+        {
+            return (int)left.Eval(r) - (int)right.Eval(r);
+        }
+
+        public override List<ColumnRef> GetColumns()
+        {
+            var res = new List<ColumnRef>();
+            res.AddRange(left.GetColumns());
+            res.AddRange(right.GetColumns());
+            return res;
+        }
+
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            var res = new List<ColumnRef>();
+            res.AddRange(left.GetNoCopyColumns());
+            res.AddRange(right.GetNoCopyColumns());
+            return res;
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.SubtractionToString(this);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is Subtraction otherS)) return false;
+
+            return (this.Alias.Equals(otherS.Alias))
+                && (this.left.Equals(otherS.left))
+                && (this.right.Equals(otherS.right));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                Alias.GetHashCode() *
+                left.GetHashCode() *
+                right.GetHashCode());
+        }
+    }
+
     public class Multiplication : Operation
     {
         public Multiplication(Expression left, Expression right)
@@ -174,6 +252,84 @@ namespace PrismaDB.QueryAST.DML
             return (this.Alias.Equals(otherM.Alias))
                 && (this.left.Equals(otherM.left))
                 && (this.right.Equals(otherM.right));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                Alias.GetHashCode() *
+                left.GetHashCode() *
+                right.GetHashCode());
+        }
+    }
+
+    public class Division : Operation
+    {
+        public Division(Expression left, Expression right)
+        {
+            setValue(left, right, "");
+        }
+
+        public Division(Expression left, Expression right, string aliasName)
+        {
+            setValue(left, right, aliasName);
+        }
+
+        public override void setValue(params object[] value)
+        {
+            if (value.Length < 2)
+                throw new ArgumentException("Division constructor expects 2 or 3 arguments");
+
+            left = (Expression)value[0];
+            right = (Expression)value[1];
+
+            if (value.Length > 2)
+                Alias = new Identifier((string)value[2]);
+        }
+
+        public override object Clone()
+        {
+            var left_clone = left.Clone();
+            var right_clone = right.Clone();
+
+            var clone = new Division(left_clone as Expression, right_clone as Expression, Alias.id);
+
+            return clone;
+        }
+
+        public override object Eval(ResultRow r)
+        {
+            return (int)left.Eval(r) / (int)right.Eval(r);
+        }
+
+        public override List<ColumnRef> GetColumns()
+        {
+            var res = new List<ColumnRef>();
+            res.AddRange(left.GetColumns());
+            res.AddRange(right.GetColumns());
+            return res;
+        }
+
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            var res = new List<ColumnRef>();
+            res.AddRange(left.GetNoCopyColumns());
+            res.AddRange(right.GetNoCopyColumns());
+            return res;
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.DivisionToString(this);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is Division otherD)) return false;
+
+            return (this.Alias.Equals(otherD.Alias))
+                && (this.left.Equals(otherD.left))
+                && (this.right.Equals(otherD.right));
         }
 
         public override int GetHashCode()
