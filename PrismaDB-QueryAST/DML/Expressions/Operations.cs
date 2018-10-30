@@ -136,7 +136,7 @@ namespace PrismaDB.QueryAST.DML
             var left_clone = left.Clone() as Expression;
             var right_clone = right.Clone() as Expression;
 
-            var clone = new Addition(left_clone, right_clone, Alias.id);
+            var clone = new Subtraction(left_clone, right_clone, Alias.id);
 
             return clone;
         }
