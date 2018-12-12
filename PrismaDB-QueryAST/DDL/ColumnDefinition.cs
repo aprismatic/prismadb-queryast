@@ -66,6 +66,7 @@ namespace PrismaDB.QueryAST.DDL
         public Identifier ColumnName;
         public SqlDataType DataType;
         public ColumnEncryptionFlags EncryptionFlags;
+        public int? KeyVersion;
         public int? Length;
         public List<StringConstant> EnumValues;
         public bool Nullable;
@@ -83,6 +84,7 @@ namespace PrismaDB.QueryAST.DDL
                                 bool nullable = true,
                                 bool isRowId = false,
                                 ColumnEncryptionFlags encryptionFlags = ColumnEncryptionFlags.None,
+                                int? keyVersion = null,
                                 Expression defaultValue = null,
                                 bool autoIncrement = false)
             : this(new Identifier(columnName),
@@ -91,6 +93,7 @@ namespace PrismaDB.QueryAST.DDL
                    nullable,
                    isRowId,
                    encryptionFlags,
+                   keyVersion,
                    defaultValue,
                    autoIncrement)
         { }
@@ -101,12 +104,14 @@ namespace PrismaDB.QueryAST.DDL
                                 bool nullable = true,
                                 bool isRowId = false,
                                 ColumnEncryptionFlags encryptionFlags = ColumnEncryptionFlags.None,
+                                int? keyVersion = null,
                                 Expression defaultValue = null,
                                 bool autoIncrement = false)
         {
             this.ColumnName = column == null ? new Identifier("") : column.Clone();
             this.DataType = dataType;
             this.EncryptionFlags = encryptionFlags;
+            this.KeyVersion = keyVersion;
             this.Length = length;
             this.EnumValues = new List<StringConstant>();
             this.Nullable = nullable;
@@ -120,6 +125,7 @@ namespace PrismaDB.QueryAST.DDL
             ColumnName = other.ColumnName.Clone();
             DataType = other.DataType;
             EncryptionFlags = other.EncryptionFlags;
+            KeyVersion = other.KeyVersion;
             Length = other.Length;
             EnumValues = other.EnumValues.Select(item => (StringConstant)item.Clone()).ToList();
             Nullable = other.Nullable;
@@ -145,6 +151,7 @@ namespace PrismaDB.QueryAST.DDL
             return (ColumnName.Equals(otherCD.ColumnName))
                 && (DataType == otherCD.DataType)
                 && (EncryptionFlags == otherCD.EncryptionFlags)
+                && (KeyVersion == otherCD.KeyVersion)
                 && (Length == otherCD.Length)
                 && (EnumValues.SequenceEqual(otherCD.EnumValues))
                 && (Nullable == otherCD.Nullable)
@@ -159,6 +166,7 @@ namespace PrismaDB.QueryAST.DDL
                 ColumnName.GetHashCode() *
                 DataType.GetHashCode() *
                 EncryptionFlags.GetHashCode() *
+                (KeyVersion == null ? 1 : KeyVersion.GetHashCode()) *
                 (Length == null ? 1 : Length.GetHashCode()) *
                 EnumValues.Select(x => x.GetHashCode()).Aggregate((a, b) => a * b) *
                 (1 + Nullable.GetHashCode()) *
