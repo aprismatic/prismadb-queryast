@@ -77,10 +77,10 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            var Column_clone = Column.Clone() as ColumnRef;
-            var SearchValue_clone = SearchValue.Clone() as StringConstant;
+            var column_clone = Column.Clone() as ColumnRef;
+            var svalue_clone = SearchValue.Clone() as StringConstant;
 
-            var clone = new BooleanLike(Column_clone, SearchValue_clone, NOT);
+            var clone = new BooleanLike(column_clone, svalue_clone, NOT);
 
             return clone;
         }
