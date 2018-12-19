@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using PrismaDB.QueryAST.Result;
 
 namespace PrismaDB.QueryAST.DML
@@ -31,6 +32,98 @@ namespace PrismaDB.QueryAST.DML
         public override bool Equals(object other) { return (Alias.Equals((other as BooleanTrue)?.Alias))
                                                         && (NOT == (other as BooleanTrue)?.NOT); }
         public override int GetHashCode() { return unchecked(Alias.GetHashCode() * (NOT.GetHashCode() + 1)); }
+    }
+
+    public class BooleanLike : BooleanExpression
+    {
+        public ColumnRef Column;
+        public StringConstant SearchValue;
+
+        public BooleanLike()
+        {
+            setValue(new ColumnRef(""), new StringConstant(), false);
+        }
+
+        public BooleanLike(ColumnRef column, StringConstant value)
+            : this()
+        {
+            setValue((ColumnRef)column.Clone(), value);
+        }
+
+        public BooleanLike(ColumnRef column, StringConstant value, bool NOT)
+            : this(column, value)
+        {
+            setValue((ColumnRef)column.Clone(), value, NOT);
+        }
+
+        public override void setValue(params object[] value)
+        {
+            if (value.Length == 0)
+                throw new ArgumentException("BooleanLike.setValue expects at least one argument");
+            else if (value.Length == 1)
+                NOT = (bool)value[0];
+            else if (value.Length == 2)
+            {
+                Column = (ColumnRef)value[0];
+                SearchValue = (StringConstant)value[1];
+            }
+            else
+            {
+                Column = (ColumnRef)value[0];
+                SearchValue = (StringConstant)value[1];
+                NOT = (bool)value[2];
+            }
+        }
+
+        public override object Clone()
+        {
+            var Column_clone = Column.Clone() as ColumnRef;
+            var SearchValue_clone = SearchValue.Clone() as StringConstant;
+
+            var clone = new BooleanLike(Column_clone, SearchValue_clone, NOT);
+
+            return clone;
+        }
+
+        public override object Eval(ResultRow r)
+        {
+            return Regex.IsMatch(r[Column].ToString(), "^" + Regex.Escape(SearchValue.ToString())
+                   .Replace("_", ".").Replace("%", ".*") + "$") ? !NOT : NOT;
+        }
+
+        public override List<ColumnRef> GetColumns()
+        {
+            return Column.GetColumns();
+        }
+
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            return Column.GetNoCopyColumns();
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.BooleanLikeToString(this);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is BooleanLike otherBL)) return false;
+
+            return (this.NOT != otherBL.NOT)
+                && (this.Alias.Equals(otherBL.Alias))
+                && (this.Column.Equals(otherBL.Column))
+                && (this.SearchValue.Equals(otherBL.SearchValue));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+               (NOT.GetHashCode() + 1) *
+               Alias.GetHashCode() *
+               Column.GetHashCode() *
+               SearchValue.GetHashCode());
+        }
     }
 
     public class BooleanIn : BooleanExpression
