@@ -59,7 +59,6 @@ namespace PrismaDB.QueryAST.DML
             var right_clone = right.Clone() as Expression;
 
             var clone = new Addition(left_clone, right_clone, Alias.id);
-            clone.Parent = this.Parent;
 
             return clone;
         }
@@ -138,7 +137,6 @@ namespace PrismaDB.QueryAST.DML
             var right_clone = right.Clone() as Expression;
 
             var clone = new Subtraction(left_clone, right_clone, Alias.id);
-            clone.Parent = this.Parent;
 
             return clone;
         }
@@ -217,7 +215,6 @@ namespace PrismaDB.QueryAST.DML
             var right_clone = right.Clone();
 
             var clone = new Multiplication(left_clone as Expression, right_clone as Expression, Alias.id);
-            clone.Parent = this.Parent;
 
             return clone;
         }
@@ -296,7 +293,6 @@ namespace PrismaDB.QueryAST.DML
             var right_clone = right.Clone();
 
             var clone = new Division(left_clone as Expression, right_clone as Expression, Alias.id);
-            clone.Parent = this.Parent;
 
             return clone;
         }
