@@ -169,6 +169,20 @@ namespace QueryTests
             Assert.True(int1.Equals(int2));
         }
 
+        [Fact(DisplayName = "Operation")]
+        public void OperationTest()
+        {
+            var a = new Addition(new IntConstant(5), new IntConstant(10));
+            var b = new Multiplication(new IntConstant(20), a);
+            var c = new Subtraction(b, new IntConstant(50));
+            var d = new Division(c, b);
+
+            Assert.Equal(a, a.Clone());
+            Assert.Equal(b, b.Clone());
+            Assert.Equal(c, c.Clone());
+            Assert.Equal(d, d.Clone());
+        }
+
         [Fact(DisplayName = "NULLs")]
         public void TestNulls()
         {

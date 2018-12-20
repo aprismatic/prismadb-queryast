@@ -59,6 +59,7 @@ namespace PrismaDB.QueryAST.DML
             var right_clone = right.Clone() as Expression;
 
             var clone = new Addition(left_clone, right_clone, Alias.id);
+            clone.Parent = this.Parent;
 
             return clone;
         }
@@ -95,7 +96,8 @@ namespace PrismaDB.QueryAST.DML
 
             return (this.Alias.Equals(otherA.Alias))
                 && (this.left.Equals(otherA.left))
-                && (this.right.Equals(otherA.right));
+                && (this.right.Equals(otherA.right))
+                && (this.Parent.Equals(otherA.Parent));
         }
 
         public override int GetHashCode()
@@ -103,7 +105,8 @@ namespace PrismaDB.QueryAST.DML
             return unchecked(
                 Alias.GetHashCode() *
                 left.GetHashCode() *
-                right.GetHashCode());
+                right.GetHashCode()) *
+                Parent.GetHashCode();
         }
     }
 
@@ -137,6 +140,7 @@ namespace PrismaDB.QueryAST.DML
             var right_clone = right.Clone() as Expression;
 
             var clone = new Subtraction(left_clone, right_clone, Alias.id);
+            clone.Parent = this.Parent;
 
             return clone;
         }
@@ -173,7 +177,8 @@ namespace PrismaDB.QueryAST.DML
 
             return (this.Alias.Equals(otherS.Alias))
                 && (this.left.Equals(otherS.left))
-                && (this.right.Equals(otherS.right));
+                && (this.right.Equals(otherS.right))
+                && (this.Parent.Equals(otherS.Parent));
         }
 
         public override int GetHashCode()
@@ -181,7 +186,8 @@ namespace PrismaDB.QueryAST.DML
             return unchecked(
                 Alias.GetHashCode() *
                 left.GetHashCode() *
-                right.GetHashCode());
+                right.GetHashCode()) *
+                Parent.GetHashCode();
         }
     }
 
@@ -215,6 +221,7 @@ namespace PrismaDB.QueryAST.DML
             var right_clone = right.Clone();
 
             var clone = new Multiplication(left_clone as Expression, right_clone as Expression, Alias.id);
+            clone.Parent = this.Parent;
 
             return clone;
         }
@@ -251,7 +258,8 @@ namespace PrismaDB.QueryAST.DML
 
             return (this.Alias.Equals(otherM.Alias))
                 && (this.left.Equals(otherM.left))
-                && (this.right.Equals(otherM.right));
+                && (this.right.Equals(otherM.right))
+                && (this.Parent.Equals(otherM.Parent));
         }
 
         public override int GetHashCode()
@@ -259,7 +267,8 @@ namespace PrismaDB.QueryAST.DML
             return unchecked(
                 Alias.GetHashCode() *
                 left.GetHashCode() *
-                right.GetHashCode());
+                right.GetHashCode()) *
+                Parent.GetHashCode();
         }
     }
 
@@ -293,6 +302,7 @@ namespace PrismaDB.QueryAST.DML
             var right_clone = right.Clone();
 
             var clone = new Division(left_clone as Expression, right_clone as Expression, Alias.id);
+            clone.Parent = this.Parent;
 
             return clone;
         }
@@ -329,7 +339,8 @@ namespace PrismaDB.QueryAST.DML
 
             return (this.Alias.Equals(otherD.Alias))
                 && (this.left.Equals(otherD.left))
-                && (this.right.Equals(otherD.right));
+                && (this.right.Equals(otherD.right))
+                && (this.Parent.Equals(otherD.Parent));
         }
 
         public override int GetHashCode()
@@ -337,7 +348,8 @@ namespace PrismaDB.QueryAST.DML
             return unchecked(
                 Alias.GetHashCode() *
                 left.GetHashCode() *
-                right.GetHashCode());
+                right.GetHashCode()) *
+                Parent.GetHashCode();
         }
     }
 }
