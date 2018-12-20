@@ -43,7 +43,7 @@ namespace PrismaDB.QueryAST.DML
         public override object Clone()
         {
             var clone = new MySqlVariable(VariableName, Alias);
-
+            clone.Parent = this.Parent;
             return clone;
         }
 

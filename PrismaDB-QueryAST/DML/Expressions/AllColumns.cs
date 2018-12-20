@@ -32,7 +32,7 @@ namespace PrismaDB.QueryAST.DML
         public override object Clone()
         {
             var clone = new AllColumns(Table);
-
+            clone.Parent = this.Parent;
             return clone;
         }
 

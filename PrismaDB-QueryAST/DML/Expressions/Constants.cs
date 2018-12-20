@@ -38,7 +38,7 @@ namespace PrismaDB.QueryAST.DML
         public override object Clone()
         {
             var clone = new IntConstant(intvalue, Alias.id);
-
+            clone.Parent = this.Parent;
             return clone;
         }
 
@@ -109,7 +109,7 @@ namespace PrismaDB.QueryAST.DML
         public override object Clone()
         {
             var clone = new StringConstant(strvalue, Alias.id);
-
+            clone.Parent = this.Parent;
             return clone;
         }
 
@@ -180,7 +180,7 @@ namespace PrismaDB.QueryAST.DML
         public override object Clone()
         {
             var clone = new BinaryConstant(binvalue, Alias.id);
-
+            clone.Parent = this.Parent;
             return clone;
         }
 
@@ -251,7 +251,7 @@ namespace PrismaDB.QueryAST.DML
         public override object Clone()
         {
             var clone = new FloatingPointConstant(floatvalue, Alias.id);
-
+            clone.Parent = this.Parent;
             return clone;
         }
 
@@ -304,7 +304,9 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            return new NullConstant(Alias.id);
+            var clone = new NullConstant(Alias.id);
+            clone.Parent = this.Parent;
+            return clone;
         }
 
         public override void setValue(params object[] value)
