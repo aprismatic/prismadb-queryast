@@ -58,7 +58,7 @@ namespace PrismaDB.QueryAST.DML
         public override object Clone()
         {
             var clone = new ColumnRef(Table, ColumnName, Alias);
-
+            clone.Parent = this.Parent;
             return clone;
         }
 

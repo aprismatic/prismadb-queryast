@@ -57,7 +57,9 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            return new ScalarFunction(FunctionName, Alias, Parameters);
+            var clone = new ScalarFunction(FunctionName, Alias, Parameters);
+            clone.Parent = this.Parent;
+            return clone;
         }
 
         public override bool Equals(object other)
@@ -149,7 +151,9 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            return new PaillierAdditionFunction(FunctionName, Alias, Parameters);
+            var clone = new PaillierAdditionFunction(FunctionName, Alias, Parameters);
+            clone.Parent = this.Parent;
+            return clone;
         }
 
         public override bool Equals(object other)
@@ -195,7 +199,9 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            return new PaillierSubtractionFunction(FunctionName, Alias, Parameters);
+            var clone = new PaillierSubtractionFunction(FunctionName, Alias, Parameters);
+            clone.Parent = this.Parent;
+            return clone;
         }
 
         public override bool Equals(object other)
@@ -241,7 +247,9 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            return new ElGamalMultiplicationFunction(FunctionName, Alias, Parameters);
+            var clone = new ElGamalMultiplicationFunction(FunctionName, Alias, Parameters);
+            clone.Parent = this.Parent;
+            return clone;
         }
 
         public override bool Equals(object other)
@@ -286,7 +294,9 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            return new ElGamalDivisionFunction(FunctionName, Alias, Parameters);
+            var clone = new ElGamalDivisionFunction(FunctionName, Alias, Parameters);
+            clone.Parent = this.Parent;
+            return clone;
         }
 
         public override bool Equals(object other)
@@ -316,7 +326,9 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            return new SumAggregationFunction(FunctionName, Alias, Parameters);
+            var clone = new SumAggregationFunction(FunctionName, Alias, Parameters);
+            clone.Parent = this.Parent;
+            return clone;
         }
 
         public override bool Equals(object other)
@@ -346,7 +358,9 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            return new CountAggregationFunction(FunctionName, Alias, Parameters);
+            var clone = new CountAggregationFunction(FunctionName, Alias, Parameters);
+            clone.Parent = this.Parent;
+            return clone;
         }
 
         public override bool Equals(object other)
@@ -376,7 +390,9 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            return new AvgAggregationFunction(FunctionName, Alias, Parameters);
+            var clone = new AvgAggregationFunction(FunctionName, Alias, Parameters);
+            clone.Parent = this.Parent;
+            return clone;
         }
 
         public override bool Equals(object other)
@@ -406,7 +422,9 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            return new PaillierAggregationSumFunction(FunctionName, Alias, Parameters);
+            var clone = new PaillierAggregationSumFunction(FunctionName, Alias, Parameters);
+            clone.Parent = this.Parent;
+            return clone;
         }
 
         public override bool Equals(object other)
