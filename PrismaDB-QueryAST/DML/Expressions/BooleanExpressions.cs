@@ -73,7 +73,6 @@ namespace PrismaDB.QueryAST.DML
             };
             foreach (var v in InValues)
                 res.InValues.Add((Constant)v.Clone());
-            res.Parent = this.Parent;
             return res;
         }
 
@@ -156,7 +155,6 @@ namespace PrismaDB.QueryAST.DML
             var right_clone = right.Clone() as Expression;
 
             var clone = new BooleanEquals(left_clone, right_clone, NOT);
-            clone.Parent = this.Parent;
 
             return clone;
         }
@@ -262,7 +260,6 @@ namespace PrismaDB.QueryAST.DML
             var right_clone = right.Clone() as Expression;
 
             var clone = new BooleanGreaterThan(left_clone, right_clone, NOT);
-            clone.Parent = this.Parent;
 
             return clone;
         }
@@ -363,7 +360,6 @@ namespace PrismaDB.QueryAST.DML
             var right_clone = right.Clone() as Expression;
 
             var clone = new BooleanLessThan(left_clone, right_clone, NOT);
-            clone.Parent = this.Parent;
 
             return clone;
         }
@@ -470,9 +466,7 @@ namespace PrismaDB.QueryAST.DML
         {
             var left_clone = left.Clone() as Expression;
             var colid = Alias?.Clone();
-            var clone = new BooleanIsNull(left_clone, NOT, colid);
-            clone.Parent = this.Parent;
-            return clone;
+            return new BooleanIsNull(left_clone, NOT, colid);
         }
 
         public override object Eval(ResultRow r)
