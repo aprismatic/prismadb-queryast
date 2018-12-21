@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using PrismaDB.QueryAST.Result;
 
 namespace PrismaDB.QueryAST.DML
@@ -87,8 +86,58 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Eval(ResultRow r)
         {
-            return Regex.IsMatch(r[Column].ToString(), "^" + Regex.Escape(SearchValue.ToString())
-                   .Replace("_", ".").Replace("%", ".*") + "$") ? !NOT : NOT;
+            String svalue_store = SearchValue.strvalue;
+            String col_store = r[Column].ToString();
+
+            //Check length of search value
+            if (svalue_store.Replace("%", "").Length > col_store.Length) return NOT;   
+
+            Boolean firstloop = true;
+            for (int PercentIndex = svalue_store.IndexOf('%'); PercentIndex != -1; PercentIndex = svalue_store.IndexOf('%'))
+            {
+                String svalue_section = svalue_store.Substring(0, PercentIndex);
+                int containsindex = -1;
+
+                //Match leading characters
+                if (firstloop)  
+                {
+                    if (!EqualsUnderscore(col_store.Substring(0, PercentIndex), svalue_section)) return NOT;
+                    col_store = col_store.Substring(svalue_section.Length);
+                    firstloop = false;
+                }
+                //Match intermediate characters
+                else
+                {
+                    containsindex = ContainsUnderscore(col_store, svalue_section);
+                    if (containsindex == -1) return NOT;
+                    col_store = col_store.Substring(containsindex + svalue_section.Length);
+                }
+
+                svalue_store = svalue_store.Substring(PercentIndex + 1);
+            }
+
+            //Match trailing characters
+            if (!EqualsUnderscore(col_store.Substring(col_store.Length - svalue_store.Length), svalue_store)) return NOT;  
+
+            return !NOT;
+        }
+
+        private static Boolean EqualsUnderscore(String str, String search)
+        {
+            for (int i = 0; i < search.Length; i++)
+            {
+                if (!(search[i] == str[i]) && search[i] != '_') return false;
+            }
+            return true;
+        }
+
+        private static int ContainsUnderscore(String str, String search)
+        {
+            for (int i = 0; i < str.Length - search.Length + 1; i++)
+            {
+                if (EqualsUnderscore(str.Substring(i, search.Length), search)) return i;
+            }
+            return -1;
         }
 
         public override List<ColumnRef> GetColumns()

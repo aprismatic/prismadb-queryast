@@ -348,6 +348,29 @@ namespace QueryTests
             Assert.Equal(tableDict[new TableRef("tbl1")][new Identifier("col2")], newTableDict[new TableRef("tbl1")][new Identifier("col2")]);
         }
 
+        [Fact(DisplayName = "BooleanExpression Like")]
+        public void TestBooleanExpressionLike()
+        {
+            //Initialize
+            var table = new ResultTable();
+            var col = new ResultColumnHeader("TextColumn", typeof(string));
+            col.Expression = new ColumnRef("TextColumn");
+            table.Columns.Add(col);
+            var like = new BooleanLike();
+
+            //Equal test
+            var row1 = table.NewRow();
+            row1.Add(new object[] { "ABCDEFG" });
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("ABC_%"));
+            Assert.Equal(true, like.Eval(row1));
+
+            //Not Equal test
+            var row2 = table.NewRow();
+            row2.Add(new object[] { "ABCDEFG" });
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("%ABC_"));
+            Assert.NotEqual(true, like.Eval(row2));
+        }
+
         internal class MyContractResolver : DefaultContractResolver
         {
             protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
