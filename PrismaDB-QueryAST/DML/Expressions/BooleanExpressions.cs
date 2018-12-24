@@ -86,16 +86,16 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Eval(ResultRow r)
         {
-            String svalue_store = SearchValue.strvalue;
-            String col_store = r[Column].ToString();
+            var svalue_store = SearchValue.strvalue;
+            var col_store = r[Column].ToString();
 
             //Check length of search value
             if (svalue_store.Replace("%", "").Length > col_store.Length) return NOT;   
 
-            Boolean firstloop = true;
+            var firstloop = true;
             for (int PercentIndex = svalue_store.IndexOf('%'); PercentIndex != -1; PercentIndex = svalue_store.IndexOf('%'))
             {
-                String svalue_section = svalue_store.Substring(0, PercentIndex);
+                var svalue_section = svalue_store.Substring(0, PercentIndex);
                 int containsindex = -1;
 
                 //Match leading characters
