@@ -33,6 +33,148 @@ namespace PrismaDB.QueryAST.DML
         public override int GetHashCode() { return unchecked(Alias.GetHashCode() * (NOT.GetHashCode() + 1)); }
     }
 
+    public class BooleanLike : BooleanExpression
+    {
+        public ColumnRef Column;
+        public StringConstant SearchValue;
+
+        public BooleanLike()
+        {
+            setValue(new ColumnRef(""), new StringConstant(), false);
+        }
+
+        public BooleanLike(ColumnRef column, StringConstant value)
+            : this()
+        {
+            setValue((ColumnRef)column.Clone(), value);
+        }
+
+        public BooleanLike(ColumnRef column, StringConstant value, bool NOT)
+            : this(column, value)
+        {
+            setValue((ColumnRef)column.Clone(), value, NOT);
+        }
+
+        public override void setValue(params object[] value)
+        {
+            if (value.Length == 0)
+                throw new ArgumentException("BooleanLike.setValue expects at least one argument");
+            else if (value.Length == 1)
+                NOT = (bool)value[0];
+            else if (value.Length == 2)
+            {
+                Column = (ColumnRef)value[0];
+                SearchValue = (StringConstant)value[1];
+            }
+            else
+            {
+                Column = (ColumnRef)value[0];
+                SearchValue = (StringConstant)value[1];
+                NOT = (bool)value[2];
+            }
+        }
+
+        public override object Clone()
+        {
+            var column_clone = Column.Clone() as ColumnRef;
+            var svalue_clone = SearchValue.Clone() as StringConstant;
+
+            var clone = new BooleanLike(column_clone, svalue_clone, NOT);
+
+            return clone;
+        }
+
+        public override object Eval(ResultRow r)
+        {
+            var svalue_store = SearchValue.strvalue;
+            var col_store = r[Column].ToString();
+
+            //Check length of search value
+            if (svalue_store.Replace("%", "").Length > col_store.Length) return NOT;   
+
+            var firstloop = true;
+            for (int PercentIndex = svalue_store.IndexOf('%'); PercentIndex != -1; PercentIndex = svalue_store.IndexOf('%'))
+            {
+                var svalue_section = svalue_store.Substring(0, PercentIndex);
+                int containsindex = -1;
+
+                //Match leading characters
+                if (firstloop)  
+                {
+                    if (!EqualsUnderscore(col_store.Substring(0, PercentIndex), svalue_section)) return NOT;
+                    col_store = col_store.Substring(svalue_section.Length);
+                    firstloop = false;
+                }
+                //Match intermediate characters
+                else
+                {
+                    containsindex = ContainsUnderscore(col_store, svalue_section);
+                    if (containsindex == -1) return NOT;
+                    col_store = col_store.Substring(containsindex + svalue_section.Length);
+                }
+
+                svalue_store = svalue_store.Substring(PercentIndex + 1);
+            }
+
+            //Match trailing characters
+            if (!EqualsUnderscore(col_store.Substring(col_store.Length - svalue_store.Length), svalue_store)) return NOT;  
+
+            return !NOT;
+        }
+
+        private static Boolean EqualsUnderscore(String str, String search)
+        {
+            for (int i = 0; i < search.Length; i++)
+            {
+                if (!(search[i] == str[i]) && search[i] != '_') return false;
+            }
+            return true;
+        }
+
+        private static int ContainsUnderscore(String str, String search)
+        {
+            for (int i = 0; i < str.Length - search.Length + 1; i++)
+            {
+                if (EqualsUnderscore(str.Substring(i, search.Length), search)) return i;
+            }
+            return -1;
+        }
+
+        public override List<ColumnRef> GetColumns()
+        {
+            return Column.GetColumns();
+        }
+
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            return Column.GetNoCopyColumns();
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.BooleanLikeToString(this);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is BooleanLike otherBL)) return false;
+
+            return (this.NOT != otherBL.NOT)
+                && (this.Alias.Equals(otherBL.Alias))
+                && (this.Column.Equals(otherBL.Column))
+                && (this.SearchValue.Equals(otherBL.SearchValue));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+               (NOT.GetHashCode() + 1) *
+               Alias.GetHashCode() *
+               Column.GetHashCode() *
+               SearchValue.GetHashCode());
+        }
+    }
+
     public class BooleanIn : BooleanExpression
     {
         public ColumnRef Column;

@@ -29,6 +29,7 @@ namespace PrismaDB.QueryAST
         string DivisionToString(Division q);
         string ColumnRefToString(ColumnRef q);
         string BooleanTrueToString(BooleanTrue q);
+        string BooleanLikeToString(BooleanLike q);
         string BooleanInToString(BooleanIn q);
         string BooleanEqualsToString(BooleanEquals q);
         string BooleanGreaterThanToString(BooleanGreaterThan q);

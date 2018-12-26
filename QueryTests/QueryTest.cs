@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using PrismaDB.Commons;
 using PrismaDB.QueryAST;
@@ -346,6 +343,48 @@ namespace QueryTests
 
             Assert.Equal(tableDict[new TableRef("tbl1")][new Identifier("col1")], newTableDict[new TableRef("tbl1")][new Identifier("col1")]);
             Assert.Equal(tableDict[new TableRef("tbl1")][new Identifier("col2")], newTableDict[new TableRef("tbl1")][new Identifier("col2")]);
+        }
+
+        [Fact(DisplayName = "BooleanExpression Like")]
+        public void TestBooleanExpressionLike()
+        {
+            //Initialize
+            var table = new ResultTable();
+            var col = new ResultColumnHeader("TextColumn", typeof(string));
+            col.Expression = new ColumnRef("TextColumn");
+            table.Columns.Add(col);
+            var like = new BooleanLike();
+
+            var row1 = table.NewRow();
+            row1.Add(new object[] { "ABCDEFG" });
+
+            //Leading percent test
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("%EFG"));
+            Assert.Equal(true, like.Eval(row1));
+
+            //Trailing percent test
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("ABC%"));
+            Assert.Equal(true, like.Eval(row1));
+
+            //Middle percent test
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("ABC%EFG"));
+            Assert.Equal(true, like.Eval(row1));
+
+            //Leading underscore test
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("_BCDEFG"));
+            Assert.Equal(true, like.Eval(row1));
+
+            //Trailing underscore test
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("ABCDEF_"));
+            Assert.Equal(true, like.Eval(row1));
+
+            //Middle underscore test
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("ABC_EFG"));
+            Assert.Equal(true, like.Eval(row1));
+
+            //Mixed wild card test
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("_BCD%_"));
+            Assert.Equal(true, like.Eval(row1));
         }
 
         internal class MyContractResolver : DefaultContractResolver
