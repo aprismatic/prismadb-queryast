@@ -10,6 +10,7 @@ namespace PrismaDB.QueryAST
         string ColumnDefinitionToString(ColumnDefinition q);
         string CreateIndexQueryToString(CreateIndexQuery q);
         string CreateTableQueryToString(CreateTableQuery q);
+        string DropTableQueryToString(DropTableQuery q);
         string AlterTableQueryToString(AlterTableQuery q);
         string AlteredColumnToString(AlteredColumn q);
         string TableRefToString(TableRef q);
