@@ -7,22 +7,19 @@ namespace PrismaDB.QueryAST.DCL
     {
         public ColumnRef Column;
         public ColumnEncryptionFlags EncryptionFlags;
+        public bool StatusCheck;
 
-        public EncryptColumnCommand()
-        {
-            Column = new ColumnRef("");
-        }
+        public EncryptColumnCommand(bool statusCheck = false)
+            : this(new ColumnRef(""), ColumnEncryptionFlags.None, statusCheck) { }
 
-        public EncryptColumnCommand(string columnName, ColumnEncryptionFlags encryptionFlags)
-        {
-            Column = new ColumnRef(columnName);
-            EncryptionFlags = encryptionFlags;
-        }
+        public EncryptColumnCommand(string columnName, ColumnEncryptionFlags encryptionFlags, bool statusCheck = false)
+            : this(new ColumnRef(columnName), encryptionFlags, statusCheck) { }
 
-        public EncryptColumnCommand(ColumnRef column, ColumnEncryptionFlags encryptionFlags)
+        public EncryptColumnCommand(ColumnRef column, ColumnEncryptionFlags encryptionFlags, bool statusCheck = false)
         {
             Column = column;
             EncryptionFlags = encryptionFlags;
+            StatusCheck = statusCheck;
         }
 
         public override string ToString()
@@ -32,9 +29,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override object Clone()
         {
-            var clone = new EncryptColumnCommand((ColumnRef)Column.Clone(), EncryptionFlags);
-
-            return clone;
+            return new EncryptColumnCommand((ColumnRef)Column.Clone(), EncryptionFlags, StatusCheck);
         }
     }
 }
