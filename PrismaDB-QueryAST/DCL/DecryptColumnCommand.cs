@@ -5,20 +5,18 @@ namespace PrismaDB.QueryAST.DCL
     public class DecryptColumnCommand : Command
     {
         public ColumnRef Column;
+        public bool StatusCheck;
 
-        public DecryptColumnCommand()
-        {
-            Column = new ColumnRef("");
-        }
+        public DecryptColumnCommand(bool statusCheck = false)
+            : this(new ColumnRef(""), statusCheck) { }
 
-        public DecryptColumnCommand(string columnName)
-        {
-            Column = new ColumnRef(columnName);
-        }
+        public DecryptColumnCommand(string columnName, bool statusCheck = false)
+            : this(new ColumnRef(columnName), statusCheck) { }
 
-        public DecryptColumnCommand(ColumnRef column)
+        public DecryptColumnCommand(ColumnRef column, bool statusCheck = false)
         {
             Column = column;
+            StatusCheck = statusCheck;
         }
 
         public override string ToString()
@@ -28,9 +26,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override object Clone()
         {
-            var clone = new DecryptColumnCommand((ColumnRef)Column.Clone());
-
-            return clone;
+            return new DecryptColumnCommand((ColumnRef)Column.Clone(), StatusCheck);
         }
     }
 }

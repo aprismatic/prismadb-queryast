@@ -2,8 +2,11 @@
 {
     public class UpdateKeysCommand : Command
     {
-        public UpdateKeysCommand()
+        public bool StatusCheck;
+
+        public UpdateKeysCommand(bool statusCheck = false)
         {
+            StatusCheck = statusCheck;
         }
 
         public override string ToString()
@@ -13,9 +16,7 @@
 
         public override object Clone()
         {
-            var clone = new UpdateKeysCommand();
-
-            return clone;
+            return new UpdateKeysCommand(StatusCheck);
         }
     }
 }
