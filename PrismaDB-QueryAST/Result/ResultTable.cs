@@ -1,13 +1,20 @@
-﻿using PrismaDB.Commons;
+﻿using Newtonsoft.Json;
+using PrismaDB.Commons;
 using PrismaDB.QueryAST.DML;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace PrismaDB.QueryAST.Result
 {
     public class ResultTable : PrismaDB.Result.ResultTable
     {
         public new ResultColumnList Columns => (ResultColumnList)base.Columns;
+
+        [JsonIgnore]
+        [XmlIgnore]
+        public ReadOnlyCollection<ResultRow> ReadOnlyRows => base.Rows.Cast<ResultRow>().ToList().AsReadOnly();
 
         public ResultTable()
         {

@@ -2,6 +2,7 @@
 using PrismaDB.QueryAST.DML;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace PrismaDB.QueryAST.Result
@@ -9,6 +10,8 @@ namespace PrismaDB.QueryAST.Result
     public class ResultColumnList : PrismaDB.Result.ResultColumnList
     {
         protected ResultColumnList() { }
+
+        internal ReadOnlyCollection<ResultColumnHeader> ReadOnlyHeaders => base.Headers.Cast<ResultColumnHeader>().ToList().AsReadOnly();
 
         internal ResultColumnList(ResultTable table)
             : base(table) { }
