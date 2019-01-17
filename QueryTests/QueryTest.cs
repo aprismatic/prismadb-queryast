@@ -281,26 +281,26 @@ namespace QueryTests
             row2.Add(new object[] { 2, null, "xyz" });
             table.Rows.Add(row2);
 
-            string xmlRes;
-            using (var stream = new StringWriter())
-            {
-                var namespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
-                var serializer = new XmlSerializer(table.GetType());
-                var settings = new XmlWriterSettings
-                {
-                    Indent = true,
-                    OmitXmlDeclaration = true
-                };
-                using (var writer = XmlWriter.Create(stream, settings))
-                {
-                    serializer.Serialize(writer, table, namespaces);
-                    xmlRes = stream.ToString();
-                }
-            }
+            //string xmlRes;
+            //using (var stream = new StringWriter())
+            //{
+            //    var namespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+            //    var serializer = new XmlSerializer(table.GetType());
+            //    var settings = new XmlWriterSettings
+            //    {
+            //        Indent = true,
+            //        OmitXmlDeclaration = true
+            //    };
+            //    using (var writer = XmlWriter.Create(stream, settings))
+            //    {
+            //        serializer.Serialize(writer, table, namespaces);
+            //        xmlRes = stream.ToString();
+            //    }
+            //}
 
             var jsonRes = JsonConvert.SerializeObject(table);
 
-            Assert.NotNull(xmlRes);
+            //Assert.NotNull(xmlRes);
             Assert.NotNull(jsonRes);
         }
 
