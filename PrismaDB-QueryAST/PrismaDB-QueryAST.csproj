@@ -11,5 +11,6 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="PrismaDB-Commons" Version="0.1.8" />
+    <PackageReference Include="PrismaDB-Result" Version="0.1.0.1" />
   </ItemGroup>
 </Project>
