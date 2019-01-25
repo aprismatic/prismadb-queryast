@@ -12,10 +12,6 @@ namespace PrismaDB.QueryAST.Result
     {
         public new ResultColumnList Columns => (ResultColumnList)base.Columns;
 
-        [JsonIgnore]
-        [XmlIgnore]
-        public ReadOnlyCollection<ResultRow> ReadOnlyRows => base.Rows.Cast<ResultRow>().ToList().AsReadOnly();
-
         public ResultTable()
         {
             base.Columns = new ResultColumnList(this);

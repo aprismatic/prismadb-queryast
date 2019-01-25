@@ -12,8 +12,6 @@ namespace PrismaDB.QueryAST.Result
     {
         protected ResultColumnList() { }
 
-        internal ReadOnlyCollection<ResultColumnHeader> ReadOnlyHeaders => base.Headers.Cast<ResultColumnHeader>().ToList().AsReadOnly();
-
         internal ResultColumnList(ResultTable table)
             : base(table) { }
 
@@ -27,7 +25,7 @@ namespace PrismaDB.QueryAST.Result
 
         public new IEnumerator<ResultColumnHeader> GetEnumerator()
         {
-            return ((IEnumerable<ResultColumnHeader>)ReadOnlyHeaders).GetEnumerator();
+            return Headers.Cast<ResultColumnHeader>().ToList().AsReadOnly().GetEnumerator();
         }
 
         public new void Add()
