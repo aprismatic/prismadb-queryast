@@ -1,6 +1,7 @@
 ﻿using PrismaDB.QueryAST.DDL;
 using PrismaDB.QueryAST.DML;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace PrismaDB.QueryAST.Result
 
         public new IEnumerator<ResultColumnHeader> GetEnumerator()
         {
-            return ((IEnumerable<ResultColumnHeader>)Headers).GetEnumerator();
+            return ((IEnumerable<ResultColumnHeader>)ReadOnlyHeaders).GetEnumerator();
         }
 
         public new void Add()

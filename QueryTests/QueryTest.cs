@@ -281,6 +281,8 @@ namespace QueryTests
             row2.Add(new object[] { 2, null, "xyz" });
             table.Rows.Add(row2);
 
+            Assert.Equal(3, table.Columns.Count);
+
             var jsonRes = JsonConvert.SerializeObject(table);
 
             Assert.NotNull(jsonRes);
