@@ -1,25 +1,15 @@
-﻿using System;
-using System.Xml.Serialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using PrismaDB.QueryAST.DDL;
 using PrismaDB.QueryAST.DML;
+using System;
+using System.Xml.Serialization;
 
 namespace PrismaDB.QueryAST.Result
 {
-    public class ResultColumnHeader
+    public class ResultColumnHeader : PrismaDB.Result.ResultColumnHeader
     {
         private Expression _expression;
         private ColumnDefinition _columnDefinition;
-
-        public string ColumnName { get; set; }
-
-        [JsonIgnore]
-        [XmlIgnore]
-        public int? MaxLength { get; set; }
-        
-        [JsonIgnore]
-        [XmlIgnore]
-        public Type DataType { get; set; }
 
         [JsonIgnore]
         [XmlIgnore]
@@ -109,11 +99,7 @@ namespace PrismaDB.QueryAST.Result
         public ResultColumnHeader() : this("") { }
 
         public ResultColumnHeader(string columnName, Type dataType = null, int? maxLength = null)
-        {
-            ColumnName = columnName;
-            DataType = dataType;
-            MaxLength = maxLength;
-        }
+             : base(columnName, dataType, maxLength) { }
 
         public ResultColumnHeader(Expression exp, Type dataType = null, int? maxLength = null)
         {
@@ -132,12 +118,6 @@ namespace PrismaDB.QueryAST.Result
 
             if (dataType != null)
                 DataType = dataType;
-        }
-
-        public void RemoveMetadata()
-        {
-            _expression = null;
-            _columnDefinition = null;
         }
     }
 }

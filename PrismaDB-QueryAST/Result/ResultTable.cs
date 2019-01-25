@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Xml.Serialization;
+﻿using Newtonsoft.Json;
 using PrismaDB.Commons;
 using PrismaDB.QueryAST.DML;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Xml.Serialization;
 
 namespace PrismaDB.QueryAST.Result
 {
-    public class ResultTable
+    public class ResultTable : PrismaDB.Result.ResultTable
     {
-        private List<ResultRow> _rows;
+        public new ResultColumnList Columns => (ResultColumnList)base.Columns;
 
-        public ResultColumnList Columns { get; }
-
+        [JsonIgnore]
         [XmlIgnore]
-        public List<ResultRow> Rows => _rows;
-
-        public string TableName { get; set; }
+        public ReadOnlyCollection<ResultRow> ReadOnlyRows => base.Rows.Cast<ResultRow>().ToList().AsReadOnly();
 
         public ResultTable()
         {
-            Columns = new ResultColumnList(this);
-            _rows = new List<ResultRow>();
+            base.Columns = new ResultColumnList(this);
+            _rows = new List<PrismaDB.Result.ResultRow>();
         }
 
         public ResultTable(string tableName) : this()
@@ -30,15 +27,9 @@ namespace PrismaDB.QueryAST.Result
             TableName = tableName;
         }
 
-        public ResultRow NewRow()
+        public new ResultRow NewRow()
         {
             return new ResultRow(this);
-        }
-
-        public void RemoveMetadata()
-        {
-            foreach (var col in Columns.Headers)
-                col.RemoveMetadata();
         }
 
         public void Sort(IEnumerable<Pair<string, OrderDirection>> orderColumns)
@@ -64,32 +55,12 @@ namespace PrismaDB.QueryAST.Result
                 switch (orderPair.Second)
                 {
                     case OrderDirection.ASC:
-                        _rows = _rows.OrderBy(x => x[orderPair.First]).ToList();
+                        _rows = _rows.OrderBy(x => ((ResultRow)x)[orderPair.First]).ToList();
                         break;
                     case OrderDirection.DESC:
-                        _rows = _rows.OrderByDescending(x => x[orderPair.First]).ToList();
+                        _rows = _rows.OrderByDescending(x => ((ResultRow)x)[orderPair.First]).ToList();
                         break;
                 }
-            }
-        }
-
-        public void Load(IDataReader reader)
-        {
-            if (Rows.Count > 0 || Columns.Count > 0)
-                throw new ApplicationException("ResultTable is not empty.");
-
-            // TODO: Change to GetSchemaTable(), probably better performance
-            var dataTable = new DataTable();
-            dataTable.Load(reader);
-
-            foreach (DataColumn column in dataTable.Columns)
-                Columns.Add(column.ColumnName, column.DataType, column.MaxLength);
-
-            foreach (DataRow row in dataTable.Rows)
-            {
-                var resRow = this.NewRow();
-                resRow.Add(row.ItemArray);
-                Rows.Add(resRow);
             }
         }
     }
