@@ -126,7 +126,7 @@ namespace PrismaDB.QueryAST.DML
         {
             for (int i = 0; i < search.Length; i++)
             {
-                if (!(search[i] == str[i]) && search[i] != '_') return false;
+                if (!(char.ToUpperInvariant(search[i]) == char.ToUpperInvariant(str[i])) && search[i] != '_') return false;
             }
             return true;
         }

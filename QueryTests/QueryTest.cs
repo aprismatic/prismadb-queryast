@@ -369,6 +369,10 @@ namespace QueryTests
             //Mixed wild card test
             like.setValue(new ColumnRef("TextColumn"), new StringConstant("_BCD%_"));
             Assert.Equal(true, like.Eval(row1));
+
+            //Case insensitive test
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("_bcd%_"));
+            Assert.Equal(true, like.Eval(row1));
         }
 
         internal class MyContractResolver : DefaultContractResolver
