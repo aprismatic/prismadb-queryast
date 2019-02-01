@@ -340,39 +340,47 @@ namespace QueryTests
             var like = new BooleanLike();
 
             var row1 = table.NewRow();
-            row1.Add(new object[] { "ABCDEFG" });
+            row1.Add(new object[] { "%%ABCDEFG" });
+
+            //Escape character test
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%%"), new StringConstant("!"));
+            Assert.Equal(true, like.Eval(row1));
 
             //Leading percent test
             like.setValue(new ColumnRef("TextColumn"), new StringConstant("%EFG"));
             Assert.Equal(true, like.Eval(row1));
 
             //Trailing percent test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("ABC%"));
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC%"), new StringConstant("!"));
             Assert.Equal(true, like.Eval(row1));
 
             //Middle percent test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("ABC%EFG"));
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC%EFG"), new StringConstant("!"));
             Assert.Equal(true, like.Eval(row1));
 
             //Leading underscore test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("_BCDEFG"));
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("_!%ABCDEFG"), new StringConstant("!"));
             Assert.Equal(true, like.Eval(row1));
 
             //Trailing underscore test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("ABCDEF_"));
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABCDEF_"), new StringConstant("!"));
             Assert.Equal(true, like.Eval(row1));
 
             //Middle underscore test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("ABC_EFG"));
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC_EFG"), new StringConstant("!"));
             Assert.Equal(true, like.Eval(row1));
 
             //Mixed wild card test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("_BCD%_"));
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("__ABCD%_"));
             Assert.Equal(true, like.Eval(row1));
 
             //Case insensitive test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("_bcd%_"));
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("___bcd%_"));
             Assert.Equal(true, like.Eval(row1));
+
+            //Invalid escape character test
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%!ABCDEF!G!"));
+            Assert.Equal(false, like.Eval(row1));
         }
 
         internal class MyContractResolver : DefaultContractResolver

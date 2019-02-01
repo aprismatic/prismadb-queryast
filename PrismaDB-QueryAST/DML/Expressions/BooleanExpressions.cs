@@ -37,10 +37,11 @@ namespace PrismaDB.QueryAST.DML
     {
         public ColumnRef Column;
         public StringConstant SearchValue;
+        public StringConstant EscapeChar;
 
         public BooleanLike()
         {
-            setValue(new ColumnRef(""), new StringConstant(), false);
+            setValue(new ColumnRef(""), new StringConstant(), new StringConstant(), false);
         }
 
         public BooleanLike(ColumnRef column, StringConstant value)
@@ -49,10 +50,16 @@ namespace PrismaDB.QueryAST.DML
             setValue((ColumnRef)column.Clone(), value);
         }
 
-        public BooleanLike(ColumnRef column, StringConstant value, bool NOT)
+        public BooleanLike(ColumnRef column, StringConstant value, StringConstant escape)
+            : this()
+        {
+            setValue((ColumnRef)column.Clone(), value, escape);
+        }
+
+        public BooleanLike(ColumnRef column, StringConstant value, StringConstant escape, bool NOT)
             : this(column, value)
         {
-            setValue((ColumnRef)column.Clone(), value, NOT);
+            setValue((ColumnRef)column.Clone(), value, escape, NOT);
         }
 
         public override void setValue(params object[] value)
@@ -66,11 +73,18 @@ namespace PrismaDB.QueryAST.DML
                 Column = (ColumnRef)value[0];
                 SearchValue = (StringConstant)value[1];
             }
+            else if (value.Length == 3)
+            {
+                Column = (ColumnRef)value[0];
+                SearchValue = (StringConstant)value[1];
+                EscapeChar = (StringConstant)value[2];
+            }
             else
             {
                 Column = (ColumnRef)value[0];
                 SearchValue = (StringConstant)value[1];
-                NOT = (bool)value[2];
+                EscapeChar = (StringConstant)value[2];
+                NOT = (bool)value[3];
             }
         }
 
@@ -78,8 +92,9 @@ namespace PrismaDB.QueryAST.DML
         {
             var column_clone = Column.Clone() as ColumnRef;
             var svalue_clone = SearchValue.Clone() as StringConstant;
+            var esc_clone = EscapeChar.Clone() as StringConstant;
 
-            var clone = new BooleanLike(column_clone, svalue_clone, NOT);
+            var clone = new BooleanLike(column_clone, svalue_clone, esc_clone, NOT);
 
             return clone;
         }
@@ -87,57 +102,217 @@ namespace PrismaDB.QueryAST.DML
         public override object Eval(ResultRow r)
         {
             var svalue_store = SearchValue.strvalue;
+            var esc_store = EscapeChar.strvalue;
+            if(EscapeChar.strvalue == "") esc_store = "\\";
             var col_store = r[Column].ToString();
 
-            //Check length of search value
-            if (svalue_store.Replace("%", "").Length > col_store.Length) return NOT;   
+            EvalState state = EvalState.Start;
+            int search_index = 0;
+            int column_index = 0;
+            Boolean match = true;
 
-            var firstloop = true;
-            for (int PercentIndex = svalue_store.IndexOf('%'); PercentIndex != -1; PercentIndex = svalue_store.IndexOf('%'))
+            //Check for invalid placement of escape character
+            for(int i = 0; i < esc_store.Length; i++)
             {
-                var svalue_section = svalue_store.Substring(0, PercentIndex);
-                int containsindex = -1;
-
-                //Match leading characters
-                if (firstloop)  
-                {
-                    if (!EqualsUnderscore(col_store.Substring(0, PercentIndex), svalue_section)) return NOT;
-                    col_store = col_store.Substring(svalue_section.Length);
-                    firstloop = false;
-                }
-                //Match intermediate characters
-                else
-                {
-                    containsindex = ContainsUnderscore(col_store, svalue_section);
-                    if (containsindex == -1) return NOT;
-                    col_store = col_store.Substring(containsindex + svalue_section.Length);
-                }
-
-                svalue_store = svalue_store.Substring(PercentIndex + 1);
+                if (esc_store[i] == svalue_store[svalue_store.Length - 1]) return NOT;
             }
 
-            //Match trailing characters
-            if (!EqualsUnderscore(col_store.Substring(col_store.Length - svalue_store.Length), svalue_store)) return NOT;  
+            while (state != EvalState.End)
+            {
+                //If column string length is shorter than search value length
+                if (column_index >= col_store.Length) return CheckTrailingPercent(svalue_store.Substring(search_index));
 
-            return !NOT;
+                state = IdentifyState(svalue_store[ConstraintedIndex(search_index, svalue_store.Length)], esc_store, search_index.Equals(svalue_store.Length));
+
+                switch (state)
+                {
+                    case EvalState.Last:
+                        if (column_index == col_store.Length) return !NOT;
+                        state = EvalState.End;
+                        break;
+
+                    case EvalState.Character:
+                        match = CaseInsensitiveCompare(svalue_store[search_index], col_store[column_index]);
+                        search_index++;
+                        column_index++;
+                        break;
+
+                    case EvalState.Escape:
+                        search_index++;
+                        match = CaseInsensitiveCompare(svalue_store[search_index], col_store[column_index]);
+                        search_index++;
+                        column_index++;
+                        break;
+
+                    case EvalState.Percent:
+                        search_index = search_index + NextNonPercentIndex(svalue_store.Substring(search_index));
+                        if (search_index >= svalue_store.Length) return !NOT; //Trailing characters of search value consist only of %
+                        int search_chars = NextPercentIndex(svalue_store.Substring(search_index), esc_store);
+                        if (search_chars == -1)
+                        {
+                            if (CompareTrailingCharacters(svalue_store.Substring(search_index), col_store.Substring(column_index), esc_store)) return !NOT;
+                            else return NOT;
+                        }
+                        int matchingindex = FindNextMatch(svalue_store.Substring(search_index, search_chars), col_store.Substring(column_index), esc_store);
+                        if (matchingindex == -1) return NOT;  //Substring of search value does not exist in column value
+                        search_index = search_index + search_chars;
+                        column_index = column_index + matchingindex + 1;
+                        break;
+
+                    case EvalState.Underscore:
+                        search_index++;
+                        column_index++;
+                        break;
+                }
+                if (!match) return NOT;
+            }
+            return NOT;
+        }
+ 
+        private enum EvalState
+        {
+            Start,
+            Character,
+            Escape,
+            Percent,
+            Underscore,
+            Last,
+            End
         }
 
-        private static Boolean EqualsUnderscore(String str, String search)
+        private Boolean CaseInsensitiveCompare(char a, char b)
+        {
+            return Char.ToUpper(a) == Char.ToUpper(b);
+        }
+
+        private int NextPercentIndex(String search, String escape)
         {
             for (int i = 0; i < search.Length; i++)
             {
-                if (!(char.ToUpperInvariant(search[i]) == char.ToUpperInvariant(str[i])) && search[i] != '_') return false;
+                if (search[i] == '%')
+                {
+                    Boolean escaped = false;
+                    for (int j = 0; j < escape.Length; j++)
+                    {
+                        if (search[i - 1] == escape[j]) escaped = true;
+                    }
+                    if (!escaped) return i;
+                }
+            }
+            return -1;
+        }
+
+        private int ConstraintedIndex(int search_index, int search_length)
+        {
+            if (search_index >= search_length) return search_length - 1;
+            return search_index;
+        }
+
+        private EvalState IdentifyState(char c, String escape, Boolean lastchar)
+        {
+            if (lastchar) return EvalState.Last;
+            if (c == '%') return EvalState.Percent;
+            if (c == '_') return EvalState.Underscore;
+            for (int i = 0; i < escape.Length; i++)
+            {
+                if (escape[i] == c) return EvalState.Escape;
+            }
+            return EvalState.Character;
+        }
+
+        private Boolean CompareTrailingCharacters(String search, String column, String escape)
+        {
+            String search_noesc = search;
+            for (int i = 0; i < escape.Length; i++)
+            {
+                search_noesc = search_noesc.Replace(escape[i].ToString(), "");
+            }
+
+            if (column.Length < search_noesc.Length) return false;
+
+            column = column.Substring(column.Length - search_noesc.Length);
+
+            int search_index = 0;
+            int column_index = 0;
+
+            while (search_index < search.Length)
+            {
+                Boolean esc = false;
+                for (int j = 0; j < escape.Length; j++)
+                {
+                    if (search[search_index] == escape[j])
+                    {
+                        esc = true;
+                        j = escape.Length;
+                        search_index++;
+                    }
+                }
+                if (esc)
+                {
+                    if (search[search_index] != column[column_index]) return false;
+                }
+                else
+                {
+                    if (!CaseInsensitiveCompare(search[search_index], column[column_index]) && search[search_index] != '_') return false;
+                }
+                search_index++;
+                column_index++;
             }
             return true;
         }
 
-        private static int ContainsUnderscore(String str, String search)
+        private int FindNextMatch(String search, String column, String escape)
         {
-            for (int i = 0; i < str.Length - search.Length + 1; i++)
+            for (int i = 0; i < column.Length; i++)
             {
-                if (EqualsUnderscore(str.Substring(i, search.Length), search)) return i;
+                int wildcards = 0;
+                for (int j = 0; j < search.Length; j++)
+                {
+                    Boolean notwildcard = true;
+                    for (int m = 0; m < escape.Length; m++)
+                    {
+                        if (search[j] == escape[m])
+                        {
+                            j++;
+                            if (j >= search.Length) return -1;
+                            notwildcard = false;
+                            wildcards++;
+                            m = escape.Length;
+                        }
+                    }
+                    if (i + j - wildcards >= column.Length) return -1;
+                    if (!CaseInsensitiveCompare(search[j], column[i + j - wildcards]) && (search[j] != '_' && notwildcard || !notwildcard)) j = search.Length;
+                    if (j == search.Length - 1) return i + j - wildcards;
+                }
             }
             return -1;
+        }
+
+        private Boolean CheckTrailingPercent(String search)
+        {
+            for (int i = 0; i < search.Length; i++)
+            {
+                if (search[i] != '%') return false;
+            }
+            return true;
+        }
+
+        private int NextNonPercentIndex(String search)
+        {
+            for (int i = 0; i < search.Length; i++)
+            {
+                if (search[i] != '%') return i;
+            }
+            return search.Length;
+        }
+
+        private Boolean IsEscapeCharacter(char c, String escape)
+        {
+            for (int i = 0; i < escape.Length; i++)
+            {
+                if (c == escape[i]) return true;
+            }
+            return false;
         }
 
         public override List<ColumnRef> GetColumns()
@@ -162,7 +337,8 @@ namespace PrismaDB.QueryAST.DML
             return (this.NOT != otherBL.NOT)
                 && (this.Alias.Equals(otherBL.Alias))
                 && (this.Column.Equals(otherBL.Column))
-                && (this.SearchValue.Equals(otherBL.SearchValue));
+                && (this.SearchValue.Equals(otherBL.SearchValue))
+                && (this.EscapeChar.Equals(otherBL.EscapeChar));
         }
 
         public override int GetHashCode()
@@ -171,7 +347,8 @@ namespace PrismaDB.QueryAST.DML
                (NOT.GetHashCode() + 1) *
                Alias.GetHashCode() *
                Column.GetHashCode() *
-               SearchValue.GetHashCode());
+               SearchValue.GetHashCode()) *
+               EscapeChar.GetHashCode();
         }
     }
 
