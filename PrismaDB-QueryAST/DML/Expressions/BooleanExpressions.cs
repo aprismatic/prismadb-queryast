@@ -106,7 +106,7 @@ namespace PrismaDB.QueryAST.DML
             if(EscapeChar == null) esc_store = '\\';
             var col_store = r[Column].ToString();
 
-            EvalState state = EvalState.Start;
+            var state = EvalState.Start;
             var search_index = 0;
             var column_index = 0;
             var match = true;
