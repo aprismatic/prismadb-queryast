@@ -37,11 +37,11 @@ namespace PrismaDB.QueryAST.DML
     {
         public ColumnRef Column;
         public StringConstant SearchValue;
-        public StringConstant EscapeChar;
+        public char? EscapeChar;
 
         public BooleanLike()
         {
-            setValue(new ColumnRef(""), new StringConstant(), new StringConstant(), false);
+            setValue(new ColumnRef(""), new StringConstant(), null, false);
         }
 
         public BooleanLike(ColumnRef column, StringConstant value)
@@ -50,13 +50,13 @@ namespace PrismaDB.QueryAST.DML
             setValue((ColumnRef)column.Clone(), value);
         }
 
-        public BooleanLike(ColumnRef column, StringConstant value, StringConstant escape)
+        public BooleanLike(ColumnRef column, StringConstant value, char? escape)
             : this()
         {
             setValue((ColumnRef)column.Clone(), value, escape);
         }
 
-        public BooleanLike(ColumnRef column, StringConstant value, StringConstant escape, bool NOT)
+        public BooleanLike(ColumnRef column, StringConstant value, char? escape, bool NOT)
             : this(column, value)
         {
             setValue((ColumnRef)column.Clone(), value, escape, NOT);
@@ -77,13 +77,13 @@ namespace PrismaDB.QueryAST.DML
             {
                 Column = (ColumnRef)value[0];
                 SearchValue = (StringConstant)value[1];
-                EscapeChar = (StringConstant)value[2];
+                EscapeChar = (char?)value[2];
             }
             else
             {
                 Column = (ColumnRef)value[0];
                 SearchValue = (StringConstant)value[1];
-                EscapeChar = (StringConstant)value[2];
+                EscapeChar = (char?)value[2];
                 NOT = (bool)value[3];
             }
         }
@@ -92,7 +92,7 @@ namespace PrismaDB.QueryAST.DML
         {
             var column_clone = Column.Clone() as ColumnRef;
             var svalue_clone = SearchValue.Clone() as StringConstant;
-            var esc_clone = EscapeChar.Clone() as StringConstant;
+            var esc_clone = EscapeChar;
 
             var clone = new BooleanLike(column_clone, svalue_clone, esc_clone, NOT);
 
@@ -102,27 +102,24 @@ namespace PrismaDB.QueryAST.DML
         public override object Eval(ResultRow r)
         {
             var svalue_store = SearchValue.strvalue;
-            var esc_store = EscapeChar.strvalue;
-            if(EscapeChar.strvalue == "") esc_store = "\\";
+            var esc_store = EscapeChar;
+            if(EscapeChar == null) esc_store = '\\';
             var col_store = r[Column].ToString();
 
             EvalState state = EvalState.Start;
-            int search_index = 0;
-            int column_index = 0;
-            Boolean match = true;
+            var search_index = 0;
+            var column_index = 0;
+            var match = true;
 
             //Check for invalid placement of escape character
-            for(int i = 0; i < esc_store.Length; i++)
-            {
-                if (esc_store[i] == svalue_store[svalue_store.Length - 1]) return NOT;
-            }
+            if (esc_store == svalue_store[svalue_store.Length - 1]) return NOT;
 
             while (state != EvalState.End)
             {
                 //If column string length is shorter than search value length
                 if (column_index >= col_store.Length) return CheckTrailingPercent(svalue_store.Substring(search_index));
 
-                state = IdentifyState(svalue_store[ConstraintedIndex(search_index, svalue_store.Length)], esc_store, search_index.Equals(svalue_store.Length));
+                state = IdentifyState(svalue_store[RestrainSearchIndex(search_index, svalue_store.Length)], esc_store, search_index.Equals(svalue_store.Length));
 
                 switch (state)
                 {
@@ -185,67 +182,53 @@ namespace PrismaDB.QueryAST.DML
             return Char.ToUpper(a) == Char.ToUpper(b);
         }
 
-        private int NextPercentIndex(String search, String escape)
+        private int NextPercentIndex(String search, char? escape)
         {
             for (int i = 0; i < search.Length; i++)
             {
                 if (search[i] == '%')
                 {
-                    Boolean escaped = false;
-                    for (int j = 0; j < escape.Length; j++)
-                    {
-                        if (search[i - 1] == escape[j]) escaped = true;
-                    }
+                    var escaped = false;
+                    if (search[i - 1] == escape) escaped = true;
                     if (!escaped) return i;
                 }
             }
             return -1;
         }
 
-        private int ConstraintedIndex(int search_index, int search_length)
+        private int RestrainSearchIndex(int search_index, int search_length)
         {
             if (search_index >= search_length) return search_length - 1;
             return search_index;
         }
 
-        private EvalState IdentifyState(char c, String escape, Boolean lastchar)
+        private EvalState IdentifyState(char c, char? escape, Boolean lastchar)
         {
             if (lastchar) return EvalState.Last;
             if (c == '%') return EvalState.Percent;
             if (c == '_') return EvalState.Underscore;
-            for (int i = 0; i < escape.Length; i++)
-            {
-                if (escape[i] == c) return EvalState.Escape;
-            }
+            if (escape == c) return EvalState.Escape;
             return EvalState.Character;
         }
 
-        private Boolean CompareTrailingCharacters(String search, String column, String escape)
+        private Boolean CompareTrailingCharacters(String search, String column, char? escape)
         {
-            String search_noesc = search;
-            for (int i = 0; i < escape.Length; i++)
-            {
-                search_noesc = search_noesc.Replace(escape[i].ToString(), "");
-            }
+            var search_noesc = search.Replace(escape.ToString(), "");
 
             if (column.Length < search_noesc.Length) return false;
 
             column = column.Substring(column.Length - search_noesc.Length);
 
-            int search_index = 0;
-            int column_index = 0;
+            var search_index = 0;
+            var column_index = 0;
 
             while (search_index < search.Length)
             {
-                Boolean esc = false;
-                for (int j = 0; j < escape.Length; j++)
+                var esc = false;
+                if (search[search_index] == escape)
                 {
-                    if (search[search_index] == escape[j])
-                    {
-                        esc = true;
-                        j = escape.Length;
-                        search_index++;
-                    }
+                    esc = true;
+                    search_index++;
                 }
                 if (esc)
                 {
@@ -261,24 +244,20 @@ namespace PrismaDB.QueryAST.DML
             return true;
         }
 
-        private int FindNextMatch(String search, String column, String escape)
+        private int FindNextMatch(String search, String column, char? escape)
         {
             for (int i = 0; i < column.Length; i++)
             {
-                int wildcards = 0;
+                var wildcards = 0;
                 for (int j = 0; j < search.Length; j++)
                 {
-                    Boolean notwildcard = true;
-                    for (int m = 0; m < escape.Length; m++)
+                    var notwildcard = true;
+                    if (search[j] == escape)
                     {
-                        if (search[j] == escape[m])
-                        {
-                            j++;
-                            if (j >= search.Length) return -1;
-                            notwildcard = false;
-                            wildcards++;
-                            m = escape.Length;
-                        }
+                        j++;
+                        if (j >= search.Length) return -1;
+                        notwildcard = false;
+                        wildcards++;
                     }
                     if (i + j - wildcards >= column.Length) return -1;
                     if (!CaseInsensitiveCompare(search[j], column[i + j - wildcards]) && (search[j] != '_' && notwildcard || !notwildcard)) j = search.Length;
@@ -304,15 +283,6 @@ namespace PrismaDB.QueryAST.DML
                 if (search[i] != '%') return i;
             }
             return search.Length;
-        }
-
-        private Boolean IsEscapeCharacter(char c, String escape)
-        {
-            for (int i = 0; i < escape.Length; i++)
-            {
-                if (c == escape[i]) return true;
-            }
-            return false;
         }
 
         public override List<ColumnRef> GetColumns()

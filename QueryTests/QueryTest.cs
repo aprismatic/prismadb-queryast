@@ -343,7 +343,7 @@ namespace QueryTests
             row1.Add(new object[] { "%%ABCDEFG" });
 
             //Escape character test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%%"), new StringConstant("!"));
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%%"), new char?('!'));
             Assert.Equal(true, like.Eval(row1));
 
             //Leading percent test
@@ -351,23 +351,23 @@ namespace QueryTests
             Assert.Equal(true, like.Eval(row1));
 
             //Trailing percent test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC%"), new StringConstant("!"));
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC%"), new char?('!'));
             Assert.Equal(true, like.Eval(row1));
 
             //Middle percent test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC%EFG"), new StringConstant("!"));
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC%EFG"), new char?('!'));
             Assert.Equal(true, like.Eval(row1));
 
             //Leading underscore test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("_!%ABCDEFG"), new StringConstant("!"));
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("_!%ABCDEFG"), new char?('!'));
             Assert.Equal(true, like.Eval(row1));
 
             //Trailing underscore test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABCDEF_"), new StringConstant("!"));
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABCDEF_"), new char?('!'));
             Assert.Equal(true, like.Eval(row1));
 
             //Middle underscore test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC_EFG"), new StringConstant("!"));
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC_EFG"), new char?('!'));
             Assert.Equal(true, like.Eval(row1));
 
             //Mixed wild card test
@@ -381,6 +381,10 @@ namespace QueryTests
             //Invalid escape character test
             like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%!ABCDEF!G!"));
             Assert.Equal(false, like.Eval(row1));
+
+            //Null escape character test
+            like.setValue(new ColumnRef("TextColumn"), new StringConstant("\\%\\%ABCDEFG"), null);
+            Assert.Equal(true, like.Eval(row1));
         }
 
         internal class MyContractResolver : DefaultContractResolver
