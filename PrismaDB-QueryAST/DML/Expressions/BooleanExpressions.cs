@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PrismaDB.QueryAST.Result;
@@ -103,7 +103,7 @@ namespace PrismaDB.QueryAST.DML
         {
             var svalue_store = SearchValue.strvalue;
             var esc_store = EscapeChar;
-            if(EscapeChar == null) esc_store = '\\';
+            if (EscapeChar == null) esc_store = '\\';
             var col_store = r[Column].ToString();
 
             var state = EvalState.Start;
@@ -165,7 +165,7 @@ namespace PrismaDB.QueryAST.DML
             }
             return NOT;
         }
- 
+
         private enum EvalState
         {
             Start,
@@ -402,6 +402,88 @@ namespace PrismaDB.QueryAST.DML
                 Alias.GetHashCode() *
                 Column.GetHashCode() *
                 InValues.Aggregate(1, (x, y) => unchecked(x * y.GetHashCode())));
+        }
+    }
+
+    public class BooleanFullTextSearch : BooleanExpression
+    {
+        public ColumnRef Column;
+        public StringConstant SearchText;
+
+        public BooleanFullTextSearch()
+        {
+            Alias = new Identifier("");
+            Column = new ColumnRef("");
+            SearchText = new StringConstant("");
+            NOT = false;
+        }
+
+        public BooleanFullTextSearch(ColumnRef column, StringConstant searchText)
+            : this()
+        {
+            Column = (ColumnRef)column.Clone();
+            SearchText = (StringConstant)searchText.Clone();
+        }
+
+        public BooleanFullTextSearch(bool NOT, ColumnRef column, StringConstant searchText)
+            : this(column, searchText)
+        {
+            this.NOT = NOT;
+        }
+
+        public override void setValue(params object[] value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override object Clone()
+        {
+            var res = new BooleanFullTextSearch
+            {
+                Column = (ColumnRef)Column.Clone(),
+                SearchText = (StringConstant)SearchText.Clone(),
+                NOT = NOT
+            };
+            return res;
+        }
+
+        public override object Eval(ResultRow r)
+        {
+            return r[Column].ToString().ToUpperInvariant().Contains(SearchText.strvalue.ToUpperInvariant()) ? !NOT : NOT;
+        }
+
+        public override List<ColumnRef> GetColumns()
+        {
+            return Column.GetColumns();
+        }
+
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            return Column.GetNoCopyColumns();
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.BooleanFullTextSearchToString(this);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is BooleanFullTextSearch otherBFt)) return false;
+
+            return (this.NOT != otherBFt.NOT)
+                && (this.Alias.Equals(otherBFt.Alias))
+                && (this.Column.Equals(otherBFt.Column))
+                && (this.SearchText.Equals(otherBFt.SearchText));
+        }
+
+        public override int GetHashCode()
+        {
+            return unchecked(
+                (NOT.GetHashCode() + 1) *
+                Alias.GetHashCode() *
+                Column.GetHashCode() *
+                SearchText.GetHashCode());
         }
     }
 
