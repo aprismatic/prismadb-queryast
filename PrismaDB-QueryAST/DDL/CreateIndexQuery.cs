@@ -8,6 +8,7 @@ namespace PrismaDB.QueryAST.DDL
     {
         MSSQL_UNIQUE,
         MySQL_UNIQUE,
+        MSSQL_FULLTEXT,
         MySQL_FULLTEXT,
         MySQL_SPATIAL,
         DEFAULT
@@ -29,8 +30,9 @@ namespace PrismaDB.QueryAST.DDL
         public TableRef OnTable;
         public List<ColumnRef> OnColumns;
         public Identifier Name;
+        public Identifier MsSqlFullTextKeyIndex;
 
-        public CreateIndexQuery(string name, TableRef table, IndexType type = IndexType.DEFAULT, IndexModifier modifier = IndexModifier.DEFAULT, params ColumnRef[] columns)
+        public CreateIndexQuery(string name, TableRef table, IndexType type = IndexType.DEFAULT, IndexModifier modifier = IndexModifier.DEFAULT, string msSqlFullTextKeyIndex = null, params ColumnRef[] columns)
         {
             Name = new Identifier(name);
             OnTable = table.Clone();
@@ -38,14 +40,16 @@ namespace PrismaDB.QueryAST.DDL
             Modifier = modifier;
             OnColumns = new List<ColumnRef>(columns.Length);
             OnColumns.AddRange(columns.Select(x => x.Clone() as ColumnRef));
+            if (msSqlFullTextKeyIndex != null)
+                MsSqlFullTextKeyIndex = new Identifier(msSqlFullTextKeyIndex);
         }
 
-        public CreateIndexQuery(string name, string table, IndexType type = IndexType.DEFAULT, IndexModifier modifier = IndexModifier.DEFAULT, params ColumnRef[] columns)
-            : this(name, new TableRef(table), type, modifier, columns)
+        public CreateIndexQuery(string name, string table, IndexType type = IndexType.DEFAULT, IndexModifier modifier = IndexModifier.DEFAULT, string msSqlFullTextKeyIndex = null, params ColumnRef[] columns)
+            : this(name, new TableRef(table), type, modifier, msSqlFullTextKeyIndex, columns)
         { }
 
         public CreateIndexQuery(CreateIndexQuery other)
-            : this(other.Name.id, other.OnTable, other.Type, other.Modifier, other.OnColumns.ToArray())
+            : this(other.Name.id, other.OnTable, other.Type, other.Modifier, other.MsSqlFullTextKeyIndex?.id, other.OnColumns.ToArray())
         { }
 
         public override string ToString()
