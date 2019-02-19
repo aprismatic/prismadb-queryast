@@ -9,7 +9,6 @@ namespace PrismaDB.QueryAST
         string IdentifierToString(Identifier q);
         string ColumnDefinitionToString(ColumnDefinition q);
         string CreateIndexQueryToString(CreateIndexQuery q);
-        string MsSqlCreateFullTextCatalogQueryToString(MsSqlCreateFullTextCatalogQuery q);
         string CreateTableQueryToString(CreateTableQuery q);
         string DropTableQueryToString(DropTableQuery q);
         string AlterTableQueryToString(AlterTableQuery q);
