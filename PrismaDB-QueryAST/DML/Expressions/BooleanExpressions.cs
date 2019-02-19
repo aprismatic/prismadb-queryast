@@ -12,24 +12,13 @@ namespace PrismaDB.QueryAST.DML
 
     public class BooleanTrue : BooleanExpression
     {
-        public BooleanTrue() { setValue(false); }
-        public BooleanTrue(bool NOT) { setValue(NOT); }
-        public override void setValue(params object[] value)
-        {
-            if (value.Length == 0)
-                throw new ArgumentException("BooleanTrue.setValue expects at least one argument");
-            else if (value.Length == 1)
-                NOT = (bool)value[0];
-            else
-                throw new ArgumentException("BooleanTrue.setValue expects no more than one argument");
-        }
+        public BooleanTrue(bool NOT = false) { Alias = new Identifier(""); this.NOT = NOT; }
         public override object Clone() { return new BooleanTrue(NOT); }
         public override object Eval(ResultRow r) { return !NOT; }
         public override List<ColumnRef> GetColumns() { return new List<ColumnRef>(); }
         public override List<ColumnRef> GetNoCopyColumns() { return new List<ColumnRef>(); }
         public override string ToString() { return DialectResolver.Dialect.BooleanTrueToString(this); }
-        public override bool Equals(object other) { return (Alias.Equals((other as BooleanTrue)?.Alias))
-                                                        && (NOT == (other as BooleanTrue)?.NOT); }
+        public override bool Equals(object other) { return (other is BooleanTrue otherBT) && Alias.Equals(otherBT.Alias) && NOT == otherBT.NOT; }
         public override int GetHashCode() { return unchecked(Alias.GetHashCode() * (NOT.GetHashCode() + 1)); }
     }
 
@@ -41,62 +30,25 @@ namespace PrismaDB.QueryAST.DML
 
         public BooleanLike()
         {
-            setValue(new ColumnRef(""), new StringConstant(), null, false);
+            Alias = new Identifier("");
+            Column = new ColumnRef("");
+            SearchValue = new StringConstant("");
+            EscapeChar = null;
+            NOT = false;
         }
 
-        public BooleanLike(ColumnRef column, StringConstant value)
-            : this()
+        public BooleanLike(ColumnRef column, StringConstant value, char? escape = null, bool NOT = false)
         {
-            setValue((ColumnRef)column.Clone(), value);
-        }
-
-        public BooleanLike(ColumnRef column, StringConstant value, char? escape)
-            : this()
-        {
-            setValue((ColumnRef)column.Clone(), value, escape);
-        }
-
-        public BooleanLike(ColumnRef column, StringConstant value, char? escape, bool NOT)
-            : this(column, value)
-        {
-            setValue((ColumnRef)column.Clone(), value, escape, NOT);
-        }
-
-        public override void setValue(params object[] value)
-        {
-            if (value.Length == 0)
-                throw new ArgumentException("BooleanLike.setValue expects at least one argument");
-            else if (value.Length == 1)
-                NOT = (bool)value[0];
-            else if (value.Length == 2)
-            {
-                Column = (ColumnRef)value[0];
-                SearchValue = (StringConstant)value[1];
-            }
-            else if (value.Length == 3)
-            {
-                Column = (ColumnRef)value[0];
-                SearchValue = (StringConstant)value[1];
-                EscapeChar = (char?)value[2];
-            }
-            else
-            {
-                Column = (ColumnRef)value[0];
-                SearchValue = (StringConstant)value[1];
-                EscapeChar = (char?)value[2];
-                NOT = (bool)value[3];
-            }
+            Alias = new Identifier("");
+            Column = column.Clone() as ColumnRef;
+            SearchValue = value.Clone() as StringConstant;
+            EscapeChar = escape;
+            this.NOT = NOT;
         }
 
         public override object Clone()
         {
-            var column_clone = Column.Clone() as ColumnRef;
-            var svalue_clone = SearchValue.Clone() as StringConstant;
-            var esc_clone = EscapeChar;
-
-            var clone = new BooleanLike(column_clone, svalue_clone, esc_clone, NOT);
-
-            return clone;
+            return new BooleanLike(Column, SearchValue, EscapeChar, NOT);
         }
 
         public override object Eval(ResultRow r)
@@ -335,34 +287,19 @@ namespace PrismaDB.QueryAST.DML
             NOT = false;
         }
 
-        public BooleanIn(ColumnRef column, params Constant[] values)
-            : this()
+        public BooleanIn(ColumnRef column, bool NOT = false, params Constant[] values)
         {
-            Column = (ColumnRef)column.Clone();
-            InValues.AddRange(values);
-        }
-
-        public BooleanIn(bool NOT, ColumnRef column, params Constant[] values)
-            : this(column, values)
-        {
+            Alias = new Identifier("");
+            Column = column.Clone() as ColumnRef;
+            InValues = new List<Constant>();
+            foreach (var v in values)
+                InValues.Add(v.Clone() as Constant);
             this.NOT = NOT;
-        }
-
-        public override void setValue(params object[] value)
-        {
-            throw new NotImplementedException();
         }
 
         public override object Clone()
         {
-            var res = new BooleanIn
-            {
-                Column = Column,
-                NOT = NOT
-            };
-            foreach (var v in InValues)
-                res.InValues.Add((Constant)v.Clone());
-            return res;
+            return new BooleanIn(Column, NOT, InValues.ToArray());
         }
 
         public override object Eval(ResultRow r)  // TODO: Check for correctness
@@ -418,33 +355,17 @@ namespace PrismaDB.QueryAST.DML
             NOT = false;
         }
 
-        public BooleanFullTextSearch(ColumnRef column, StringConstant searchText)
-            : this()
+        public BooleanFullTextSearch(ColumnRef column, StringConstant searchText, bool NOT = false)
         {
-            Column = (ColumnRef)column.Clone();
-            SearchText = (StringConstant)searchText.Clone();
-        }
-
-        public BooleanFullTextSearch(bool NOT, ColumnRef column, StringConstant searchText)
-            : this(column, searchText)
-        {
+            Alias = new Identifier("");
+            Column = column.Clone() as ColumnRef;
+            SearchText = searchText.Clone() as StringConstant;
             this.NOT = NOT;
-        }
-
-        public override void setValue(params object[] value)
-        {
-            throw new NotImplementedException();
         }
 
         public override object Clone()
         {
-            var res = new BooleanFullTextSearch
-            {
-                Column = (ColumnRef)Column.Clone(),
-                SearchText = (StringConstant)SearchText.Clone(),
-                NOT = NOT
-            };
-            return res;
+            return new BooleanFullTextSearch(Column, SearchText, NOT);
         }
 
         public override object Eval(ResultRow r)
@@ -491,43 +412,17 @@ namespace PrismaDB.QueryAST.DML
     {
         public Expression left, right;
 
-        public BooleanEquals(Expression left, Expression right)
+        public BooleanEquals(Expression left, Expression right, bool NOT = false)
         {
-            setValue(left, right);
-        }
-
-        public BooleanEquals(Expression left, Expression right, bool NOT)
-        {
-            setValue(left, right, NOT);
-        }
-
-        public override void setValue(params object[] value)
-        {
-            if (value.Length == 0)
-                throw new ArgumentException("BooleanEquals.setValue expects at least one argument");
-            else if (value.Length == 1)
-                NOT = (bool)value[0];
-            else if (value.Length == 2)
-            {
-                left = (Expression)value[0];
-                right = (Expression)value[1];
-            }
-            else
-            {
-                left = (Expression)value[0];
-                right = (Expression)value[1];
-                NOT = (bool)value[2];
-            }
+            Alias = new Identifier("");
+            this.left = left.Clone() as Expression;
+            this.right = right.Clone() as Expression;
+            this.NOT = NOT;
         }
 
         public override object Clone()
         {
-            var left_clone = left.Clone() as Expression;
-            var right_clone = right.Clone() as Expression;
-
-            var clone = new BooleanEquals(left_clone, right_clone, NOT);
-
-            return clone;
+            return new BooleanEquals(left, right, NOT);
         }
 
         public override string ToString()
@@ -596,45 +491,18 @@ namespace PrismaDB.QueryAST.DML
     {
         public Expression left, right;
 
-        public BooleanGreaterThan(Expression left, Expression right)
+        public BooleanGreaterThan(Expression left, Expression right, bool NOT = false)
         {
-            setValue(left, right);
-        }
-
-        public BooleanGreaterThan(Expression left, Expression right, bool NOT)
-        {
-            setValue(left, right, NOT);
-        }
-
-        public override void setValue(params object[] value)
-        {
-            if (value.Length == 0)
-                throw new ArgumentException("BooleanGreaterThan.setValue expects at least one argument");
-            else if (value.Length == 1)
-                NOT = (bool)value[0];
-            else if (value.Length == 2)
-            {
-                left = (Expression)value[0];
-                right = (Expression)value[1];
-            }
-            else
-            {
-                left = (Expression)value[0];
-                right = (Expression)value[1];
-                NOT = (bool)value[2];
-            }
+            Alias = new Identifier("");
+            this.left = left.Clone() as Expression;
+            this.right = right.Clone() as Expression;
+            this.NOT = NOT;
         }
 
         public override object Clone()
         {
-            var left_clone = left.Clone() as Expression;
-            var right_clone = right.Clone() as Expression;
-
-            var clone = new BooleanGreaterThan(left_clone, right_clone, NOT);
-
-            return clone;
+            return new BooleanGreaterThan(left, right, NOT);
         }
-
         public override string ToString()
         {
             return DialectResolver.Dialect.BooleanGreaterThanToString(this);
@@ -696,43 +564,17 @@ namespace PrismaDB.QueryAST.DML
     {
         public Expression left, right;
 
-        public BooleanLessThan(Expression left, Expression right)
+        public BooleanLessThan(Expression left, Expression right, bool NOT = false)
         {
-            setValue(left, right);
-        }
-
-        public BooleanLessThan(Expression left, Expression right, bool NOT)
-        {
-            setValue(left, right, NOT);
-        }
-
-        public override void setValue(params object[] value)
-        {
-            if (value.Length == 0)
-                throw new ArgumentException("BooleanLessThan.setValue expects at least one argument");
-            else if (value.Length == 1)
-                NOT = (bool)value[0];
-            else if (value.Length == 2)
-            {
-                left = (Expression)value[0];
-                right = (Expression)value[1];
-            }
-            else
-            {
-                left = (Expression)value[0];
-                right = (Expression)value[1];
-                NOT = (bool)value[2];
-            }
+            Alias = new Identifier("");
+            this.left = left.Clone() as Expression;
+            this.right = right.Clone() as Expression;
+            this.NOT = NOT;
         }
 
         public override object Clone()
         {
-            var left_clone = left.Clone() as Expression;
-            var right_clone = right.Clone() as Expression;
-
-            var clone = new BooleanLessThan(left_clone, right_clone, NOT);
-
-            return clone;
+            return new BooleanLessThan(left, right, NOT);
         }
 
         public override string ToString()
@@ -796,48 +638,16 @@ namespace PrismaDB.QueryAST.DML
     {
         public Expression left;
 
-        public BooleanIsNull(Expression left, bool not = false)
+        public BooleanIsNull(Expression left, bool NOT = false)
         {
-            setValue(not, left);
-        }
-
-        public BooleanIsNull(Expression left, bool not, Identifier columnname)
-        {
-            setValue(not, left, columnname);
-        }
-
-        public BooleanIsNull(Expression left, Identifier columnname)
-        {
-            setValue(false, left, columnname);
-        }
-
-        public override void setValue(params object[] value)
-        {
-            switch (value.Length)
-            {
-                case 1:
-                    NOT = false;
-                    left = (Expression) value[1];
-                    break;
-                case 2:
-                    NOT = (bool) value[0];
-                    left = (Expression) value[1];
-                    break;
-                case 3:
-                    NOT = (bool) value[0];
-                    left = (Expression) value[1];
-                    Alias = (Identifier) value[2];
-                    break;
-                default:
-                    throw new ArgumentException("BooleanIsNull.setValue expects one to three arguments");
-            }
+            Alias = new Identifier("");
+            this.left = left.Clone() as Expression;
+            this.NOT = NOT;
         }
 
         public override object Clone()
         {
-            var left_clone = left.Clone() as Expression;
-            var colid = Alias?.Clone();
-            return new BooleanIsNull(left_clone, NOT, colid);
+            return new BooleanIsNull(left, NOT);
         }
 
         public override object Eval(ResultRow r)

@@ -343,47 +343,47 @@ namespace QueryTests
             row1.Add(new object[] { "%%ABCDEFG" });
 
             //Escape character test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%%"), new char?('!'));
+            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("!%!%%"), '!');
             Assert.Equal(true, like.Eval(row1));
 
             //Leading percent test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("%EFG"));
+            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("%EFG"));
             Assert.Equal(true, like.Eval(row1));
 
             //Trailing percent test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC%"), new char?('!'));
+            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC%"), '!');
             Assert.Equal(true, like.Eval(row1));
 
             //Middle percent test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC%EFG"), new char?('!'));
+            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC%EFG"), '!');
             Assert.Equal(true, like.Eval(row1));
 
             //Leading underscore test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("_!%ABCDEFG"), new char?('!'));
+            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("_!%ABCDEFG"), '!');
             Assert.Equal(true, like.Eval(row1));
 
             //Trailing underscore test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABCDEF_"), new char?('!'));
+            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("!%!%ABCDEF_"), '!');
             Assert.Equal(true, like.Eval(row1));
 
             //Middle underscore test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC_EFG"), new char?('!'));
+            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC_EFG"), '!');
             Assert.Equal(true, like.Eval(row1));
 
             //Mixed wild card test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("__ABCD%_"));
+            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("__ABCD%_"));
             Assert.Equal(true, like.Eval(row1));
 
             //Case insensitive test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("___bcd%_"));
+            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("___bcd%_"));
             Assert.Equal(true, like.Eval(row1));
 
             //Invalid escape character test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("!%!%!ABCDEF!G!"));
+            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("!%!%!ABCDEF!G!"));
             Assert.Equal(false, like.Eval(row1));
 
             //Null escape character test
-            like.setValue(new ColumnRef("TextColumn"), new StringConstant("\\%\\%ABCDEFG"), null);
+            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("\\%\\%ABCDEFG"), null);
             Assert.Equal(true, like.Eval(row1));
         }
 

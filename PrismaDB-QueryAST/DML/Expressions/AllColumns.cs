@@ -10,7 +10,7 @@ namespace PrismaDB.QueryAST.DML
 
         public AllColumns(string tableName)
         {
-            setValue(tableName);
+            Table = new TableRef(tableName);
         }
 
         public AllColumns()
@@ -23,17 +23,9 @@ namespace PrismaDB.QueryAST.DML
             Table = table.Clone();
         }
 
-        public override void setValue(params object[] value)
-        {
-            Parent = null;
-            Table = new TableRef((string)value[0]);
-        }
-
         public override object Clone()
         {
-            var clone = new AllColumns(Table);
-
-            return clone;
+            return new AllColumns(Table);
         }
 
         public override object Eval(ResultRow r)

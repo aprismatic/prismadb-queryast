@@ -1,5 +1,4 @@
 ﻿using PrismaDB.QueryAST.Result;
-using System;
 using System.Collections.Generic;
 
 namespace PrismaDB.QueryAST.DML
@@ -31,26 +30,11 @@ namespace PrismaDB.QueryAST.DML
 
     public class Addition : Operation
     {
-        public Addition(Expression left, Expression right)
+        public Addition(Expression left, Expression right, string aliasName = "")
         {
-            setValue(left, right, "");
-        }
-
-        public Addition(Expression left, Expression right, string aliasName)
-        {
-            setValue(left, right, aliasName);
-        }
-
-        public override void setValue(params object[] value)
-        {
-            if (value.Length < 2)
-                throw new ArgumentException("Addition constructor expects 2 or 3 arguments");
-
-            left = (Expression)value[0];
-            right = (Expression)value[1];
-
-            if (value.Length > 2)
-                Alias = new Identifier((string)value[2]);
+            this.left = left;
+            this.right = right;
+            Alias = new Identifier(aliasName);
         }
 
         public override object Clone()
@@ -109,26 +93,11 @@ namespace PrismaDB.QueryAST.DML
 
     public class Subtraction : Operation
     {
-        public Subtraction(Expression left, Expression right)
+        public Subtraction(Expression left, Expression right, string aliasName = "")
         {
-            setValue(left, right, "");
-        }
-
-        public Subtraction(Expression left, Expression right, string aliasName)
-        {
-            setValue(left, right, aliasName);
-        }
-
-        public override void setValue(params object[] value)
-        {
-            if (value.Length < 2)
-                throw new ArgumentException("Subtraction constructor expects 2 or 3 arguments");
-
-            left = (Expression)value[0];
-            right = (Expression)value[1];
-
-            if (value.Length > 2)
-                Alias = new Identifier((string)value[2]);
+            this.left = left;
+            this.right = right;
+            Alias = new Identifier(aliasName);
         }
 
         public override object Clone()
@@ -187,26 +156,11 @@ namespace PrismaDB.QueryAST.DML
 
     public class Multiplication : Operation
     {
-        public Multiplication(Expression left, Expression right)
+        public Multiplication(Expression left, Expression right, string aliasName = "")
         {
-            setValue(left, right, "");
-        }
-
-        public Multiplication(Expression left, Expression right, string aliasName)
-        {
-            setValue(left, right, aliasName);
-        }
-
-        public override void setValue(params object[] value)
-        {
-            if (value.Length < 2)
-                throw new ArgumentException("Multiplication constructor expects 2 or 3 arguments");
-
-            left = (Expression)value[0];
-            right = (Expression)value[1];
-
-            if (value.Length > 2)
-                Alias = new Identifier((string)value[2]);
+            this.left = left;
+            this.right = right;
+            Alias = new Identifier(aliasName);
         }
 
         public override object Clone()
@@ -265,26 +219,11 @@ namespace PrismaDB.QueryAST.DML
 
     public class Division : Operation
     {
-        public Division(Expression left, Expression right)
+        public Division(Expression left, Expression right, string aliasName = "")
         {
-            setValue(left, right, "");
-        }
-
-        public Division(Expression left, Expression right, string aliasName)
-        {
-            setValue(left, right, aliasName);
-        }
-
-        public override void setValue(params object[] value)
-        {
-            if (value.Length < 2)
-                throw new ArgumentException("Division constructor expects 2 or 3 arguments");
-
-            left = (Expression)value[0];
-            right = (Expression)value[1];
-
-            if (value.Length > 2)
-                Alias = new Identifier((string)value[2]);
+            this.left = left;
+            this.right = right;
+            Alias = new Identifier(aliasName);
         }
 
         public override object Clone()

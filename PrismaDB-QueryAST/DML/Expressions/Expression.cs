@@ -10,8 +10,6 @@ namespace PrismaDB.QueryAST.DML
 
         public Expression Parent;
 
-        public abstract void setValue(params object[] value);
-
         public abstract object Clone();
 
         public abstract object Eval(ResultRow r);
