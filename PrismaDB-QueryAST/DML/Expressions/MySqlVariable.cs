@@ -8,9 +8,8 @@ namespace PrismaDB.QueryAST.DML
         public Identifier VariableName;
 
         public MySqlVariable(string variableName)
-        {
-            setValue(variableName, "");
-        }
+          : this(variableName, "")
+        { }
 
         public MySqlVariable(Identifier variable)
             : this(variable.id)
@@ -18,27 +17,13 @@ namespace PrismaDB.QueryAST.DML
 
         public MySqlVariable(string variableName, string aliasName)
         {
-            setValue(variableName, aliasName);
+            VariableName = new Identifier(variableName);
+            Alias = new Identifier(aliasName);
         }
-
-        public MySqlVariable(Identifier variable, string aliasName)
-            : this(variable.id, aliasName)
-        { }
-
-        public MySqlVariable(string variableName, Identifier alias)
-            : this(variableName, alias.id)
-        { }
 
         public MySqlVariable(Identifier variable, Identifier alias)
             : this(variable.id, alias.id)
         { }
-
-        public override void setValue(params object[] value)
-        {
-            Parent = null;
-            VariableName = new Identifier((string)value[0]);
-            Alias = new Identifier((string)value[1]);
-        }
 
         public override object Clone()
         {

@@ -11,35 +11,17 @@ namespace PrismaDB.QueryAST.DML
     {
         public Int64 intvalue;
 
-        public IntConstant()
-            : this(0)
-        { }
+        public IntConstant() : this(0) { }
 
-        public IntConstant(Int64 value)
+        public IntConstant(Int64 value, string aliasName = "")
         {
-            setValue(value, "");
-        }
-
-        public IntConstant(Int64 value, string aliasName)
-        {
-            setValue(value, aliasName);
-        }
-
-        public override void setValue(params object[] value)
-        {
-            Parent = null;
-
-            intvalue = (Int64)value[0];
-
-            if (value.Length > 1)
-                Alias = new Identifier((string)value[1]);
+            intvalue = value;
+            Alias = new Identifier("");
         }
 
         public override object Clone()
         {
-            var clone = new IntConstant(intvalue, Alias.id);
-
-            return clone;
+            return new IntConstant(intvalue, Alias.id);
         }
 
         public override object Eval(ResultRow r)
@@ -82,35 +64,17 @@ namespace PrismaDB.QueryAST.DML
     {
         public string strvalue;
 
-        public StringConstant()
-            : this("")
-        { }
+        public StringConstant() : this("") { }
 
-        public StringConstant(string strvalue)
+        public StringConstant(string value, string aliasName = "")
         {
-            setValue(strvalue, "");
-        }
-
-        public StringConstant(string strvalue, string aliasName)
-        {
-            setValue(strvalue, aliasName);
-        }
-
-        public override void setValue(params object[] value)
-        {
-            Parent = null;
-
-            strvalue = (string)((string)value[0]).Clone();
-
-            if (value.Length > 1)
-                Alias = new Identifier((string)value[1]);
+            strvalue = (string)value.Clone();
+            Alias = new Identifier("");
         }
 
         public override object Clone()
         {
-            var clone = new StringConstant(strvalue, Alias.id);
-
-            return clone;
+            return new StringConstant(strvalue, Alias.id);
         }
 
         public override object Eval(ResultRow r)
@@ -153,35 +117,17 @@ namespace PrismaDB.QueryAST.DML
     {
         public byte[] binvalue;
 
-        public BinaryConstant()
-            : this(new byte[0])
-        { }
+        public BinaryConstant() : this(new byte[0]) { }
 
-        public BinaryConstant(byte[] binvalue)
+        public BinaryConstant(byte[] value, string aliasName = "")
         {
-            setValue(binvalue, "");
-        }
-
-        public BinaryConstant(byte[] binvalue, string aliasName)
-        {
-            setValue(binvalue, aliasName);
-        }
-
-        public override void setValue(params object[] value)
-        {
-            Parent = null;
-
-            binvalue = (byte[])((byte[])value[0]).Clone();
-
-            if (value.Length > 1)
-                Alias = new Identifier((string)value[1]);
+            binvalue = (byte[])value.Clone();
+            Alias = new Identifier(aliasName);
         }
 
         public override object Clone()
         {
-            var clone = new BinaryConstant(binvalue, Alias.id);
-
-            return clone;
+            return new BinaryConstant(binvalue, Alias.id);
         }
 
         public override object Eval(ResultRow r)
@@ -224,35 +170,17 @@ namespace PrismaDB.QueryAST.DML
     {
         public Decimal floatvalue;
 
-        public FloatingPointConstant()
-            : this(0)
-        { }
+        public FloatingPointConstant() : this(0) { }
 
-        public FloatingPointConstant(Decimal value)
+        public FloatingPointConstant(Decimal value, string aliasName = "")
         {
-            setValue(value, "");
-        }
-
-        public FloatingPointConstant(Decimal value, string ColumnName)
-        {
-            setValue(value, ColumnName);
-        }
-
-        public override void setValue(params object[] value)
-        {
-            Parent = null;
-
-            floatvalue = (Decimal)value[0];
-
-            if (value.Length > 1)
-                Alias = new Identifier((string)value[1]);
+            floatvalue = value;
+            Alias = new Identifier(aliasName);
         }
 
         public override object Clone()
         {
-            var clone = new FloatingPointConstant(floatvalue, Alias.id);
-
-            return clone;
+            return new FloatingPointConstant(floatvalue, Alias.id);
         }
 
         public override object Eval(ResultRow r)
@@ -293,30 +221,16 @@ namespace PrismaDB.QueryAST.DML
 
     public class NullConstant : Constant
     {
-        public NullConstant()
-            : this("")
-        { }
+        public NullConstant() : this("") { }
 
-        public NullConstant(string aliasName)
+        public NullConstant(string aliasName = "")
         {
-            setValue(aliasName);
+            Alias = new Identifier(aliasName);
         }
 
         public override object Clone()
         {
             return new NullConstant(Alias.id);
-        }
-
-        public override void setValue(params object[] value)
-        {
-            switch (value.Length)
-            {
-                case 1:
-                    Alias = new Identifier((string)value[0]);
-                    break;
-                default:
-                    throw new ArgumentException("NullConstant.setValue expects zero or one arguments");
-            }
         }
 
         public override object Eval(ResultRow r)
