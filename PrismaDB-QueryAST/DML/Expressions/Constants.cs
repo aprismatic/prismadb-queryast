@@ -16,7 +16,7 @@ namespace PrismaDB.QueryAST.DML
         public IntConstant(Int64 value, string aliasName = "")
         {
             intvalue = value;
-            Alias = new Identifier("");
+            Alias = new Identifier(aliasName);
         }
 
         public override object Clone()
@@ -69,7 +69,7 @@ namespace PrismaDB.QueryAST.DML
         public StringConstant(string value, string aliasName = "")
         {
             strvalue = (string)value.Clone();
-            Alias = new Identifier("");
+            Alias = new Identifier(aliasName);
         }
 
         public override object Clone()
