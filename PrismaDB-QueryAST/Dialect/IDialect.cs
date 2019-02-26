@@ -12,8 +12,8 @@ namespace PrismaDB.QueryAST
         string CreateTableQueryToString(CreateTableQuery q);
         string DropTableQueryToString(DropTableQuery q);
         string AlterTableQueryToString(AlterTableQuery q);
-        string ShowQueryToString(ShowQuery q);
-        string DescribeQueryToString(DescribeQuery q);
+        string ShowTablesQueryToString(ShowTablesQuery q);
+        string ShowColumnsQueryToString(ShowColumnsQuery q);
         string AlteredColumnToString(AlteredColumn q);
         string TableRefToString(TableRef q);
         string DatabaseRefToString(DatabaseRef q);
