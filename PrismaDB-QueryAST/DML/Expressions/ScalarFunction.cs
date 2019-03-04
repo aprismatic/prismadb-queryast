@@ -17,19 +17,18 @@ namespace PrismaDB.QueryAST.DML
             Parameters = new List<Expression>();
         }
 
-        public ScalarFunction(string functionName = "", string aliasName = "")
+        public ScalarFunction(string functionName = "", string aliasName = "", List<Expression> parameters = null)
         {
             FunctionName = new Identifier(functionName);
             Alias = new Identifier(aliasName);
             Parameters = new List<Expression>();
+            if (parameters != null)
+                foreach (var v in parameters)
+                    Parameters.Add(v.Clone() as Expression);
         }
 
-        public ScalarFunction(Identifier functionName, Identifier alias, List<Expression> parameters)
-            : this(functionName.id, alias.id)
-        {
-            foreach (var v in parameters)
-                Parameters.Add(v.Clone() as Expression);
-        }
+        public ScalarFunction(Identifier functionName, Identifier alias = null, List<Expression> parameters = null)
+            : this(functionName.id, alias?.id ?? "", parameters) { }
 
         public override object Clone()
         {
@@ -73,8 +72,11 @@ namespace PrismaDB.QueryAST.DML
 
     public class PaillierAdditionFunction : ScalarFunction
     {
-        public PaillierAdditionFunction(string functionName = "", string aliasName = "") : base(functionName, aliasName) { }
-        public PaillierAdditionFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+        public PaillierAdditionFunction(string functionName = "", string aliasName = "", List<Expression> parameters = null)
+            : base(functionName, aliasName, parameters) { }
+
+        public PaillierAdditionFunction(Identifier functionName, Identifier alias = null, List<Expression> parameters = null)
+            : base(functionName, alias, parameters) { }
 
         public PaillierAdditionFunction(string functionName, Expression left, Expression right, Expression N)
             : this(functionName)
@@ -113,8 +115,11 @@ namespace PrismaDB.QueryAST.DML
 
     public class PaillierSubtractionFunction : ScalarFunction
     {
-        public PaillierSubtractionFunction(string functionName = "", string aliasName = "") : base(functionName, aliasName) { }
-        public PaillierSubtractionFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+        public PaillierSubtractionFunction(string functionName = "", string aliasName = "", List<Expression> parameters = null)
+            : base(functionName, aliasName, parameters) { }
+
+        public PaillierSubtractionFunction(Identifier functionName, Identifier alias = null, List<Expression> parameters = null)
+            : base(functionName, alias, parameters) { }
 
         public PaillierSubtractionFunction(string functionName, Expression left, Expression right, Expression N)
             : this(functionName)
@@ -153,8 +158,11 @@ namespace PrismaDB.QueryAST.DML
 
     public class ElGamalMultiplicationFunction : ScalarFunction
     {
-        public ElGamalMultiplicationFunction(string functionName = "", string aliasName = "") : base(functionName, aliasName) { }
-        public ElGamalMultiplicationFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+        public ElGamalMultiplicationFunction(string functionName = "", string aliasName = "", List<Expression> parameters = null)
+            : base(functionName, aliasName, parameters) { }
+
+        public ElGamalMultiplicationFunction(Identifier functionName, Identifier alias = null, List<Expression> parameters = null)
+            : base(functionName, alias, parameters) { }
 
         public ElGamalMultiplicationFunction(string functionName, Expression left, Expression right, Expression P)
             : this(functionName)
@@ -192,8 +200,11 @@ namespace PrismaDB.QueryAST.DML
     }
     public class ElGamalDivisionFunction : ScalarFunction
     {
-        public ElGamalDivisionFunction(string functionName = "", string aliasName = "") : base(functionName, aliasName) { }
-        public ElGamalDivisionFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+        public ElGamalDivisionFunction(string functionName = "", string aliasName = "", List<Expression> parameters = null)
+            : base(functionName, aliasName, parameters) { }
+
+        public ElGamalDivisionFunction(Identifier functionName, Identifier alias = null, List<Expression> parameters = null)
+            : base(functionName, alias, parameters) { }
 
         public ElGamalDivisionFunction(string functionName, Expression left, Expression right, Expression P)
             : this(functionName)
@@ -232,8 +243,11 @@ namespace PrismaDB.QueryAST.DML
 
     public class SumAggregationFunction : ScalarFunction
     {
-        public SumAggregationFunction(string functionName = "", string aliasName = "") : base(functionName, aliasName) { }
-        public SumAggregationFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+        public SumAggregationFunction(string functionName = "", string aliasName = "", List<Expression> parameters = null)
+            : base(functionName, aliasName, parameters) { }
+
+        public SumAggregationFunction(Identifier functionName, Identifier alias = null, List<Expression> parameters = null)
+            : base(functionName, alias, parameters) { }
 
         public override object Clone()
         {
@@ -256,8 +270,11 @@ namespace PrismaDB.QueryAST.DML
 
     public class CountAggregationFunction : ScalarFunction
     {
-        public CountAggregationFunction(string functionName = "", string aliasName = "") : base(functionName, aliasName) { }
-        public CountAggregationFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+        public CountAggregationFunction(string functionName = "", string aliasName = "", List<Expression> parameters = null)
+            : base(functionName, aliasName, parameters) { }
+
+        public CountAggregationFunction(Identifier functionName, Identifier alias = null, List<Expression> parameters = null)
+            : base(functionName, alias, parameters) { }
 
         public override object Clone()
         {
@@ -280,8 +297,11 @@ namespace PrismaDB.QueryAST.DML
 
     public class AvgAggregationFunction : ScalarFunction
     {
-        public AvgAggregationFunction(string functionName = "", string aliasName = "") : base(functionName, aliasName) { }
-        public AvgAggregationFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+        public AvgAggregationFunction(string functionName = "", string aliasName = "", List<Expression> parameters = null)
+            : base(functionName, aliasName, parameters) { }
+
+        public AvgAggregationFunction(Identifier functionName, Identifier alias = null, List<Expression> parameters = null)
+            : base(functionName, alias, parameters) { }
 
         public override object Clone()
         {
@@ -304,8 +324,11 @@ namespace PrismaDB.QueryAST.DML
 
     public class PaillierAggregationSumFunction : ScalarFunction
     {
-        public PaillierAggregationSumFunction(string functionName = "", string aliasName = "") : base(functionName, aliasName) { }
-        public PaillierAggregationSumFunction(Identifier functionName, Identifier alias, List<Expression> parameters) : base(functionName, alias, parameters) { }
+        public PaillierAggregationSumFunction(string functionName = "", string aliasName = "", List<Expression> parameters = null)
+            : base(functionName, aliasName, parameters) { }
+
+        public PaillierAggregationSumFunction(Identifier functionName, Identifier alias = null, List<Expression> parameters = null)
+            : base(functionName, alias, parameters) { }
 
         public override object Clone()
         {
