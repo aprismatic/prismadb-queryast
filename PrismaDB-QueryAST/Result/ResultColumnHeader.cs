@@ -41,17 +41,17 @@ namespace PrismaDB.QueryAST.Result
                 {
                     case SqlDataType.MSSQL_INT:
                     case SqlDataType.MySQL_INT:
-                    case SqlDataType.Postgres_INT:
+                    case SqlDataType.Postgres_INT4:
                         DataType = typeof(Int32);
                         break;
                     case SqlDataType.MSSQL_BIGINT:
                     case SqlDataType.MySQL_BIGINT:
-                    case SqlDataType.Postgres_BIGINT:
+                    case SqlDataType.Postgres_INT8:
                         DataType = typeof(Int64);
                         break;
                     case SqlDataType.MSSQL_SMALLINT:
                     case SqlDataType.MySQL_SMALLINT:
-                    case SqlDataType.Postgres_SMALLINT:
+                    case SqlDataType.Postgres_INT2:
                         DataType = typeof(Int16);
                         break;
                     case SqlDataType.MSSQL_TINYINT:
@@ -65,12 +65,13 @@ namespace PrismaDB.QueryAST.Result
                         break;
                     case SqlDataType.MSSQL_DATETIME:
                     case SqlDataType.MySQL_DATETIME:
-                    case SqlDataType.Postgres_DATETIME:
+                    case SqlDataType.Postgres_TIMESTAMP:
                         DataType = typeof(DateTime);
                         break;
                     case SqlDataType.MSSQL_FLOAT:
                     case SqlDataType.MySQL_DOUBLE:
-                    case SqlDataType.Postgres_FLOAT:
+                    case SqlDataType.Postgres_FLOAT4:
+                    case SqlDataType.Postgres_FLOAT8:
                         DataType = typeof(Double);
                         break;
                     case SqlDataType.MSSQL_CHAR:
@@ -86,7 +87,6 @@ namespace PrismaDB.QueryAST.Result
                     case SqlDataType.Postgres_TEXT:
                     case SqlDataType.MSSQL_NTEXT:
                     case SqlDataType.MySQL_TIMESTAMP:
-                    case SqlDataType.Postgres_TIMESTAMP:
                     case SqlDataType.MySQL_ENUM:
                     case SqlDataType.MSSQL_DATE:
                     case SqlDataType.MySQL_DATE:
@@ -98,9 +98,9 @@ namespace PrismaDB.QueryAST.Result
                     case SqlDataType.MySQL_BINARY:
                     case SqlDataType.MySQL_VARBINARY:
                     case SqlDataType.MySQL_BLOB:
+                    case SqlDataType.Postgres_BYTEA:
                     case SqlDataType.Postgres_BIT:
                     case SqlDataType.Postgres_VARBIT:
-                    case SqlDataType.Postgres_BYTEA:
                         DataType = typeof(byte[]);
                         break;
                     default:

@@ -50,22 +50,22 @@ namespace PrismaDB.QueryAST.DDL
         MySQL_ENUM = 1400,
 
 
-        Postgres_INT = 2000,
-        Postgres_SMALLINT = 2001,
-        Postgres_BIGINT = 2002,
-        Postgres_FLOAT = 2003,
+        Postgres_INT4 = 2000,
+        Postgres_INT2 = 2001,
+        Postgres_INT8 = 2002,
+        Postgres_FLOAT4 = 2003,
+        Postgres_FLOAT8 = 2004,
 
         Postgres_DATE = 2100,
-        Postgres_DATETIME = 2101,
-        Postgres_TIMESTAMP = 2102,
+        Postgres_TIMESTAMP = 2101,
 
         Postgres_CHAR = 2200,
         Postgres_VARCHAR = 2201,
         Postgres_TEXT = 2202,
 
-        Postgres_BIT = 2300,
-        Postgres_VARBIT = 2301,
-        Postgres_BYTEA = 2302,
+        Postgres_BYTEA = 2300,
+        Postgres_BIT = 2301,
+        Postgres_VARBIT = 2302,
     }
 
     [Flags]
