@@ -11,6 +11,7 @@ namespace PrismaDB.QueryAST.DDL
         MSSQL_FULLTEXT,
         MySQL_FULLTEXT,
         MySQL_SPATIAL,
+        Postgres_UNIQUE,
         DEFAULT
     }
 
@@ -20,6 +21,10 @@ namespace PrismaDB.QueryAST.DDL
         MSSQL_NONCLUSTERED,
         MySQL_BTREE,
         MySQL_HASH,
+        Postgres_BTREE,
+        Postgres_HASH,
+        Postgres_GIN,
+        Postgres_GIST,
         DEFAULT
     }
 
