@@ -8,8 +8,9 @@ namespace PrismaDB.QueryAST.Result
     {
         protected ResultRow() { }
 
-        internal ResultRow(ResultTable table)
-            : base(table) { }
+        internal ResultRow(PrismaDB.Result.ResultQueryResponse table) : base(table) { }
+
+        internal ResultRow(PrismaDB.Result.ResultQueryResponse table, ResultRow other) : base(table, other) { }
 
         public object this[Expression exp]
         {

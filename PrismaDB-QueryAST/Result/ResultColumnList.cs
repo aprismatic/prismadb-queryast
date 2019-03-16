@@ -1,9 +1,7 @@
 ﻿using PrismaDB.QueryAST.DDL;
 using PrismaDB.QueryAST.DML;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace PrismaDB.QueryAST.Result
@@ -12,8 +10,7 @@ namespace PrismaDB.QueryAST.Result
     {
         protected ResultColumnList() { }
 
-        internal ResultColumnList(ResultTable table)
-            : base(table) { }
+        internal ResultColumnList(PrismaDB.Result.ResultQueryResponse table) : base(table) { }
 
         public new ResultColumnHeader this[int index] => (ResultColumnHeader)Headers[index];
 

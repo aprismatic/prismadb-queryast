@@ -1,10 +1,7 @@
-﻿using Newtonsoft.Json;
-using PrismaDB.Commons;
+﻿using PrismaDB.Commons;
 using PrismaDB.QueryAST.DML;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Xml.Serialization;
 
 namespace PrismaDB.QueryAST.Result
 {
@@ -12,20 +9,36 @@ namespace PrismaDB.QueryAST.Result
     {
         public new ResultColumnList Columns => (ResultColumnList)base.Columns;
 
-        public ResultTable()
+        public ResultTable() : this("") { }
+
+        public ResultTable(string tableName)
         {
             base.Columns = new ResultColumnList(this);
             _rows = new List<PrismaDB.Result.ResultRow>();
+            TableName = tableName;
         }
 
-        public ResultTable(string tableName) : this()
+        public ResultTable(ResultReader reader)
         {
-            TableName = tableName;
+            base.Columns = new ResultColumnList(this);
+            _rows = new List<PrismaDB.Result.ResultRow>();
+            RowsAffected = reader.RowsAffected;
+
+            foreach (var column in reader.Columns)
+                Columns.Add(column);
+
+            while (reader.Read())
+                _rows.Add(NewRow(reader.CurrentRow as ResultRow));
         }
 
         public new ResultRow NewRow()
         {
             return new ResultRow(this);
+        }
+
+        public ResultRow NewRow(ResultRow other)
+        {
+            return new ResultRow(this, other);
         }
 
         public void Sort(IEnumerable<Pair<string, OrderDirection>> orderColumns)
