@@ -99,8 +99,6 @@ namespace PrismaDB.QueryAST.Result
                     case SqlDataType.MySQL_VARBINARY:
                     case SqlDataType.MySQL_BLOB:
                     case SqlDataType.Postgres_BYTEA:
-                    case SqlDataType.Postgres_BIT:
-                    case SqlDataType.Postgres_VARBIT:
                         DataType = typeof(byte[]);
                         break;
                     default:

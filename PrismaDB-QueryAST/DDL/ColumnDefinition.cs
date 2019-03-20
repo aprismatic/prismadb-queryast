@@ -63,9 +63,7 @@ namespace PrismaDB.QueryAST.DDL
         Postgres_VARCHAR = 2201,
         Postgres_TEXT = 2202,
 
-        Postgres_BYTEA = 2300,
-        Postgres_BIT = 2301,
-        Postgres_VARBIT = 2302,
+        Postgres_BYTEA = 2300
     }
 
     [Flags]
