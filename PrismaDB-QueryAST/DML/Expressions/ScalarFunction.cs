@@ -322,6 +322,33 @@ namespace PrismaDB.QueryAST.DML
         }
     }
 
+    public class StDevAggregationFunction : ScalarFunction
+    {
+        public StDevAggregationFunction(string functionName = "", string aliasName = "", List<Expression> parameters = null)
+            : base(functionName, aliasName, parameters) { }
+
+        public StDevAggregationFunction(Identifier functionName, Identifier alias = null, List<Expression> parameters = null)
+            : base(functionName, alias, parameters) { }
+
+        public override object Clone()
+        {
+            return new StDevAggregationFunction(FunctionName, Alias, Parameters);
+        }
+
+        public override bool Equals(object other)
+        {
+            if (!(other is StDevAggregationFunction otherF)) return false;
+            return (FunctionName.Equals(otherF.FunctionName)) &&
+                   (Alias.Equals(otherF.Alias)) &&
+                   (Parameters.SequenceEqual(otherF.Parameters));
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.StDevAggregationFunctionToString(this);
+        }
+    }
+
     public class PaillierAggregationSumFunction : ScalarFunction
     {
         public PaillierAggregationSumFunction(string functionName = "", string aliasName = "", List<Expression> parameters = null)
