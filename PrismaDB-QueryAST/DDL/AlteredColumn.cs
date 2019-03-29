@@ -16,7 +16,7 @@ namespace PrismaDB.QueryAST.DDL
             this.First = first;
         }
 
-        public AlteredColumn(AlteredColumn other):this((ColumnDefinition)other.ColumnDefinition.Clone(), other.First)
+        public AlteredColumn(AlteredColumn other) : this((ColumnDefinition)other.ColumnDefinition.Clone(), other.First)
         { }
 
         public override string ToString()
@@ -39,7 +39,7 @@ namespace PrismaDB.QueryAST.DDL
 
         public override int GetHashCode()
         {
-            return unchecked (
+            return unchecked(
                 ColumnDefinition.GetHashCode() * First.GetHashCode());
         }
     }

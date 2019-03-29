@@ -9,7 +9,7 @@ namespace PrismaDB.QueryAST
         {
             get
             {
-                if(_dialect == null)
+                if (_dialect == null)
                     throw new ApplicationException("Dialect should be set before using the AST classes.");
                 return _dialect;
             }

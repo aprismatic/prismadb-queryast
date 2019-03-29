@@ -25,9 +25,9 @@ namespace PrismaDB.QueryAST.DDL
 
         MSSQL_BINARY = 300,
         MSSQL_VARBINARY = 301,
-        
+
         MSSQL_UNIQUEIDENTIFIER = 400,
-        
+
 
         MySQL_INT = 1000,
         MySQL_TINYINT = 1001,
@@ -38,11 +38,11 @@ namespace PrismaDB.QueryAST.DDL
         MySQL_DATE = 1100,
         MySQL_DATETIME = 1101,
         MySQL_TIMESTAMP = 1102,
-        
+
         MySQL_CHAR = 1200,
         MySQL_VARCHAR = 1201,
         MySQL_TEXT = 1202,
-        
+
         MySQL_BINARY = 1300,
         MySQL_VARBINARY = 1301,
         MySQL_BLOB = 1302,
@@ -179,7 +179,7 @@ namespace PrismaDB.QueryAST.DDL
 
         public override int GetHashCode()
         {
-            return unchecked (
+            return unchecked(
                 ColumnName.GetHashCode() *
                 DataType.GetHashCode() *
                 EncryptionFlags.GetHashCode() *

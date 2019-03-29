@@ -1,6 +1,6 @@
-﻿using System;
+﻿using PrismaDB.QueryAST.Result;
+using System;
 using System.Collections.Generic;
-using PrismaDB.QueryAST.Result;
 
 namespace PrismaDB.QueryAST.DML
 {
