@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace PrismaDB.QueryAST.DML
@@ -8,6 +7,7 @@ namespace PrismaDB.QueryAST.DML
     {
         public List<Expression> SelectExpressions;
         public List<TableRef> FromTables;
+        public List<SelectSubQuery> FromSubQueries;
         public WhereClause Where;
         public uint? Limit;
         public List<JoinClause> Joins;
@@ -19,6 +19,7 @@ namespace PrismaDB.QueryAST.DML
         {
             SelectExpressions = new List<Expression>();
             FromTables = new List<TableRef>();
+            FromSubQueries = new List<SelectSubQuery>();
             Where = new WhereClause();
             Limit = null;
             Joins = new List<JoinClause>();
@@ -34,6 +35,9 @@ namespace PrismaDB.QueryAST.DML
 
             FromTables = new List<TableRef>(other.FromTables.Capacity);
             FromTables.AddRange(other.FromTables.Select(x => x.Clone()));
+
+            FromSubQueries = new List<SelectSubQuery>(other.FromSubQueries.Capacity);
+            FromSubQueries.AddRange(other.FromSubQueries.Select(x => x.Clone()));
 
             Where = new WhereClause(other.Where);
 
@@ -57,6 +61,29 @@ namespace PrismaDB.QueryAST.DML
         public override object Clone()
         {
             return new SelectQuery(this);
+        }
+    }
+
+    public class SelectSubQuery
+    {
+        public SelectQuery Select { get; set; }
+        public Identifier Alias { get; set; }
+
+        public SelectSubQuery()
+        {
+            Select = new SelectQuery();
+            Alias = new Identifier();
+        }
+
+        public SelectSubQuery(SelectSubQuery other)
+        {
+            Select = (SelectQuery)other.Select.Clone();
+            Alias = other.Alias.Clone();
+        }
+
+        public SelectSubQuery Clone()
+        {
+            return new SelectSubQuery(this);
         }
     }
 }
