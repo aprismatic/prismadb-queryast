@@ -1,4 +1,5 @@
-﻿using PrismaDB.QueryAST.DML;
+﻿using System.Collections.Generic;
+using PrismaDB.QueryAST.DML;
 
 namespace PrismaDB.QueryAST.DCL
 {
@@ -16,16 +17,10 @@ namespace PrismaDB.QueryAST.DCL
             FileUri = new StringConstant(fileUri);
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.ExportSettingsCommandToString(this);
-        }
+        public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override object Clone()
-        {
-            var clone = new ExportSettingsCommand(FileUri.strvalue);
+        public override string ToString() => DialectResolver.Dialect.ExportSettingsCommandToString(this);
 
-            return clone;
-        }
+        public override object Clone() => new ExportSettingsCommand(FileUri.strvalue);
     }
 }

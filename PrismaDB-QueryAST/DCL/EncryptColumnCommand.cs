@@ -1,4 +1,5 @@
-﻿using PrismaDB.QueryAST.DDL;
+﻿using System.Collections.Generic;
+using PrismaDB.QueryAST.DDL;
 using PrismaDB.QueryAST.DML;
 
 namespace PrismaDB.QueryAST.DCL
@@ -22,14 +23,10 @@ namespace PrismaDB.QueryAST.DCL
             StatusCheck = statusCheck;
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.EncryptColumnCommandToString(this);
-        }
+        public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override object Clone()
-        {
-            return new EncryptColumnCommand((ColumnRef)Column.Clone(), EncryptionFlags, StatusCheck);
-        }
+        public override string ToString() => DialectResolver.Dialect.EncryptColumnCommandToString(this);
+
+        public override object Clone() => new EncryptColumnCommand((ColumnRef)Column.Clone(), EncryptionFlags, StatusCheck);
     }
 }

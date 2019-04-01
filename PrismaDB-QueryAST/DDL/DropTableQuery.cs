@@ -1,4 +1,6 @@
-﻿namespace PrismaDB.QueryAST.DDL
+﻿using System.Collections.Generic;
+
+namespace PrismaDB.QueryAST.DDL
 {
     public class DropTableQuery : DdlQuery
     {
@@ -22,14 +24,10 @@
             TableName = other.TableName.Clone();
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.DropTableQueryToString(this);
-        }
+        public override List<TableRef> GetTables() => new List<TableRef> { TableName.Clone() };
 
-        public override object Clone()
-        {
-            return new DropTableQuery(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.DropTableQueryToString(this);
+
+        public override object Clone() => new DropTableQuery(this);
     }
 }

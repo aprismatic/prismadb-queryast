@@ -29,14 +29,10 @@ namespace PrismaDB.QueryAST.DDL
             ColumnDefinitions.AddRange(other.ColumnDefinitions.Select(x => x.Clone() as ColumnDefinition));
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.CreateTableQueryToString(this);
-        }
+        public override List<TableRef> GetTables() => new List<TableRef> { TableName.Clone() };
 
-        public override object Clone()
-        {
-            return new CreateTableQuery(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.CreateTableQueryToString(this);
+
+        public override object Clone() => new CreateTableQuery(this);
     }
 }

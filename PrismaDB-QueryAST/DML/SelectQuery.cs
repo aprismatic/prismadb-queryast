@@ -53,15 +53,17 @@ namespace PrismaDB.QueryAST.DML
             LockForUpdate = other.LockForUpdate;
         }
 
-        public override string ToString()
+        public override List<TableRef> GetTables()
         {
-            return DialectResolver.Dialect.SelectQueryToString(this);
+            var res = new List<TableRef>();
+            res.AddRange(FromTables.Select(x => x.Clone()));
+            res.AddRange(Joins.Select(x => x.JoinTable.Clone()));
+            return res;
         }
 
-        public override object Clone()
-        {
-            return new SelectQuery(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.SelectQueryToString(this);
+
+        public override object Clone() => new SelectQuery(this);
     }
 
     public class SelectSubQuery

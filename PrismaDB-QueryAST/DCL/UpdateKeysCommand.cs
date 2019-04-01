@@ -1,4 +1,6 @@
-﻿namespace PrismaDB.QueryAST.DCL
+﻿using System.Collections.Generic;
+
+namespace PrismaDB.QueryAST.DCL
 {
     public class UpdateKeysCommand : Command
     {
@@ -9,14 +11,10 @@
             StatusCheck = statusCheck;
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.UpdateKeysCommandToString(this);
-        }
+        public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override object Clone()
-        {
-            return new UpdateKeysCommand(StatusCheck);
-        }
+        public override string ToString() => DialectResolver.Dialect.UpdateKeysCommandToString(this);
+
+        public override object Clone() => new UpdateKeysCommand(StatusCheck);
     }
 }
