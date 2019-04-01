@@ -50,38 +50,25 @@ namespace PrismaDB.QueryAST.DML
             Table = table.Clone();
         }
 
-        public override object Clone()
-        {
-            var clone = new ColumnRef(Table, ColumnName, Alias);
+        public override object Clone() => new ColumnRef(Table, ColumnName, Alias);
 
-            return clone;
-        }
+        public override object Eval(ResultRow r) => r[this];
 
-        public override object Eval(ResultRow r)
-        {
-            return r[this];
-        }
-
-        public override List<ColumnRef> GetColumns()
-        {
-            return new List<ColumnRef>
+        public override List<ColumnRef> GetColumns() =>
+            new List<ColumnRef>
             {
                 (ColumnRef)Clone()
             };
-        }
 
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            return new List<ColumnRef>
+        public override List<ColumnRef> GetNoCopyColumns() =>
+            new List<ColumnRef>
             {
                 this
             };
-        }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.ColumnRefToString(this);
-        }
+        public override bool UpdateChild(Expression child, Expression newChild) => false;
+
+        public override string ToString() => DialectResolver.Dialect.ColumnRefToString(this);
 
         public override bool Equals(object other)
         {
@@ -92,18 +79,12 @@ namespace PrismaDB.QueryAST.DML
                 && Table.Equals(otherCR.Table);
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                Alias.GetHashCode() *
-                ColumnName.GetHashCode() *
-                Table.GetHashCode());
-        }
+        public override int GetHashCode() =>
+            unchecked(Alias.GetHashCode() *
+                      ColumnName.GetHashCode() *
+                      Table.GetHashCode());
 
-        public string DisplayName()
-        {
-            return Alias.id.Length == 0 ? ColumnName.id : Alias.id;
-        }
+        public string DisplayName() => Alias.id.Length == 0 ? ColumnName.id : Alias.id;
 
         public void AppendColumnName(string value)
         {

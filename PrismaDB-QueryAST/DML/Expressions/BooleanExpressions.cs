@@ -13,13 +13,15 @@ namespace PrismaDB.QueryAST.DML
     public class BooleanTrue : BooleanExpression
     {
         public BooleanTrue(bool NOT = false) { Alias = new Identifier(""); this.NOT = NOT; }
-        public override object Clone() { return new BooleanTrue(NOT); }
-        public override object Eval(ResultRow r) { return !NOT; }
-        public override List<ColumnRef> GetColumns() { return new List<ColumnRef>(); }
-        public override List<ColumnRef> GetNoCopyColumns() { return new List<ColumnRef>(); }
-        public override string ToString() { return DialectResolver.Dialect.BooleanTrueToString(this); }
-        public override bool Equals(object other) { return (other is BooleanTrue otherBT) && Alias.Equals(otherBT.Alias) && NOT == otherBT.NOT; }
-        public override int GetHashCode() { return unchecked(Alias.GetHashCode() * (NOT.GetHashCode() + 1)); }
+        public override object Clone() => new BooleanTrue(NOT);
+        public override object Eval(ResultRow r) => !NOT;
+        public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
+        public override List<ColumnRef> GetNoCopyColumns() => new List<ColumnRef>();
+        public override bool UpdateChild(Expression child, Expression newChild) => false;
+
+        public override string ToString() => DialectResolver.Dialect.BooleanTrueToString(this);
+        public override bool Equals(object other) => (other is BooleanTrue otherBT) && Alias.Equals(otherBT.Alias) && NOT == otherBT.NOT;
+        public override int GetHashCode() => unchecked(Alias.GetHashCode() * (NOT.GetHashCode() + 1));
     }
 
     public class BooleanLike : BooleanExpression
@@ -46,10 +48,7 @@ namespace PrismaDB.QueryAST.DML
             this.NOT = NOT;
         }
 
-        public override object Clone()
-        {
-            return new BooleanLike(Column, SearchValue, EscapeChar, NOT);
-        }
+        public override object Clone() => new BooleanLike(Column, SearchValue, EscapeChar, NOT);
 
         public override object Eval(ResultRow r)
         {
@@ -129,10 +128,7 @@ namespace PrismaDB.QueryAST.DML
             End
         }
 
-        private Boolean CaseInsensitiveCompare(char a, char b)
-        {
-            return Char.ToUpper(a) == Char.ToUpper(b);
-        }
+        private bool CaseInsensitiveCompare(char a, char b) => Char.ToUpper(a) == Char.ToUpper(b);
 
         private int NextPercentIndex(String search, char? escape)
         {
@@ -140,8 +136,7 @@ namespace PrismaDB.QueryAST.DML
             {
                 if (search[i] == '%')
                 {
-                    var escaped = false;
-                    if (search[i - 1] == escape) escaped = true;
+                    var escaped = search[i - 1] == escape;
                     if (!escaped) return i;
                 }
             }
@@ -154,7 +149,7 @@ namespace PrismaDB.QueryAST.DML
             return search_index;
         }
 
-        private EvalState IdentifyState(char c, char? escape, Boolean lastchar)
+        private EvalState IdentifyState(char c, char? escape, bool lastchar)
         {
             if (lastchar) return EvalState.Last;
             if (c == '%') return EvalState.Percent;
@@ -163,7 +158,7 @@ namespace PrismaDB.QueryAST.DML
             return EvalState.Character;
         }
 
-        private Boolean CompareTrailingCharacters(String search, String column, char? escape)
+        private bool CompareTrailingCharacters(String search, String column, char? escape)
         {
             var search_noesc = search.Replace(escape.ToString(), "");
 
@@ -198,10 +193,10 @@ namespace PrismaDB.QueryAST.DML
 
         private int FindNextMatch(String search, String column, char? escape)
         {
-            for (int i = 0; i < column.Length; i++)
+            for (var i = 0; i < column.Length; i++)
             {
                 var wildcards = 0;
-                for (int j = 0; j < search.Length; j++)
+                for (var j = 0; j < search.Length; j++)
                 {
                     var notwildcard = true;
                     if (search[j] == escape)
@@ -219,9 +214,9 @@ namespace PrismaDB.QueryAST.DML
             return -1;
         }
 
-        private Boolean CheckTrailingPercent(String search)
+        private bool CheckTrailingPercent(String search)
         {
-            for (int i = 0; i < search.Length; i++)
+            for (var i = 0; i < search.Length; i++)
             {
                 if (search[i] != '%') return false;
             }
@@ -230,48 +225,53 @@ namespace PrismaDB.QueryAST.DML
 
         private int NextNonPercentIndex(String search)
         {
-            for (int i = 0; i < search.Length; i++)
+            for (var i = 0; i < search.Length; i++)
             {
                 if (search[i] != '%') return i;
             }
             return search.Length;
         }
 
-        public override List<ColumnRef> GetColumns()
+        public override List<ColumnRef> GetColumns() => Column.GetColumns();
+
+        public override List<ColumnRef> GetNoCopyColumns() => Column.GetNoCopyColumns();
+
+        public override bool UpdateChild(Expression child, Expression newChild)
         {
-            return Column.GetColumns();
+            if (SearchValue == child)
+            {
+                if (newChild is StringConstant newsrv)
+                {
+                    SearchValue = newsrv;
+                    newsrv.Parent = this;
+                }
+                else
+                    throw new ArgumentException("Expected type StringConstant", nameof(newChild));
+                return true;
+            }
+
+            return false;
         }
 
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            return Column.GetNoCopyColumns();
-        }
-
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.BooleanLikeToString(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.BooleanLikeToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is BooleanLike otherBL)) return false;
 
-            return (this.NOT != otherBL.NOT)
-                && (this.Alias.Equals(otherBL.Alias))
-                && (this.Column.Equals(otherBL.Column))
-                && (this.SearchValue.Equals(otherBL.SearchValue))
-                && (this.EscapeChar.Equals(otherBL.EscapeChar));
+            return NOT != otherBL.NOT
+                && Alias.Equals(otherBL.Alias)
+                && Column.Equals(otherBL.Column)
+                && SearchValue.Equals(otherBL.SearchValue)
+                && EscapeChar.Equals(otherBL.EscapeChar);
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-               (NOT.GetHashCode() + 1) *
-               Alias.GetHashCode() *
-               Column.GetHashCode() *
-               SearchValue.GetHashCode()) *
-               EscapeChar.GetHashCode();
-        }
+        public override int GetHashCode() =>
+            unchecked((NOT.GetHashCode() + 1) *
+                      Alias.GetHashCode() *
+                      Column.GetHashCode() *
+                      SearchValue.GetHashCode() *
+                      EscapeChar.GetHashCode());
     }
 
     public class BooleanIn : BooleanExpression
@@ -297,49 +297,54 @@ namespace PrismaDB.QueryAST.DML
             this.NOT = NOT;
         }
 
-        public override object Clone()
-        {
-            return new BooleanIn(Column, NOT, InValues.ToArray());
-        }
+        public override object Clone() => new BooleanIn(Column, NOT, InValues.ToArray());
 
         public override object Eval(ResultRow r)  // TODO: Check for correctness
         {
             return InValues.Select(x => x.ToString()).Contains(r[Column].ToString()) ? !NOT : NOT;
         }
 
-        public override List<ColumnRef> GetColumns()
+        public override List<ColumnRef> GetColumns() => Column.GetColumns();
+
+        public override List<ColumnRef> GetNoCopyColumns() => Column.GetNoCopyColumns();
+
+        public override bool UpdateChild(Expression child, Expression newChild)
         {
-            return Column.GetColumns();
+            for (var i = 0; i < InValues.Count; i++)
+            {
+                if (InValues[i] == child)
+                {
+                    if (newChild is Constant cnst)
+                    {
+                        InValues[i] = cnst;
+                        cnst.Parent = this;
+                        return true;
+                    }
+
+                    throw new ArgumentException("Expected type Constant", nameof(newChild));
+                }
+            }
+
+            return false;
         }
 
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            return Column.GetNoCopyColumns();
-        }
-
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.BooleanInToString(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.BooleanInToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is BooleanIn otherBI)) return false;
 
-            return (this.NOT != otherBI.NOT)
-                && (this.Alias.Equals(otherBI.Alias))
-                && (this.Column.Equals(otherBI.Column))
-                && (this.InValues.All(x => otherBI.InValues.Exists(y => x.Equals(y))));
+            return NOT != otherBI.NOT
+                && Alias.Equals(otherBI.Alias)
+                && Column.Equals(otherBI.Column)
+                && InValues.All(x => otherBI.InValues.Exists(y => x.Equals(y)));
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                (NOT.GetHashCode() + 1) *
-                Alias.GetHashCode() *
-                Column.GetHashCode() *
-                InValues.Aggregate(1, (x, y) => unchecked(x * y.GetHashCode())));
-        }
+        public override int GetHashCode() =>
+            unchecked((NOT.GetHashCode() + 1) *
+                      Alias.GetHashCode() *
+                      Column.GetHashCode() *
+                      InValues.Aggregate(1, (x, y) => unchecked(x * y.GetHashCode())));
     }
 
     public class BooleanFullTextSearch : BooleanExpression
@@ -363,49 +368,48 @@ namespace PrismaDB.QueryAST.DML
             this.NOT = NOT;
         }
 
-        public override object Clone()
+        public override object Clone() => new BooleanFullTextSearch(Column, SearchText, NOT);
+
+        public override object Eval(ResultRow r) => r[Column].ToString().ToUpperInvariant().Contains(SearchText.strvalue.ToUpperInvariant()) ? !NOT : NOT;
+
+        public override List<ColumnRef> GetColumns() => Column.GetColumns();
+
+        public override List<ColumnRef> GetNoCopyColumns() => Column.GetNoCopyColumns();
+
+        public override bool UpdateChild(Expression child, Expression newChild)
         {
-            return new BooleanFullTextSearch(Column, SearchText, NOT);
+            if (SearchText == child)
+            {
+                if (newChild is StringConstant newsrv)
+                {
+                    SearchText = newsrv;
+                    newsrv.Parent = this;
+                    return true;
+                }
+
+                throw new ArgumentException("Expected type StringConstant", nameof(newChild));
+            }
+
+            return false;
         }
 
-        public override object Eval(ResultRow r)
-        {
-            return r[Column].ToString().ToUpperInvariant().Contains(SearchText.strvalue.ToUpperInvariant()) ? !NOT : NOT;
-        }
-
-        public override List<ColumnRef> GetColumns()
-        {
-            return Column.GetColumns();
-        }
-
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            return Column.GetNoCopyColumns();
-        }
-
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.BooleanFullTextSearchToString(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.BooleanFullTextSearchToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is BooleanFullTextSearch otherBFt)) return false;
 
-            return (this.NOT != otherBFt.NOT)
-                && (this.Alias.Equals(otherBFt.Alias))
-                && (this.Column.Equals(otherBFt.Column))
-                && (this.SearchText.Equals(otherBFt.SearchText));
+            return NOT != otherBFt.NOT
+                && Alias.Equals(otherBFt.Alias)
+                && Column.Equals(otherBFt.Column)
+                && SearchText.Equals(otherBFt.SearchText);
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                (NOT.GetHashCode() + 1) *
-                Alias.GetHashCode() *
-                Column.GetHashCode() *
-                SearchText.GetHashCode());
-        }
+        public override int GetHashCode() =>
+            unchecked((NOT.GetHashCode() + 1) *
+                      Alias.GetHashCode() *
+                      Column.GetHashCode() *
+                      SearchText.GetHashCode());
     }
 
     public class BooleanEquals : BooleanExpression
@@ -420,34 +424,43 @@ namespace PrismaDB.QueryAST.DML
             this.NOT = NOT;
         }
 
-        public override object Clone()
+        public override object Clone() => new BooleanEquals(left, right, NOT);
+
+        public override bool UpdateChild(Expression child, Expression newChild)
         {
-            return new BooleanEquals(left, right, NOT);
+            if (child == left)
+            {
+                left = newChild;
+                newChild.Parent = this;
+                return true;
+            }
+            if (child == right)
+            {
+                right = newChild;
+                newChild.Parent = this;
+                return true;
+            }
+
+            return false;
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.BooleanEqualsToString(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.BooleanEqualsToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is BooleanEquals otherBE)) return false;
 
-            return (this.NOT != otherBE.NOT)
-                && (this.Alias.Equals(otherBE.Alias))
-                && (this.left.Equals(otherBE.left))
-                && (this.right.Equals(otherBE.right));
+            return NOT != otherBE.NOT
+                && Alias.Equals(otherBE.Alias)
+                && left.Equals(otherBE.left)
+                && right.Equals(otherBE.right);
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                (NOT.GetHashCode() + 1) *
-                Alias.GetHashCode() *
-                left.GetHashCode() *
-                right.GetHashCode());
-        }
+        public override int GetHashCode() =>
+            unchecked((NOT.GetHashCode() + 1) *
+                      Alias.GetHashCode() *
+                      left.GetHashCode() *
+                      right.GetHashCode());
 
         public override object Eval(ResultRow r)
         {
@@ -456,18 +469,11 @@ namespace PrismaDB.QueryAST.DML
 
             if (leftEval is String && rightEval is String)
             {
-                return ((String)leftEval == (String)rightEval) ? !NOT : NOT;
+                return (String)leftEval == (String)rightEval ? !NOT : NOT;
             }
 
             // Assume data in DataRow are numeric
             return (Convert.ToDecimal(leftEval) == Convert.ToDecimal(rightEval)) ? !NOT : NOT;
-
-            throw new ApplicationException(
-                 "Left and right expressions of BooleanEquals are not of the same type.\n" +
-                $"Left expression is \"{left}\" of type {left.GetType()}\n" +
-                $"Left expression evaluates to \"{leftEval}\" of type {leftEval.GetType()}\n" +
-                $"Right expression is \"{right}\" of type {right.GetType()}\n" +
-                $"Right expression evaluates to \"{rightEval}\" of type {rightEval.GetType()}");
         }
 
         public override List<ColumnRef> GetColumns()
@@ -499,33 +505,43 @@ namespace PrismaDB.QueryAST.DML
             this.NOT = NOT;
         }
 
-        public override object Clone()
+        public override object Clone() => new BooleanGreaterThan(left, right, NOT);
+
+        public override bool UpdateChild(Expression child, Expression newChild)
         {
-            return new BooleanGreaterThan(left, right, NOT);
+            if (child == left)
+            {
+                left = newChild;
+                newChild.Parent = this;
+                return true;
+            }
+            if (child == right)
+            {
+                right = newChild;
+                newChild.Parent = this;
+                return true;
+            }
+
+            return false;
         }
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.BooleanGreaterThanToString(this);
-        }
+
+        public override string ToString() => DialectResolver.Dialect.BooleanGreaterThanToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is BooleanGreaterThan otherBG)) return false;
 
-            return (this.NOT != otherBG.NOT)
-                && (this.Alias.Equals(otherBG.Alias))
-                && (this.left.Equals(otherBG.left))
-                && (this.right.Equals(otherBG.right));
+            return NOT != otherBG.NOT
+                && Alias.Equals(otherBG.Alias)
+                && left.Equals(otherBG.left)
+                && right.Equals(otherBG.right);
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                (NOT.GetHashCode() + 1) *
-                Alias.GetHashCode() *
-                left.GetHashCode() *
-                right.GetHashCode());
-        }
+        public override int GetHashCode() =>
+            unchecked((NOT.GetHashCode() + 1) *
+                      Alias.GetHashCode() *
+                      left.GetHashCode() *
+                      right.GetHashCode());
 
         public override object Eval(ResultRow r)
         {
@@ -533,14 +549,7 @@ namespace PrismaDB.QueryAST.DML
             var rightEval = right.Eval(r);
 
             // Assume data in DataRow are numeric
-            return (Convert.ToDecimal(leftEval) > Convert.ToDecimal(rightEval)) ? !NOT : NOT;
-
-            throw new ApplicationException(
-                 "Left and right expressions of BooleanGreaterThan are not of the same type.\n" +
-                $"Left expression is \"{left}\" of type {left.GetType()}\n" +
-                $"Left expression evaluates to \"{leftEval}\" of type {leftEval.GetType()}\n" +
-                $"Right expression is \"{right}\" of type {right.GetType()}\n" +
-                $"Right expression evaluates to \"{rightEval}\" of type {rightEval.GetType()}");
+            return Convert.ToDecimal(leftEval) > Convert.ToDecimal(rightEval) ? !NOT : NOT;
         }
 
         public override List<ColumnRef> GetColumns()
@@ -572,34 +581,43 @@ namespace PrismaDB.QueryAST.DML
             this.NOT = NOT;
         }
 
-        public override object Clone()
+        public override object Clone() => new BooleanLessThan(left, right, NOT);
+
+        public override bool UpdateChild(Expression child, Expression newChild)
         {
-            return new BooleanLessThan(left, right, NOT);
+            if (child == left)
+            {
+                left = newChild;
+                newChild.Parent = this;
+                return true;
+            }
+            if (child == right)
+            {
+                right = newChild;
+                newChild.Parent = this;
+                return true;
+            }
+
+            return false;
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.BooleanLessThanToString(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.BooleanLessThanToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is BooleanLessThan otherBL)) return false;
 
-            return (this.NOT != otherBL.NOT)
-                && (this.Alias.Equals(otherBL.Alias))
-                && (this.left.Equals(otherBL.left))
-                && (this.right.Equals(otherBL.right));
+            return NOT != otherBL.NOT
+                && Alias.Equals(otherBL.Alias)
+                && left.Equals(otherBL.left)
+                && right.Equals(otherBL.right);
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                (NOT.GetHashCode() + 1) *
-                Alias.GetHashCode() *
-                left.GetHashCode() *
-                right.GetHashCode());
-        }
+        public override int GetHashCode() =>
+            unchecked((NOT.GetHashCode() + 1) *
+                      Alias.GetHashCode() *
+                      left.GetHashCode() *
+                      right.GetHashCode());
 
         public override object Eval(ResultRow r)
         {
@@ -607,14 +625,7 @@ namespace PrismaDB.QueryAST.DML
             var rightEval = right.Eval(r);
 
             // Assume data in DataRow are numeric
-            return (Convert.ToDecimal(leftEval) < Convert.ToDecimal(rightEval)) ? !NOT : NOT;
-
-            throw new ApplicationException(
-                 "Left and right expressions of BooleanLessThan are not of the same type.\n" +
-                $"Left expression is \"{left}\" of type {left.GetType()}\n" +
-                $"Left expression evaluates to \"{leftEval}\" of type {leftEval.GetType()}\n" +
-                $"Right expression is \"{right}\" of type {right.GetType()}\n" +
-                $"Right expression evaluates to \"{rightEval}\" of type {rightEval.GetType()}");
+            return Convert.ToDecimal(leftEval) < Convert.ToDecimal(rightEval) ? !NOT : NOT;
         }
 
         public override List<ColumnRef> GetColumns()
@@ -656,36 +667,36 @@ namespace PrismaDB.QueryAST.DML
             return NOT ? !(leftres is DBNull) : leftres is DBNull;
         }
 
-        public override List<ColumnRef> GetColumns()
+        public override List<ColumnRef> GetColumns() => left.GetColumns();
+
+        public override List<ColumnRef> GetNoCopyColumns() => left.GetNoCopyColumns();
+
+        public override bool UpdateChild(Expression child, Expression newChild)
         {
-            return left.GetColumns();
+            if (child == left)
+            {
+                left = newChild;
+                newChild.Parent = this;
+                return true;
+            }
+
+            return false;
         }
 
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            return left.GetNoCopyColumns();
-        }
-
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.BooleanIsNullToString(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.BooleanIsNullToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is BooleanIsNull otherBIN)) return false;
 
-            return (NOT != otherBIN.NOT)
-                && (left.Equals(otherBIN.left))
-                && (Alias.Equals(otherBIN.Alias));
+            return NOT != otherBIN.NOT
+                && left.Equals(otherBIN.left)
+                && Alias.Equals(otherBIN.Alias);
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                (NOT.GetHashCode() + 1) *
-                left.GetHashCode() *
-                Alias.GetHashCode());
-        }
+        public override int GetHashCode() =>
+            unchecked((NOT.GetHashCode() + 1) *
+                      left.GetHashCode() *
+                      Alias.GetHashCode());
     }
 }

@@ -23,30 +23,21 @@ namespace PrismaDB.QueryAST.DML
             Table = table.Clone();
         }
 
-        public override object Clone()
-        {
-            return new AllColumns(Table);
-        }
+        public override object Clone() => new AllColumns(Table);
 
-        public override object Eval(ResultRow r)
-        {
+        public override object Eval(ResultRow r) =>
             throw new ApplicationException("AllColumns should not be in a WHERE clause.");
-        }
 
-        public override List<ColumnRef> GetColumns()
-        {
+        public override List<ColumnRef> GetColumns() =>
             throw new ApplicationException("AllColumns needs to be replaced with corresponding ColumnRefs in table.");
-        }
 
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
+        public override List<ColumnRef> GetNoCopyColumns() =>
             throw new ApplicationException("AllColumns needs to be replaced with corresponding ColumnRefs in table.");
-        }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.AllColumnsToString(this);
-        }
+        public override bool UpdateChild(Expression child, Expression newChild) =>
+            throw new ApplicationException("AllColumns needs to be replaced with corresponding ColumnRefs in table.");
+
+        public override string ToString() => DialectResolver.Dialect.AllColumnsToString(this);
 
         public override bool Equals(object other)
         {
@@ -55,9 +46,7 @@ namespace PrismaDB.QueryAST.DML
             return Table.Equals(otherCR.Table);
         }
 
-        public override int GetHashCode()
-        {
-            return Table.GetHashCode();
-        }
+        public override int GetHashCode() =>
+            unchecked(Table.GetHashCode());
     }
 }

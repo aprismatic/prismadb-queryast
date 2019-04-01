@@ -1,5 +1,6 @@
 ﻿using PrismaDB.QueryAST.Result;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -9,7 +10,7 @@ namespace PrismaDB.QueryAST.DML
 
         public Expression left
         {
-            get { return _left; }
+            get => _left;
             set
             {
                 _left = value;
@@ -19,12 +20,29 @@ namespace PrismaDB.QueryAST.DML
 
         public Expression right
         {
-            get { return _right; }
+            get => _right;
             set
             {
                 _right = value;
                 _right.Parent = this;
             }
+        }
+
+        [SuppressMessage("ReSharper", "PossibleUnintendedReferenceComparison")]
+        public override bool UpdateChild(Expression child, Expression newChild)
+        {
+            if (child == left)
+            {
+                left = newChild;
+                return true;
+            }
+            if (child == right)
+            {
+                right = newChild;
+                return true;
+            }
+
+            return false;
         }
     }
 
@@ -47,10 +65,7 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(ResultRow r)
-        {
-            return (int)left.Eval(r) + (int)right.Eval(r);
-        }
+        public override object Eval(ResultRow r) => (int)left.Eval(r) + (int)right.Eval(r);
 
         public override List<ColumnRef> GetColumns()
         {
@@ -68,27 +83,21 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.AdditionToString(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.AdditionToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is Addition otherA)) return false;
 
-            return (this.Alias.Equals(otherA.Alias))
-                && (this.left.Equals(otherA.left))
-                && (this.right.Equals(otherA.right));
+            return Alias.Equals(otherA.Alias)
+                && left.Equals(otherA.left)
+                && right.Equals(otherA.right);
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                Alias.GetHashCode() *
-                left.GetHashCode() *
-                right.GetHashCode());
-        }
+        public override int GetHashCode() =>
+            unchecked(Alias.GetHashCode() *
+                      left.GetHashCode() *
+                      right.GetHashCode());
     }
 
     public class Subtraction : Operation
@@ -110,10 +119,7 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(ResultRow r)
-        {
-            return (int)left.Eval(r) - (int)right.Eval(r);
-        }
+        public override object Eval(ResultRow r) => (int)left.Eval(r) - (int)right.Eval(r);
 
         public override List<ColumnRef> GetColumns()
         {
@@ -131,27 +137,21 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.SubtractionToString(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.SubtractionToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is Subtraction otherS)) return false;
 
-            return (this.Alias.Equals(otherS.Alias))
-                && (this.left.Equals(otherS.left))
-                && (this.right.Equals(otherS.right));
+            return Alias.Equals(otherS.Alias)
+                && left.Equals(otherS.left)
+                && right.Equals(otherS.right);
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                Alias.GetHashCode() *
-                left.GetHashCode() *
-                right.GetHashCode());
-        }
+        public override int GetHashCode() =>
+            unchecked(Alias.GetHashCode() *
+                      left.GetHashCode() *
+                      right.GetHashCode());
     }
 
     public class Multiplication : Operation
@@ -173,10 +173,7 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(ResultRow r)
-        {
-            return (int)left.Eval(r) * (int)right.Eval(r);
-        }
+        public override object Eval(ResultRow r) => (int)left.Eval(r) * (int)right.Eval(r);
 
         public override List<ColumnRef> GetColumns()
         {
@@ -194,27 +191,21 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.MultiplicationToString(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.MultiplicationToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is Multiplication otherM)) return false;
 
-            return (this.Alias.Equals(otherM.Alias))
-                && (this.left.Equals(otherM.left))
-                && (this.right.Equals(otherM.right));
+            return Alias.Equals(otherM.Alias)
+                && left.Equals(otherM.left)
+                && right.Equals(otherM.right);
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                Alias.GetHashCode() *
-                left.GetHashCode() *
-                right.GetHashCode());
-        }
+        public override int GetHashCode() =>
+            unchecked(Alias.GetHashCode() *
+                      left.GetHashCode() *
+                      right.GetHashCode());
     }
 
     public class Division : Operation
@@ -236,10 +227,7 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(ResultRow r)
-        {
-            return (int)left.Eval(r) / (int)right.Eval(r);
-        }
+        public override object Eval(ResultRow r) => (int)left.Eval(r) / (int)right.Eval(r);
 
         public override List<ColumnRef> GetColumns()
         {
@@ -257,26 +245,20 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.DivisionToString(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.DivisionToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is Division otherD)) return false;
 
-            return (this.Alias.Equals(otherD.Alias))
-                && (this.left.Equals(otherD.left))
-                && (this.right.Equals(otherD.right));
+            return Alias.Equals(otherD.Alias)
+                && left.Equals(otherD.left)
+                && right.Equals(otherD.right);
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                Alias.GetHashCode() *
-                left.GetHashCode() *
-                right.GetHashCode());
-        }
+        public override int GetHashCode() =>
+            unchecked(Alias.GetHashCode() *
+                      left.GetHashCode() *
+                      right.GetHashCode());
     }
 }
