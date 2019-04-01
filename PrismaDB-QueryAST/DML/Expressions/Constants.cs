@@ -19,45 +19,29 @@ namespace PrismaDB.QueryAST.DML
             Alias = new Identifier(aliasName);
         }
 
-        public override object Clone()
-        {
-            return new IntConstant(intvalue, Alias.id);
-        }
+        public override object Clone() => new IntConstant(intvalue, Alias.id);
 
-        public override object Eval(ResultRow r)
-        {
-            return intvalue;
-        }
+        public override object Eval(ResultRow r) => intvalue;
 
-        public override List<ColumnRef> GetColumns()
-        {
-            return new List<ColumnRef>();
-        }
+        public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
 
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            return new List<ColumnRef>();
-        }
+        public override List<ColumnRef> GetNoCopyColumns() => new List<ColumnRef>();
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.IntConstantToString(this);
-        }
+        public override bool UpdateChild(Expression child, Expression newChild) => false;
+
+        public override string ToString() => DialectResolver.Dialect.IntConstantToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is IntConstant otherIC)) return false;
 
-            return (this.Alias.Equals(otherIC.Alias))
-                && (this.intvalue == otherIC.intvalue);
+            return Alias.Equals(otherIC.Alias)
+                && intvalue == otherIC.intvalue;
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                Alias.GetHashCode() *
-                intvalue.GetHashCode());
-        }
+        public override int GetHashCode() =>
+            unchecked(Alias.GetHashCode() *
+                      intvalue.GetHashCode());
     }
 
     public class StringConstant : Constant
@@ -72,45 +56,29 @@ namespace PrismaDB.QueryAST.DML
             Alias = new Identifier(aliasName);
         }
 
-        public override object Clone()
-        {
-            return new StringConstant(strvalue, Alias.id);
-        }
+        public override object Clone() => new StringConstant(strvalue, Alias.id);
 
-        public override object Eval(ResultRow r)
-        {
-            return strvalue;
-        }
+        public override object Eval(ResultRow r) => strvalue;
 
-        public override List<ColumnRef> GetColumns()
-        {
-            return new List<ColumnRef>();
-        }
+        public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
 
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            return new List<ColumnRef>();
-        }
+        public override List<ColumnRef> GetNoCopyColumns() => new List<ColumnRef>();
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.StringConstantToString(this);
-        }
+        public override bool UpdateChild(Expression child, Expression newChild) => false;
+
+        public override string ToString() => DialectResolver.Dialect.StringConstantToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is StringConstant otherSC)) return false;
 
-            return (this.Alias.Equals(otherSC.Alias))
-                && (this.strvalue == otherSC.strvalue);
+            return Alias.Equals(otherSC.Alias)
+                && strvalue == otherSC.strvalue;
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                Alias.GetHashCode() *
-                strvalue.GetHashCode());
-        }
+        public override int GetHashCode() =>
+            unchecked(Alias.GetHashCode() *
+                      strvalue.GetHashCode());
     }
 
     public class BinaryConstant : Constant
@@ -125,45 +93,29 @@ namespace PrismaDB.QueryAST.DML
             Alias = new Identifier(aliasName);
         }
 
-        public override object Clone()
-        {
-            return new BinaryConstant(binvalue, Alias.id);
-        }
+        public override object Clone() => new BinaryConstant(binvalue, Alias.id);
 
-        public override object Eval(ResultRow r)
-        {
-            throw new NotImplementedException("This method should not be called.");
-        }
+        public override object Eval(ResultRow r) => throw new NotImplementedException("This method should not be called.");
 
-        public override List<ColumnRef> GetColumns()
-        {
-            return new List<ColumnRef>();
-        }
+        public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
 
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            return new List<ColumnRef>();
-        }
+        public override List<ColumnRef> GetNoCopyColumns() => new List<ColumnRef>();
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.BinaryConstantToString(this);
-        }
+        public override bool UpdateChild(Expression child, Expression newChild) => false;
+
+        public override string ToString() => DialectResolver.Dialect.BinaryConstantToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is BinaryConstant otherBC)) return false;
 
-            return (this.Alias.Equals(otherBC.Alias))
-                && (this.binvalue.SequenceEqual(otherBC.binvalue));
+            return Alias.Equals(otherBC.Alias)
+                && binvalue.SequenceEqual(otherBC.binvalue);
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                Alias.GetHashCode() *
-                binvalue.Aggregate(1, unchecked((x, y) => x * y.GetHashCode())));
-        }
+        public override int GetHashCode() =>
+            unchecked(Alias.GetHashCode() *
+                      binvalue.Aggregate(1, unchecked((x, y) => x * y.GetHashCode())));
     }
 
     public class FloatingPointConstant : Constant
@@ -178,45 +130,29 @@ namespace PrismaDB.QueryAST.DML
             Alias = new Identifier(aliasName);
         }
 
-        public override object Clone()
-        {
-            return new FloatingPointConstant(floatvalue, Alias.id);
-        }
+        public override object Clone() => new FloatingPointConstant(floatvalue, Alias.id);
 
-        public override object Eval(ResultRow r)
-        {
-            return floatvalue;
-        }
+        public override object Eval(ResultRow r) => floatvalue;
 
-        public override List<ColumnRef> GetColumns()
-        {
-            return new List<ColumnRef>();
-        }
+        public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
 
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            return new List<ColumnRef>();
-        }
+        public override List<ColumnRef> GetNoCopyColumns() => new List<ColumnRef>();
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.FloatingPointConstantToString(this);
-        }
+        public override bool UpdateChild(Expression child, Expression newChild) => false;
+
+        public override string ToString() => DialectResolver.Dialect.FloatingPointConstantToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is FloatingPointConstant otherIC)) return false;
 
-            return (this.Alias.Equals(otherIC.Alias))
-                && (this.floatvalue == otherIC.floatvalue);
+            return Alias.Equals(otherIC.Alias)
+                && floatvalue == otherIC.floatvalue;
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                Alias.GetHashCode() *
-                floatvalue.GetHashCode());
-        }
+        public override int GetHashCode() =>
+            unchecked(Alias.GetHashCode() *
+                      floatvalue.GetHashCode());
     }
 
     public class NullConstant : Constant
@@ -228,30 +164,18 @@ namespace PrismaDB.QueryAST.DML
             Alias = new Identifier(aliasName);
         }
 
-        public override object Clone()
-        {
-            return new NullConstant(Alias.id);
-        }
+        public override object Clone() => new NullConstant(Alias.id);
 
-        public override object Eval(ResultRow r)
-        {
-            throw new NotImplementedException("NULL constant should not be used in WHERE clause like that."); // TODO: reconsider
-        }
+        public override object Eval(ResultRow r) =>
+            throw new NotImplementedException("NULL constant should not be used in WHERE clause like that.");
 
-        public override List<ColumnRef> GetColumns()
-        {
-            return new List<ColumnRef>();
-        }
+        public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
 
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            return new List<ColumnRef>();
-        }
+        public override List<ColumnRef> GetNoCopyColumns() => new List<ColumnRef>();
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.NullConstantToString(this);
-        }
+        public override bool UpdateChild(Expression child, Expression newChild) => false;
+
+        public override string ToString() => DialectResolver.Dialect.NullConstantToString(this);
 
         public override bool Equals(object other)
         {
@@ -260,10 +184,6 @@ namespace PrismaDB.QueryAST.DML
             return Alias.Equals(otherNC.Alias);
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                Alias.GetHashCode());
-        }
+        public override int GetHashCode() => unchecked(Alias.GetHashCode());
     }
 }

@@ -25,32 +25,17 @@ namespace PrismaDB.QueryAST.DML
             : this(variable.id, alias.id)
         { }
 
-        public override object Clone()
-        {
-            var clone = new MySqlVariable(VariableName, Alias);
+        public override object Clone() => new MySqlVariable(VariableName, Alias);
 
-            return clone;
-        }
+        public override object Eval(ResultRow r) => r[this];
 
-        public override object Eval(ResultRow r)
-        {
-            return r[this];
-        }
+        public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
 
-        public override List<ColumnRef> GetColumns()
-        {
-            return new List<ColumnRef>();
-        }
+        public override List<ColumnRef> GetNoCopyColumns() => new List<ColumnRef>();
 
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            return new List<ColumnRef>();
-        }
+        public override bool UpdateChild(Expression child, Expression newChild) => false;
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.MySqlVariableToString(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.MySqlVariableToString(this);
 
         public override bool Equals(object other)
         {
@@ -60,11 +45,8 @@ namespace PrismaDB.QueryAST.DML
                 && Alias.Equals(otherVar.Alias);
         }
 
-        public override int GetHashCode()
-        {
-            return unchecked(
-                VariableName.GetHashCode() *
-                Alias.GetHashCode());
-        }
+        public override int GetHashCode() =>
+            unchecked(VariableName.GetHashCode() *
+                      Alias.GetHashCode());
     }
 }
