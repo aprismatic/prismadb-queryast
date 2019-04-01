@@ -30,14 +30,10 @@ namespace PrismaDB.QueryAST.DML
             Where = new WhereClause(other.Where);
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.UpdateQueryToString(this);
-        }
+        public override List<TableRef> GetTables() => new List<TableRef> {UpdateTable.Clone()};
 
-        public override object Clone()
-        {
-            return new UpdateQuery(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.UpdateQueryToString(this);
+
+        public override object Clone() => new UpdateQuery(this);
     }
 }

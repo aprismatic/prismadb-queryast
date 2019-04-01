@@ -1,4 +1,5 @@
-﻿using PrismaDB.QueryAST.DML;
+﻿using System.Collections.Generic;
+using PrismaDB.QueryAST.DML;
 
 namespace PrismaDB.QueryAST.DCL
 {
@@ -19,16 +20,10 @@ namespace PrismaDB.QueryAST.DCL
             Password = new StringConstant(password);
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.RegisterUserCommandToString(this);
-        }
+        public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override object Clone()
-        {
-            var clone = new RegisterUserCommand(UserId.strvalue, Password.strvalue);
+        public override string ToString() => DialectResolver.Dialect.RegisterUserCommandToString(this);
 
-            return clone;
-        }
+        public override object Clone() => new RegisterUserCommand(UserId.strvalue, Password.strvalue);
     }
 }

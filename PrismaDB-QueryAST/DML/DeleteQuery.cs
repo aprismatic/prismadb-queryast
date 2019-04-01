@@ -1,4 +1,6 @@
-﻿namespace PrismaDB.QueryAST.DML
+﻿using System.Collections.Generic;
+
+namespace PrismaDB.QueryAST.DML
 {
     public class DeleteQuery : DmlQuery
     {
@@ -17,14 +19,10 @@
             Where = new WhereClause(other.Where);
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.DeleteQueryToString(this);
-        }
+        public override List<TableRef> GetTables() => new List<TableRef> { DeleteTable.Clone()};
 
-        public override object Clone()
-        {
-            return new DeleteQuery(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.DeleteQueryToString(this);
+
+        public override object Clone() => new DeleteQuery(this);
     }
 }

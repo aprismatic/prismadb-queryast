@@ -57,14 +57,10 @@ namespace PrismaDB.QueryAST.DDL
             : this(other.Name.id, other.OnTable, other.Type, other.Modifier, other.MsSqlFullTextKeyIndex?.id, other.OnColumns.ToArray())
         { }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.CreateIndexQueryToString(this);
-        }
+        public override List<TableRef> GetTables() => new List<TableRef> { OnTable.Clone() };
 
-        public override object Clone()
-        {
-            return new CreateIndexQuery(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.CreateIndexQueryToString(this);
+
+        public override object Clone() => new CreateIndexQuery(this);
     }
 }

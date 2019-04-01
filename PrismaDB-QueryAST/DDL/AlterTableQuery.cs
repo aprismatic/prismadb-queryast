@@ -39,14 +39,10 @@ namespace PrismaDB.QueryAST.DDL
             AlteredColumns.AddRange(other.AlteredColumns.Select(x => x.Clone() as AlteredColumn));
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.AlterTableQueryToString(this);
-        }
+        public override List<TableRef> GetTables() => new List<TableRef> { TableName.Clone() };
 
-        public override object Clone()
-        {
-            return new AlterTableQuery(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.AlterTableQueryToString(this);
+
+        public override object Clone() => new AlterTableQuery(this);
     }
 }

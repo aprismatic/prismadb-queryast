@@ -1,4 +1,6 @@
-﻿namespace PrismaDB.QueryAST.DDL
+﻿using System.Collections.Generic;
+
+namespace PrismaDB.QueryAST.DDL
 {
     public class UseStatement : DdlQuery
     {
@@ -17,14 +19,10 @@
             : this(other.Database)
         { }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.UseStatementToString(this);
-        }
+        public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override object Clone()
-        {
-            return new UseStatement(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.UseStatementToString(this);
+
+        public override object Clone() => new UseStatement(this);
     }
 }

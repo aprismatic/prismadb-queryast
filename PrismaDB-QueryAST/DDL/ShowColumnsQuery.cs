@@ -1,4 +1,6 @@
-﻿namespace PrismaDB.QueryAST.DDL
+﻿using System.Collections.Generic;
+
+namespace PrismaDB.QueryAST.DDL
 {
     public class ShowColumnsQuery : DdlQuery
     {
@@ -19,14 +21,10 @@
             TableName = other.TableName.Clone();
         }
 
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.ShowColumnsQueryToString(this);
-        }
+        public override List<TableRef> GetTables() => new List<TableRef> { TableName.Clone() };
 
-        public override object Clone()
-        {
-            return new ShowColumnsQuery(this);
-        }
+        public override string ToString() => DialectResolver.Dialect.ShowColumnsQueryToString(this);
+
+        public override object Clone() => new ShowColumnsQuery(this);
     }
 }
