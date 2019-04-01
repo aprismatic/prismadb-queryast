@@ -1,5 +1,6 @@
 ﻿using PrismaDB.QueryAST.Result;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PrismaDB.QueryAST.DML
 {
@@ -25,6 +26,23 @@ namespace PrismaDB.QueryAST.DML
                 _right = value;
                 _right.Parent = this;
             }
+        }
+
+        [SuppressMessage("ReSharper", "PossibleUnintendedReferenceComparison")]
+        public override bool UpdateChild(Expression child, Expression newChild)
+        {
+            if (child == left)
+            {
+                left = newChild;
+                return true;
+            }
+            if (child == right)
+            {
+                right = newChild;
+                return true;
+            }
+
+            return false;
         }
     }
 
@@ -63,22 +81,6 @@ namespace PrismaDB.QueryAST.DML
             res.AddRange(left.GetNoCopyColumns());
             res.AddRange(right.GetNoCopyColumns());
             return res;
-        }
-
-        public override bool UpdateChild(Expression child, Expression newChild)
-        {
-            if (child == left)
-            {
-                left = newChild;
-                return true;
-            }
-            if (child == right)
-            {
-                right = newChild;
-                return true;
-            }
-
-            return false;
         }
 
         public override string ToString() => DialectResolver.Dialect.AdditionToString(this);
@@ -135,22 +137,6 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override bool UpdateChild(Expression child, Expression newChild)
-        {
-            if (child == left)
-            {
-                left = newChild;
-                return true;
-            }
-            if (child == right)
-            {
-                right = newChild;
-                return true;
-            }
-
-            return false;
-        }
-
         public override string ToString() => DialectResolver.Dialect.SubtractionToString(this);
 
         public override bool Equals(object other)
@@ -205,22 +191,6 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override bool UpdateChild(Expression child, Expression newChild)
-        {
-            if (child == left)
-            {
-                left = newChild;
-                return true;
-            }
-            if (child == right)
-            {
-                right = newChild;
-                return true;
-            }
-
-            return false;
-        }
-
         public override string ToString() => DialectResolver.Dialect.MultiplicationToString(this);
 
         public override bool Equals(object other)
@@ -273,22 +243,6 @@ namespace PrismaDB.QueryAST.DML
             res.AddRange(left.GetNoCopyColumns());
             res.AddRange(right.GetNoCopyColumns());
             return res;
-        }
-
-        public override bool UpdateChild(Expression child, Expression newChild)
-        {
-            if (child == left)
-            {
-                left = newChild;
-                return true;
-            }
-            if (child == right)
-            {
-                right = newChild;
-                return true;
-            }
-
-            return false;
         }
 
         public override string ToString() => DialectResolver.Dialect.DivisionToString(this);
