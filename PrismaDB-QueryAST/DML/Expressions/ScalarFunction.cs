@@ -63,6 +63,12 @@ namespace PrismaDB.QueryAST.DML
             return false;
         }
 
+        public void AddChild(Expression child)
+        {
+            child.Parent = this;
+            Parameters.Add(child);
+        }
+
         public override int GetHashCode() =>
             unchecked(FunctionName.GetHashCode() *
                       Alias.GetHashCode() *

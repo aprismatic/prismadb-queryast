@@ -1,6 +1,7 @@
 using PrismaDB.QueryAST.Result;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 
 namespace PrismaDB.QueryAST.DML
@@ -27,8 +28,18 @@ namespace PrismaDB.QueryAST.DML
     public class BooleanLike : BooleanExpression
     {
         public ColumnRef Column;
-        public StringConstant SearchValue;
         public char? EscapeChar;
+
+        private StringConstant _searchValue;
+        public StringConstant SearchValue
+        {
+            get => _searchValue;
+            set
+            {
+                _searchValue = value;
+                _searchValue.Parent = this;
+            }
+        }
 
         public BooleanLike()
         {
@@ -308,6 +319,12 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetNoCopyColumns() => Column.GetNoCopyColumns();
 
+        public void AddChild(Constant child)
+        {
+            child.Parent = this;
+            InValues.Add(child);
+        }
+
         public override bool UpdateChild(Expression child, Expression newChild)
         {
             for (var i = 0; i < InValues.Count; i++)
@@ -350,7 +367,17 @@ namespace PrismaDB.QueryAST.DML
     public class BooleanFullTextSearch : BooleanExpression
     {
         public ColumnRef Column;
-        public StringConstant SearchText;
+
+        private StringConstant _searchText;
+        public StringConstant SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                _searchText.Parent = this;
+            }
+        }
 
         public BooleanFullTextSearch()
         {
@@ -414,7 +441,27 @@ namespace PrismaDB.QueryAST.DML
 
     public class BooleanEquals : BooleanExpression
     {
-        public Expression left, right;
+        protected Expression _left, _right;
+
+        public Expression left
+        {
+            get => _left;
+            set
+            {
+                _left = value;
+                _left.Parent = this;
+            }
+        }
+
+        public Expression right
+        {
+            get => _right;
+            set
+            {
+                _right = value;
+                _right.Parent = this;
+            }
+        }
 
         public BooleanEquals(Expression left, Expression right, bool NOT = false)
         {
@@ -495,7 +542,27 @@ namespace PrismaDB.QueryAST.DML
 
     public class BooleanGreaterThan : BooleanExpression
     {
-        public Expression left, right;
+        protected Expression _left, _right;
+
+        public Expression left
+        {
+            get => _left;
+            set
+            {
+                _left = value;
+                _left.Parent = this;
+            }
+        }
+
+        public Expression right
+        {
+            get => _right;
+            set
+            {
+                _right = value;
+                _right.Parent = this;
+            }
+        }
 
         public BooleanGreaterThan(Expression left, Expression right, bool NOT = false)
         {
@@ -571,7 +638,27 @@ namespace PrismaDB.QueryAST.DML
 
     public class BooleanLessThan : BooleanExpression
     {
-        public Expression left, right;
+        protected Expression _left, _right;
+
+        public Expression left
+        {
+            get => _left;
+            set
+            {
+                _left = value;
+                _left.Parent = this;
+            }
+        }
+
+        public Expression right
+        {
+            get => _right;
+            set
+            {
+                _right = value;
+                _right.Parent = this;
+            }
+        }
 
         public BooleanLessThan(Expression left, Expression right, bool NOT = false)
         {
@@ -647,7 +734,17 @@ namespace PrismaDB.QueryAST.DML
 
     public class BooleanIsNull : BooleanExpression
     {
-        public Expression left;
+        protected Expression _left;
+
+        public Expression left
+        {
+            get => _left;
+            set
+            {
+                _left = value;
+                _left.Parent = this;
+            }
+        }
 
         public BooleanIsNull(Expression left, bool NOT = false)
         {
