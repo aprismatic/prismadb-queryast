@@ -24,7 +24,11 @@ namespace PrismaDB.QueryAST.DML
             Parameters = new List<Expression>();
             if (parameters != null)
                 foreach (var v in parameters)
-                    Parameters.Add(v.Clone() as Expression);
+                {
+                    var newp = v.Clone() as Expression;
+                    newp.Parent = this;
+                    Parameters.Add(newp as Expression);
+                }
         }
 
         public ScalarFunction(Identifier functionName, Identifier alias = null, List<Expression> parameters = null)
