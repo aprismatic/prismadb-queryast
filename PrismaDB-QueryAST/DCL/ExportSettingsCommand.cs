@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using PrismaDB.QueryAST.DML;
+﻿using PrismaDB.QueryAST.DML;
+using System.Collections.Generic;
 
 namespace PrismaDB.QueryAST.DCL
 {

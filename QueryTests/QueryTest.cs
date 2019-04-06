@@ -1,17 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Xml;
-using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using PrismaDB.Commons;
 using PrismaDB.QueryAST;
 using PrismaDB.QueryAST.DDL;
 using PrismaDB.QueryAST.DML;
 using PrismaDB.QueryAST.Result;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Xunit;
 
 namespace QueryTests
@@ -205,7 +201,7 @@ namespace QueryTests
             selQuery.Where.CNF.AND.Add(dj);
 
             selQuery.OrderBy.OrderColumns.Add(
-                new Pair<ColumnRef, OrderDirection>(new ColumnRef(new TableRef("t1"), "col1"), OrderDirection.ASC));
+                new Tuple<ColumnRef, OrderDirection>(new ColumnRef(new TableRef("t1"), "col1"), OrderDirection.ASC));
 
             {
                 var allColumns = new List<ColumnRef>();

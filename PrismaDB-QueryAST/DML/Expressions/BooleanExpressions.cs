@@ -1,7 +1,6 @@
 using PrismaDB.QueryAST.Result;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
 
 namespace PrismaDB.QueryAST.DML
@@ -257,7 +256,7 @@ namespace PrismaDB.QueryAST.DML
                     newsrv.Parent = this;
                 }
                 else
-                    throw new ArgumentException("Expected type StringConstant", nameof(newChild));
+                    throw new ArgumentException("Expected type StringConstant.", nameof(newChild));
                 return true;
             }
 
@@ -338,7 +337,7 @@ namespace PrismaDB.QueryAST.DML
                         return true;
                     }
 
-                    throw new ArgumentException("Expected type Constant", nameof(newChild));
+                    throw new ArgumentException("Expected type Constant.", nameof(newChild));
                 }
             }
 
@@ -414,7 +413,7 @@ namespace PrismaDB.QueryAST.DML
                     return true;
                 }
 
-                throw new ArgumentException("Expected type StringConstant", nameof(newChild));
+                throw new ArgumentException("Expected type StringConstant.", nameof(newChild));
             }
 
             return false;

@@ -1,4 +1,4 @@
-﻿using PrismaDB.Commons;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,18 +6,18 @@ namespace PrismaDB.QueryAST.DML
 {
     public class OrderByClause : Clause
     {
-        public List<Pair<ColumnRef, OrderDirection>> OrderColumns;
+        public List<Tuple<ColumnRef, OrderDirection>> OrderColumns;
 
         public OrderByClause()
         {
-            OrderColumns = new List<Pair<ColumnRef, OrderDirection>>();
+            OrderColumns = new List<Tuple<ColumnRef, OrderDirection>>();
         }
 
         public OrderByClause(OrderByClause other)
         {
-            OrderColumns = new List<Pair<ColumnRef, OrderDirection>>(other.OrderColumns.Capacity);
+            OrderColumns = new List<Tuple<ColumnRef, OrderDirection>>(other.OrderColumns.Capacity);
             OrderColumns.AddRange(other.OrderColumns.Select(
-                x => new Pair<ColumnRef, OrderDirection>(x.First.Clone() as ColumnRef, x.Second)));
+                x => new Tuple<ColumnRef, OrderDirection>(x.Item1.Clone() as ColumnRef, x.Item2)));
         }
 
         public override object Clone()
@@ -32,12 +32,12 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns()
         {
-            return OrderColumns.SelectMany(x => x.First.GetColumns()).ToList();
+            return OrderColumns.SelectMany(x => x.Item1.GetColumns()).ToList();
         }
 
         public override List<ColumnRef> GetNoCopyColumns()
         {
-            return OrderColumns.SelectMany(x => x.First.GetNoCopyColumns()).ToList();
+            return OrderColumns.SelectMany(x => x.Item1.GetNoCopyColumns()).ToList();
         }
     }
 

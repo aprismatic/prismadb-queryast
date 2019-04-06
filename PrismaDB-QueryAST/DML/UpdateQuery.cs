@@ -1,4 +1,4 @@
-﻿using PrismaDB.Commons;
+﻿using System;
 using System.Collections.Generic;
 
 namespace PrismaDB.QueryAST.DML
@@ -6,13 +6,13 @@ namespace PrismaDB.QueryAST.DML
     public class UpdateQuery : DmlQuery
     {
         public TableRef UpdateTable;
-        public List<Pair<ColumnRef, Constant>> UpdateExpressions;
+        public List<Tuple<ColumnRef, Constant>> UpdateExpressions;
         public WhereClause Where;
 
         public UpdateQuery()
         {
             UpdateTable = new TableRef("");
-            UpdateExpressions = new List<Pair<ColumnRef, Constant>>();
+            UpdateExpressions = new List<Tuple<ColumnRef, Constant>>();
             Where = new WhereClause();
         }
 
@@ -20,17 +20,17 @@ namespace PrismaDB.QueryAST.DML
         {
             UpdateTable = other.UpdateTable.Clone();
 
-            UpdateExpressions = new List<Pair<ColumnRef, Constant>>(other.UpdateExpressions.Count);
+            UpdateExpressions = new List<Tuple<ColumnRef, Constant>>(other.UpdateExpressions.Count);
             foreach (var pr in other.UpdateExpressions)
             {
-                var newpr = new Pair<ColumnRef, Constant>((ColumnRef)(pr.First.Clone()), (Constant)pr.Second.Clone());
+                var newpr = new Tuple<ColumnRef, Constant>((ColumnRef)(pr.Item1.Clone()), (Constant)pr.Item2.Clone());
                 UpdateExpressions.Add(newpr);
             }
 
             Where = new WhereClause(other.Where);
         }
 
-        public override List<TableRef> GetTables() => new List<TableRef> {UpdateTable.Clone()};
+        public override List<TableRef> GetTables() => new List<TableRef> { UpdateTable.Clone() };
 
         public override string ToString() => DialectResolver.Dialect.UpdateQueryToString(this);
 

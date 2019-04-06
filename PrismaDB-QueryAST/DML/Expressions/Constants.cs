@@ -167,7 +167,7 @@ namespace PrismaDB.QueryAST.DML
         public override object Clone() => new NullConstant(Alias.id);
 
         public override object Eval(ResultRow r) =>
-            throw new NotImplementedException("NULL constant should not be used in WHERE clause like that.");
+            throw new InvalidOperationException("NULL constant should not be used in WHERE clause like that.");
 
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
 

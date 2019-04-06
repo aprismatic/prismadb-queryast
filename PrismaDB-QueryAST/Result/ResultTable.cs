@@ -1,5 +1,5 @@
-﻿using PrismaDB.Commons;
-using PrismaDB.QueryAST.DML;
+﻿using PrismaDB.QueryAST.DML;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,33 +41,33 @@ namespace PrismaDB.QueryAST.Result
             return new ResultRow(this, other);
         }
 
-        public void Sort(IEnumerable<Pair<string, OrderDirection>> orderColumns)
+        public void Sort(IEnumerable<Tuple<string, OrderDirection>> orderColumns)
         {
-            foreach (var orderPair in orderColumns.Reverse())
+            foreach (var orderTuple in orderColumns.Reverse())
             {
-                switch (orderPair.Second)
+                switch (orderTuple.Item2)
                 {
                     case OrderDirection.ASC:
-                        _rows = _rows.OrderBy(x => x[orderPair.First]).ToList();
+                        _rows = _rows.OrderBy(x => x[orderTuple.Item1]).ToList();
                         break;
                     case OrderDirection.DESC:
-                        _rows = _rows.OrderByDescending(x => x[orderPair.First]).ToList();
+                        _rows = _rows.OrderByDescending(x => x[orderTuple.Item1]).ToList();
                         break;
                 }
             }
         }
 
-        public void Sort(IEnumerable<Pair<Expression, OrderDirection>> orderColumns)
+        public void Sort(IEnumerable<Tuple<Expression, OrderDirection>> orderColumns)
         {
-            foreach (var orderPair in orderColumns.Reverse())
+            foreach (var orderTuple in orderColumns.Reverse())
             {
-                switch (orderPair.Second)
+                switch (orderTuple.Item2)
                 {
                     case OrderDirection.ASC:
-                        _rows = _rows.OrderBy(x => ((ResultRow)x)[orderPair.First]).ToList();
+                        _rows = _rows.OrderBy(x => ((ResultRow)x)[orderTuple.Item1]).ToList();
                         break;
                     case OrderDirection.DESC:
-                        _rows = _rows.OrderByDescending(x => ((ResultRow)x)[orderPair.First]).ToList();
+                        _rows = _rows.OrderByDescending(x => ((ResultRow)x)[orderTuple.Item1]).ToList();
                         break;
                 }
             }
