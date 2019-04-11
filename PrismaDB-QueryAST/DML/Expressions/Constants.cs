@@ -1,11 +1,50 @@
 ﻿using PrismaDB.QueryAST.Result;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace PrismaDB.QueryAST.DML
 {
-    public abstract class Constant : Expression { }
+    public abstract class Constant : Expression
+    {
+        public static Constant GetConstant(object value)
+        {
+            if (value == null)
+                return new NullConstant();
+
+            switch (value)
+            {
+                case int intValue:
+                    return new IntConstant(intValue);
+                case long longValue:
+                    return new IntConstant(longValue);
+                case short shortValue:
+                    return new IntConstant(shortValue);
+                case byte byteValue:
+                    return new IntConstant(byteValue);
+                case sbyte sbyteValue:
+                    return new IntConstant(sbyteValue);
+                case double doubleValue:
+                    return new FloatingPointConstant((decimal)doubleValue);
+                case float floatValue:
+                    return new FloatingPointConstant((decimal)floatValue);
+                case decimal decimalValue:
+                    return new FloatingPointConstant(decimalValue);
+                case byte[] byteaValue:
+                    return new BinaryConstant(byteaValue);
+                case DateTime datetimeValue:
+                    return new StringConstant(
+                        datetimeValue.ToString("yyyy-MM-dd'T'HH:mm:ss.fffK", CultureInfo.InvariantCulture));
+                case string stringValue:
+                    return new StringConstant(stringValue);
+                case DBNull _:
+                    return new NullConstant();
+                default:
+                    throw new NotSupportedException("Type not supported by GetConstant.");
+            }
+        }
+    }
 
     public class IntConstant : Constant
     {
