@@ -326,6 +326,28 @@ namespace PrismaDB.QueryAST.DML
             _inValues.Add(child);
         }
 
+        public void SetChild(int index, Constant child)
+        {
+            child.Parent = this;
+            _inValues[index] = child;
+        }
+
+        public void InsertChild(int index, Constant child)
+        {
+            child.Parent = this;
+            _inValues.Insert(index, child);
+        }
+
+        public void RemoveChild(Constant child)
+        {
+            _inValues.Remove(child);
+        }
+
+        public void RemoveChildAt(int index)
+        {
+            _inValues.RemoveAt(index);
+        }
+
         public override bool UpdateChild(Expression child, Expression newChild)
         {
             for (var i = 0; i < InValues.Count; i++)

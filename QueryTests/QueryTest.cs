@@ -32,7 +32,7 @@ namespace QueryTests
             Assert.NotEqual(func1, func3);
 
             var func4 = (ScalarFunction)func2.Clone();
-            func4.AddChild(0, new StringConstant("123"));
+            func4.SetChild(0, new StringConstant("123"));
 
             Assert.NotEqual(func2, func4);
 

@@ -73,10 +73,26 @@ namespace PrismaDB.QueryAST.DML
             _parameters.Add(child);
         }
 
-        public void AddChild(int index, Expression child)
+        public void SetChild(int index, Expression child)
         {
             child.Parent = this;
             _parameters[index] = child;
+        }
+
+        public void InsertChild(int index, Expression child)
+        {
+            child.Parent = this;
+            _parameters.Insert(index, child);
+        }
+
+        public void RemoveChild(Expression child)
+        {
+            _parameters.Remove(child);
+        }
+
+        public void RemoveChildAt(int index)
+        {
+            _parameters.RemoveAt(index);
         }
 
         public override int GetHashCode() =>
