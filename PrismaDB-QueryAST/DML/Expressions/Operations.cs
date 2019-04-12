@@ -1,4 +1,6 @@
-﻿using PrismaDB.QueryAST.Result;
+﻿using Microsoft.CSharp.RuntimeBinder;
+using PrismaDB.QueryAST.Result;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -65,7 +67,11 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(ResultRow r) => (int)left.Eval(r) + (int)right.Eval(r);
+        public override object Eval(ResultRow r)
+        {
+            try { return (dynamic)left.Eval(r) + (dynamic)right.Eval(r); }
+            catch (RuntimeBinderException) { return Convert.ToDecimal(left.Eval(r)) + Convert.ToDecimal(right.Eval(r)); }
+        }
 
         public override List<ColumnRef> GetColumns()
         {
@@ -119,7 +125,11 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(ResultRow r) => (int)left.Eval(r) - (int)right.Eval(r);
+        public override object Eval(ResultRow r)
+        {
+            try { return (dynamic)left.Eval(r) - (dynamic)right.Eval(r); }
+            catch (RuntimeBinderException) { return Convert.ToDecimal(left.Eval(r)) - Convert.ToDecimal(right.Eval(r)); }
+        }
 
         public override List<ColumnRef> GetColumns()
         {
@@ -173,7 +183,11 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(ResultRow r) => (int)left.Eval(r) * (int)right.Eval(r);
+        public override object Eval(ResultRow r)
+        {
+            try { return (dynamic)left.Eval(r) * (dynamic)right.Eval(r); }
+            catch (RuntimeBinderException) { return Convert.ToDecimal(left.Eval(r)) * Convert.ToDecimal(right.Eval(r)); }
+        }
 
         public override List<ColumnRef> GetColumns()
         {
@@ -227,7 +241,11 @@ namespace PrismaDB.QueryAST.DML
             return clone;
         }
 
-        public override object Eval(ResultRow r) => (int)left.Eval(r) / (int)right.Eval(r);
+        public override object Eval(ResultRow r)
+        {
+            try { return (dynamic)left.Eval(r) / (dynamic)right.Eval(r); }
+            catch (RuntimeBinderException) { return Convert.ToDecimal(left.Eval(r)) / Convert.ToDecimal(right.Eval(r)); }
+        }
 
         public override List<ColumnRef> GetColumns()
         {

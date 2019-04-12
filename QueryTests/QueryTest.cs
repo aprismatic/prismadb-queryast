@@ -263,6 +263,67 @@ namespace QueryTests
             }
         }
 
+        [Fact(DisplayName = "Operations")]
+        public void TestOperations()
+        {
+            //Initialize
+            var table = new ResultTable();
+            table.Columns.Add(new ColumnRef("a"));
+            table.Columns.Add(new ColumnRef("b"));
+            table.Columns.Add(new ColumnRef("c"));
+            table.Columns.Add(new ColumnRef("d"));
+            var row = table.NewRow();
+            row.Add(new object[] { 1, 432, 24.42d, 0.256m });
+
+            var computeAddInt = new Addition(new ColumnRef("a"), new ColumnRef("b"));
+            Assert.Equal(433, computeAddInt.Eval(row));
+
+            var computeAddDouble = new Addition(new ColumnRef("c"), new ColumnRef("c"));
+            Assert.Equal(48.84, computeAddDouble.Eval(row));
+
+            var computeAddDecimal = new Addition(new ColumnRef("d"), new ColumnRef("d"));
+            Assert.Equal(0.512m, computeAddDecimal.Eval(row));
+
+            var computeAddMixed = new Addition(new ColumnRef("c"), new ColumnRef("d"));
+            Assert.Equal(24.676m, computeAddMixed.Eval(row));
+
+            var computeSubInt = new Subtraction(new ColumnRef("a"), new ColumnRef("b"));
+            Assert.Equal(-431, computeSubInt.Eval(row));
+
+            var computeSubDouble = new Subtraction(new ColumnRef("c"), new ColumnRef("c"));
+            Assert.Equal(0d, computeSubDouble.Eval(row));
+
+            var computeSubDecimal = new Subtraction(new ColumnRef("d"), new ColumnRef("d"));
+            Assert.Equal(0m, computeSubDecimal.Eval(row));
+
+            var computeSubMixed = new Subtraction(new ColumnRef("c"), new ColumnRef("d"));
+            Assert.Equal(24.164m, computeSubMixed.Eval(row));
+
+            var computeMulInt = new Multiplication(new ColumnRef("a"), new ColumnRef("b"));
+            Assert.Equal(432, computeMulInt.Eval(row));
+
+            var computeMulDouble = new Multiplication(new ColumnRef("c"), new ColumnRef("c"));
+            Assert.Equal(24.42d * 24.42d, computeMulDouble.Eval(row));
+
+            var computeMulDecimal = new Multiplication(new ColumnRef("d"), new ColumnRef("d"));
+            Assert.Equal(0.065536m, computeMulDecimal.Eval(row));
+
+            var computeMulMixed = new Multiplication(new ColumnRef("c"), new ColumnRef("d"));
+            Assert.Equal(6.25152m, computeMulMixed.Eval(row));
+
+            var computeDivInt = new Division(new ColumnRef("a"), new ColumnRef("b"));
+            Assert.Equal(0, computeDivInt.Eval(row));
+
+            var computeDivDouble = new Division(new ColumnRef("c"), new ColumnRef("c"));
+            Assert.Equal(24.42d / 24.42d, computeDivDouble.Eval(row));
+
+            var computeDivDecimal = new Division(new ColumnRef("d"), new ColumnRef("d"));
+            Assert.Equal(1m, computeDivDecimal.Eval(row));
+
+            var computeDivMixed = new Division(new ColumnRef("c"), new ColumnRef("d"));
+            Assert.Equal(95.390625m, computeDivMixed.Eval(row));
+        }
+
         [Fact(DisplayName = "ResultTable Serialization")]
         public void TestResultTableSerialization()
         {

@@ -1,18 +1,17 @@
-﻿using Newtonsoft.Json;
-using PrismaDB.QueryAST.DDL;
+﻿using PrismaDB.QueryAST.DDL;
 using PrismaDB.QueryAST.DML;
 using System;
-using System.Xml.Serialization;
+using System.Runtime.Serialization;
 
 namespace PrismaDB.QueryAST.Result
 {
+    [DataContract]
     public class ResultColumnHeader : PrismaDB.Result.ResultColumnHeader
     {
         private Expression _expression;
         private ColumnDefinition _columnDefinition;
 
-        [JsonIgnore]
-        [XmlIgnore]
+        [IgnoreDataMember]
         public Expression Expression
         {
             get => _expression;
@@ -27,8 +26,7 @@ namespace PrismaDB.QueryAST.Result
             }
         }
 
-        [JsonIgnore]
-        [XmlIgnore]
+        [IgnoreDataMember]
         public ColumnDefinition ColumnDefinition
         {
             get => _columnDefinition;
