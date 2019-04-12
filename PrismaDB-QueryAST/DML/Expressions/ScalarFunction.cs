@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace PrismaDB.QueryAST.DML
@@ -104,7 +103,7 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString() => DialectResolver.Dialect.ScalarFunctionToString(this);
     }
 
-    [SuppressMessage("", "CS0659: Type overrides Object.Equals(object o) but does not override Object.GetHashCode()")]
+#pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
     public class PaillierAdditionFunction : ScalarFunction
     {
         public PaillierAdditionFunction(string functionName = "", string aliasName = "", ICollection<Expression> parameters = null)
@@ -143,7 +142,6 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString() => DialectResolver.Dialect.PaillierAdditionFunctionToString(this);
     }
 
-    [SuppressMessage("", "CS0659: Type overrides Object.Equals(object o) but does not override Object.GetHashCode()")]
     public class PaillierSubtractionFunction : ScalarFunction
     {
         public PaillierSubtractionFunction(string functionName = "", string aliasName = "", ICollection<Expression> parameters = null)
@@ -182,7 +180,6 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString() => DialectResolver.Dialect.PaillierSubtractionFunctionToString(this);
     }
 
-    [SuppressMessage("", "CS0659: Type overrides Object.Equals(object o) but does not override Object.GetHashCode()")]
     public class ElGamalMultiplicationFunction : ScalarFunction
     {
         public ElGamalMultiplicationFunction(string functionName = "", string aliasName = "", ICollection<Expression> parameters = null)
@@ -221,7 +218,6 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString() => DialectResolver.Dialect.ElGamalMultiplicationFunctionToString(this);
     }
 
-    [SuppressMessage("", "CS0659: Type overrides Object.Equals(object o) but does not override Object.GetHashCode()")]
     public class ElGamalDivisionFunction : ScalarFunction
     {
         public ElGamalDivisionFunction(string functionName = "", string aliasName = "", ICollection<Expression> parameters = null)
@@ -260,7 +256,6 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString() => DialectResolver.Dialect.ElGamalDivisionFunctionToString(this);
     }
 
-    [SuppressMessage("", "CS0659: Type overrides Object.Equals(object o) but does not override Object.GetHashCode()")]
     public class SumAggregationFunction : ScalarFunction
     {
         public SumAggregationFunction(string functionName = "", string aliasName = "", ICollection<Expression> parameters = null)
@@ -283,7 +278,6 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString() => DialectResolver.Dialect.SumAggregationFunctionToString(this);
     }
 
-    [SuppressMessage("", "CS0659: Type overrides Object.Equals(object o) but does not override Object.GetHashCode()")]
     public class CountAggregationFunction : ScalarFunction
     {
         public CountAggregationFunction(string functionName = "", string aliasName = "", ICollection<Expression> parameters = null)
@@ -306,7 +300,6 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString() => DialectResolver.Dialect.CountAggregationFunctionToString(this);
     }
 
-    [SuppressMessage("", "CS0659: Type overrides Object.Equals(object o) but does not override Object.GetHashCode()")]
     public class AvgAggregationFunction : ScalarFunction
     {
         public AvgAggregationFunction(string functionName = "", string aliasName = "", ICollection<Expression> parameters = null)
@@ -329,7 +322,6 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString() => DialectResolver.Dialect.AvgAggregationFunctionToString(this);
     }
 
-    [SuppressMessage("", "CS0659: Type overrides Object.Equals(object o) but does not override Object.GetHashCode()")]
     public class StDevAggregationFunction : ScalarFunction
     {
         public StDevAggregationFunction(string functionName = "", string aliasName = "", ICollection<Expression> parameters = null)
@@ -352,7 +344,6 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString() => DialectResolver.Dialect.StDevAggregationFunctionToString(this);
     }
 
-    [SuppressMessage("", "CS0659: Type overrides Object.Equals(object o) but does not override Object.GetHashCode()")]
     public class PaillierAggregationSumFunction : ScalarFunction
     {
         public PaillierAggregationSumFunction(string functionName = "", string aliasName = "", ICollection<Expression> parameters = null)
@@ -374,4 +365,5 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString() => DialectResolver.Dialect.PaillierAggregationSumFunctionToString(this);
     }
+#pragma warning restore CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
 }
