@@ -532,7 +532,19 @@ namespace PrismaDB.QueryAST.DML
                       left.GetHashCode() *
                       right.GetHashCode());
 
-        public override object Eval(ResultRow r) => (dynamic)left.Eval(r) == (dynamic)right.Eval(r) ? !NOT : NOT;
+        public override object Eval(ResultRow r)
+        {
+            var leftEval = left.Eval(r);
+            var rightEval = right.Eval(r);
+
+            if (leftEval is String && rightEval is String)
+            {
+                return (String)leftEval == (String)rightEval ? !NOT : NOT;
+            }
+
+            // Assume data in DataRow are numeric
+            return (Convert.ToDecimal(leftEval) == Convert.ToDecimal(rightEval)) ? !NOT : NOT;
+        }
 
         public override List<ColumnRef> GetColumns()
         {
@@ -621,7 +633,14 @@ namespace PrismaDB.QueryAST.DML
                       left.GetHashCode() *
                       right.GetHashCode());
 
-        public override object Eval(ResultRow r) => (dynamic)left.Eval(r) > (dynamic)right.Eval(r) ? !NOT : NOT;
+        public override object Eval(ResultRow r)
+        {
+            var leftEval = left.Eval(r);
+            var rightEval = right.Eval(r);
+
+            // Assume data in DataRow are numeric
+            return Convert.ToDecimal(leftEval) > Convert.ToDecimal(rightEval) ? !NOT : NOT;
+        }
 
         public override List<ColumnRef> GetColumns()
         {
@@ -710,7 +729,14 @@ namespace PrismaDB.QueryAST.DML
                       left.GetHashCode() *
                       right.GetHashCode());
 
-        public override object Eval(ResultRow r) => (dynamic)left.Eval(r) < (dynamic)right.Eval(r) ? !NOT : NOT;
+        public override object Eval(ResultRow r)
+        {
+            var leftEval = left.Eval(r);
+            var rightEval = right.Eval(r);
+
+            // Assume data in DataRow are numeric
+            return Convert.ToDecimal(leftEval) < Convert.ToDecimal(rightEval) ? !NOT : NOT;
+        }
 
         public override List<ColumnRef> GetColumns()
         {

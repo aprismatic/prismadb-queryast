@@ -266,7 +266,6 @@ namespace QueryTests
         [Fact(DisplayName = "Operations")]
         public void TestOperations()
         {
-            //Initialize
             var table = new ResultTable();
             table.Columns.Add(new ColumnRef("a"));
             table.Columns.Add(new ColumnRef("b"));
