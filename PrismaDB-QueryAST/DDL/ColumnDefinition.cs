@@ -5,67 +5,6 @@ using System.Linq;
 
 namespace PrismaDB.QueryAST.DDL
 {
-    public enum SqlDataType
-    {
-        MSSQL_INT = 0,
-        MSSQL_TINYINT = 1,
-        MSSQL_SMALLINT = 2,
-        MSSQL_BIGINT = 3,
-        MSSQL_FLOAT = 4,
-
-        MSSQL_DATE = 100,
-        MSSQL_DATETIME = 101,
-
-        MSSQL_CHAR = 200,
-        MSSQL_VARCHAR = 201,
-        MSSQL_TEXT = 202,
-        MSSQL_NCHAR = 203,
-        MSSQL_NVARCHAR = 204,
-        MSSQL_NTEXT = 205,
-
-        MSSQL_BINARY = 300,
-        MSSQL_VARBINARY = 301,
-
-        MSSQL_UNIQUEIDENTIFIER = 400,
-
-
-        MySQL_INT = 1000,
-        MySQL_TINYINT = 1001,
-        MySQL_SMALLINT = 1002,
-        MySQL_BIGINT = 1003,
-        MySQL_DOUBLE = 1004,
-
-        MySQL_DATE = 1100,
-        MySQL_DATETIME = 1101,
-        MySQL_TIMESTAMP = 1102,
-
-        MySQL_CHAR = 1200,
-        MySQL_VARCHAR = 1201,
-        MySQL_TEXT = 1202,
-
-        MySQL_BINARY = 1300,
-        MySQL_VARBINARY = 1301,
-        MySQL_BLOB = 1302,
-
-        MySQL_ENUM = 1400,
-
-
-        Postgres_INT4 = 2000,
-        Postgres_INT2 = 2001,
-        Postgres_INT8 = 2002,
-        Postgres_FLOAT4 = 2003,
-        Postgres_FLOAT8 = 2004,
-
-        Postgres_DATE = 2100,
-        Postgres_TIMESTAMP = 2101,
-
-        Postgres_CHAR = 2200,
-        Postgres_VARCHAR = 2201,
-        Postgres_TEXT = 2202,
-
-        Postgres_BYTEA = 2300
-    }
-
     [Flags]
     public enum ColumnEncryptionFlags
     {

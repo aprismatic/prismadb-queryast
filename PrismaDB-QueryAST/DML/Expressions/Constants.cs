@@ -26,11 +26,11 @@ namespace PrismaDB.QueryAST.DML
                 case sbyte sbyteValue:
                     return new IntConstant(sbyteValue);
                 case double doubleValue:
-                    return new FloatingPointConstant((decimal)doubleValue);
+                    return new DecimalConstant((decimal)doubleValue);
                 case float floatValue:
-                    return new FloatingPointConstant((decimal)floatValue);
+                    return new DecimalConstant((decimal)floatValue);
                 case decimal decimalValue:
-                    return new FloatingPointConstant(decimalValue);
+                    return new DecimalConstant(decimalValue);
                 case byte[] byteaValue:
                     return new BinaryConstant(byteaValue);
                 case DateTime datetimeValue:
@@ -157,21 +157,21 @@ namespace PrismaDB.QueryAST.DML
                       binvalue.Aggregate(1, unchecked((x, y) => x * y.GetHashCode())));
     }
 
-    public class FloatingPointConstant : Constant
+    public class DecimalConstant : Constant
     {
-        public Decimal floatvalue;
+        public Decimal decimalvalue;
 
-        public FloatingPointConstant() : this(0) { }
+        public DecimalConstant() : this(0) { }
 
-        public FloatingPointConstant(Decimal value, string aliasName = "")
+        public DecimalConstant(Decimal value, string aliasName = "")
         {
-            floatvalue = value;
+            decimalvalue = value;
             Alias = new Identifier(aliasName);
         }
 
-        public override object Clone() => new FloatingPointConstant(floatvalue, Alias.id);
+        public override object Clone() => new DecimalConstant(decimalvalue, Alias.id);
 
-        public override object Eval(ResultRow r) => floatvalue;
+        public override object Eval(ResultRow r) => decimalvalue;
 
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
 
@@ -179,19 +179,19 @@ namespace PrismaDB.QueryAST.DML
 
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 
-        public override string ToString() => DialectResolver.Dialect.FloatingPointConstantToString(this);
+        public override string ToString() => DialectResolver.Dialect.DecimalConstantToString(this);
 
         public override bool Equals(object other)
         {
-            if (!(other is FloatingPointConstant otherIC)) return false;
+            if (!(other is DecimalConstant otherIC)) return false;
 
             return Alias.Equals(otherIC.Alias)
-                && floatvalue == otherIC.floatvalue;
+                && decimalvalue == otherIC.decimalvalue;
         }
 
         public override int GetHashCode() =>
             unchecked(Alias.GetHashCode() *
-                      floatvalue.GetHashCode());
+                      decimalvalue.GetHashCode());
     }
 
     public class NullConstant : Constant
