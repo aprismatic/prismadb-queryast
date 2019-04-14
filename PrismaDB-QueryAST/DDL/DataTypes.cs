@@ -138,9 +138,6 @@ namespace PrismaDB.QueryAST.DDL
 
         public static SqlDataType GetSqlDataType(Type type, TargetDatabase target)
         {
-            if (type == typeof(byte[]))
-                return GetSqlVarBinaryDataType(target);
-
             switch (Type.GetTypeCode(type))
             {
                 case TypeCode.Int32:
@@ -159,9 +156,14 @@ namespace PrismaDB.QueryAST.DDL
                     return GetSqlVarCharDataType(target);
                 case TypeCode.DateTime:
                     return GetSqlDateTimeDataType(target);
+                case TypeCode.Object:
+                    if (type == typeof(byte[]))
+                        return GetSqlVarBinaryDataType(target);
+                    else
+                        throw new ArgumentOutOfRangeException();
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-
-            throw new ArgumentOutOfRangeException();
         }
 
         public static SqlDataType GetSqlIntDataType(TargetDatabase target)
