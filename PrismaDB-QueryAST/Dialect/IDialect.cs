@@ -25,7 +25,7 @@ namespace PrismaDB.QueryAST
         string IntConstantToString(IntConstant q);
         string BinaryConstantToString(BinaryConstant q);
         string StringConstantToString(StringConstant q);
-        string FloatingPointConstantToString(FloatingPointConstant q);
+        string DecimalConstantToString(DecimalConstant q);
         string AdditionToString(Addition q);
         string SubtractionToString(Subtraction q);
         string MultiplicationToString(Multiplication q);

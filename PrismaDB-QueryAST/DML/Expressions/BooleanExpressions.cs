@@ -1,6 +1,7 @@
 using PrismaDB.QueryAST.Result;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace PrismaDB.QueryAST.DML
@@ -287,13 +288,14 @@ namespace PrismaDB.QueryAST.DML
     public class BooleanIn : BooleanExpression
     {
         public ColumnRef Column;
-        public List<Constant> InValues;
+        private List<Constant> _inValues;
+        public ReadOnlyCollection<Constant> InValues => _inValues.AsReadOnly();
 
         public BooleanIn()
         {
             Alias = new Identifier("");
             Column = new ColumnRef("");
-            InValues = new List<Constant>();
+            _inValues = new List<Constant>();
             NOT = false;
         }
 
@@ -301,9 +303,9 @@ namespace PrismaDB.QueryAST.DML
         {
             Alias = new Identifier("");
             Column = column.Clone() as ColumnRef;
-            InValues = new List<Constant>();
+            _inValues = new List<Constant>();
             foreach (var v in values)
-                InValues.Add(v.Clone() as Constant);
+                AddChild(v.Clone() as Constant);
             this.NOT = NOT;
         }
 
@@ -321,18 +323,40 @@ namespace PrismaDB.QueryAST.DML
         public void AddChild(Constant child)
         {
             child.Parent = this;
-            InValues.Add(child);
+            _inValues.Add(child);
+        }
+
+        public void SetChild(int index, Constant child)
+        {
+            child.Parent = this;
+            _inValues[index] = child;
+        }
+
+        public void InsertChild(int index, Constant child)
+        {
+            child.Parent = this;
+            _inValues.Insert(index, child);
+        }
+
+        public void RemoveChild(Constant child)
+        {
+            _inValues.Remove(child);
+        }
+
+        public void RemoveChildAt(int index)
+        {
+            _inValues.RemoveAt(index);
         }
 
         public override bool UpdateChild(Expression child, Expression newChild)
         {
             for (var i = 0; i < InValues.Count; i++)
             {
-                if (InValues[i] == child)
+                if (_inValues[i] == child)
                 {
                     if (newChild is Constant cnst)
                     {
-                        InValues[i] = cnst;
+                        _inValues[i] = cnst;
                         cnst.Parent = this;
                         return true;
                     }
@@ -353,7 +377,7 @@ namespace PrismaDB.QueryAST.DML
             return NOT != otherBI.NOT
                 && Alias.Equals(otherBI.Alias)
                 && Column.Equals(otherBI.Column)
-                && InValues.All(x => otherBI.InValues.Exists(y => x.Equals(y)));
+                && InValues.SequenceEqual(otherBI.InValues);
         }
 
         public override int GetHashCode() =>
