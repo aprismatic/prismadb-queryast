@@ -344,6 +344,28 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString() => DialectResolver.Dialect.StDevAggregationFunctionToString(this);
     }
 
+    public class LinRegFunction : ScalarFunction
+    {
+        public LinRegFunction(string functionName = "", string aliasName = "", ICollection<Expression> parameters = null)
+            : base(functionName, aliasName, parameters) { }
+
+        public LinRegFunction(Identifier functionName, Identifier alias = null, ICollection<Expression> parameters = null)
+            : base(functionName, alias, parameters) { }
+
+        public override object Clone() => new LinRegFunction(FunctionName, Alias, Parameters);
+
+        public override bool Equals(object other)
+        {
+            if (!(other is LinRegFunction otherF)) return false;
+
+            return FunctionName.Equals(otherF.FunctionName) &&
+                   Alias.Equals(otherF.Alias) &&
+                   Parameters.SequenceEqual(otherF.Parameters);
+        }
+
+        public override string ToString() => DialectResolver.Dialect.LinRegFunctionToString(this);
+    }
+
     public class PaillierAggregationSumFunction : ScalarFunction
     {
         public PaillierAggregationSumFunction(string functionName = "", string aliasName = "", ICollection<Expression> parameters = null)
