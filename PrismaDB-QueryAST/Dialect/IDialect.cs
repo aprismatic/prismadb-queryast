@@ -42,10 +42,11 @@ namespace PrismaDB.QueryAST
         string DisjunctionToString(Disjunction q);
         string ScalarFunctionToString(ScalarFunction q);
         string MySqlVariableToString(MySqlVariable q);
+        string FromClauseToString(FromClause q);
         string SelectSubQueryToString(SelectSubQuery q);
         string OrderByClauseToString(OrderByClause q);
         string GroupByClauseToString(GroupByClause q);
-        string JoinClauseToString(JoinClause q);
+        string JoinedTableToString(JoinedTable q);
         string AllColumnsToString(AllColumns q);
         string NullConstantToString(NullConstant q);
         string BooleanIsNullToString(BooleanIsNull q);
@@ -58,7 +59,7 @@ namespace PrismaDB.QueryAST
         string AvgAggregationFunctionToString(AvgAggregationFunction q);
         string StDevAggregationFunctionToString(StDevAggregationFunction q);
         string PaillierAggregationSumFunctionToString(PaillierAggregationSumFunction q);
-        string LinRegFunctionToString(LinRegFunction q);
+        string LinRegAggregationFunctionToString(LinRegAggregationFunction q);
         string UseStatementToString(UseStatement q);
 
         string ExportSettingsCommandToString(ExportSettingsCommand c);

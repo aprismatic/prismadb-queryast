@@ -6,11 +6,9 @@ namespace PrismaDB.QueryAST.DML
     public class SelectQuery : DmlQuery
     {
         public List<Expression> SelectExpressions;
-        public List<TableRef> FromTables;
-        public List<SelectSubQuery> FromSubQueries;
+        public FromClause From;
         public WhereClause Where;
         public uint? Limit;
-        public List<JoinClause> Joins;
         public OrderByClause OrderBy;
         public GroupByClause GroupBy;
         public bool LockForUpdate;
@@ -18,11 +16,9 @@ namespace PrismaDB.QueryAST.DML
         public SelectQuery()
         {
             SelectExpressions = new List<Expression>();
-            FromTables = new List<TableRef>();
-            FromSubQueries = new List<SelectSubQuery>();
+            From = new FromClause();
             Where = new WhereClause();
             Limit = null;
-            Joins = new List<JoinClause>();
             OrderBy = new OrderByClause();
             GroupBy = new GroupByClause();
             LockForUpdate = false;
@@ -33,18 +29,11 @@ namespace PrismaDB.QueryAST.DML
             SelectExpressions = new List<Expression>(other.SelectExpressions.Capacity);
             SelectExpressions.AddRange(other.SelectExpressions.Select(x => x.Clone() as Expression));
 
-            FromTables = new List<TableRef>(other.FromTables.Capacity);
-            FromTables.AddRange(other.FromTables.Select(x => x.Clone()));
-
-            FromSubQueries = new List<SelectSubQuery>(other.FromSubQueries.Capacity);
-            FromSubQueries.AddRange(other.FromSubQueries.Select(x => x.Clone()));
+            From = new FromClause(other.From);
 
             Where = new WhereClause(other.Where);
 
             Limit = other.Limit;
-
-            Joins = new List<JoinClause>(other.Joins.Capacity);
-            Joins.AddRange(other.Joins.Select(x => x.Clone() as JoinClause));
 
             OrderBy = new OrderByClause(other.OrderBy);
 
@@ -55,42 +44,11 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<TableRef> GetTables()
         {
-            var res = new List<TableRef>();
-            res.AddRange(FromTables.Select(x => x.Clone()));
-            res.AddRange(Joins.Select(x => x.JoinTable.Clone()));
-            return res;
+            return From.GetTables();
         }
 
         public override string ToString() => DialectResolver.Dialect.SelectQueryToString(this);
 
         public override object Clone() => new SelectQuery(this);
-    }
-
-    public class SelectSubQuery
-    {
-        public SelectQuery Select { get; set; }
-        public Identifier Alias { get; set; }
-
-        public SelectSubQuery()
-        {
-            Select = new SelectQuery();
-            Alias = new Identifier();
-        }
-
-        public SelectSubQuery(SelectSubQuery other)
-        {
-            Select = (SelectQuery)other.Select.Clone();
-            Alias = other.Alias.Clone();
-        }
-
-        public override string ToString()
-        {
-            return DialectResolver.Dialect.SelectSubQueryToString(this);
-        }
-
-        public SelectSubQuery Clone()
-        {
-            return new SelectSubQuery(this);
-        }
     }
 }
