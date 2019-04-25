@@ -104,7 +104,7 @@ namespace PrismaDB.QueryAST.DML
 
         public SelectSubQuery(SelectSubQuery other)
         {
-            Select = (SelectQuery)other.Select.Clone();
+            Select = new SelectQuery(other.Select);
             Alias = other.Alias.Clone();
         }
 
