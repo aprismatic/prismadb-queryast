@@ -87,7 +87,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            return DialectResolver.Dialect.TableRefToString(Table);
+            return DialectResolver.Dialect.TableRefSourceToString(this);
         }
     }
 

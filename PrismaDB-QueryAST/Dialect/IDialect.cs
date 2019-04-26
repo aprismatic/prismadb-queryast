@@ -43,6 +43,7 @@ namespace PrismaDB.QueryAST
         string ScalarFunctionToString(ScalarFunction q);
         string MySqlVariableToString(MySqlVariable q);
         string FromClauseToString(FromClause q);
+        string TableRefSourceToString(TableRefSource q);
         string SelectSubQueryToString(SelectSubQuery q);
         string OrderByClauseToString(OrderByClause q);
         string GroupByClauseToString(GroupByClause q);
