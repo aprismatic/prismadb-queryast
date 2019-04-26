@@ -322,6 +322,50 @@ namespace PrismaDB.QueryAST.DML
         public override string ToString() => DialectResolver.Dialect.AvgAggregationFunctionToString(this);
     }
 
+    public class MinAggregationFunction : ScalarFunction
+    {
+        public MinAggregationFunction(string functionName = "", string aliasName = "", ICollection<Expression> parameters = null)
+            : base(functionName, aliasName, parameters) { }
+
+        public MinAggregationFunction(Identifier functionName, Identifier alias = null, ICollection<Expression> parameters = null)
+            : base(functionName, alias, parameters) { }
+
+        public override object Clone() => new MinAggregationFunction(FunctionName, Alias, Parameters);
+
+        public override bool Equals(object other)
+        {
+            if (!(other is MinAggregationFunction otherF)) return false;
+
+            return FunctionName.Equals(otherF.FunctionName) &&
+                   Alias.Equals(otherF.Alias) &&
+                   Parameters.SequenceEqual(otherF.Parameters);
+        }
+
+        public override string ToString() => DialectResolver.Dialect.MinAggregationFunctionToString(this);
+    }
+
+    public class MaxAggregationFunction : ScalarFunction
+    {
+        public MaxAggregationFunction(string functionName = "", string aliasName = "", ICollection<Expression> parameters = null)
+            : base(functionName, aliasName, parameters) { }
+
+        public MaxAggregationFunction(Identifier functionName, Identifier alias = null, ICollection<Expression> parameters = null)
+            : base(functionName, alias, parameters) { }
+
+        public override object Clone() => new MaxAggregationFunction(FunctionName, Alias, Parameters);
+
+        public override bool Equals(object other)
+        {
+            if (!(other is MaxAggregationFunction otherF)) return false;
+
+            return FunctionName.Equals(otherF.FunctionName) &&
+                   Alias.Equals(otherF.Alias) &&
+                   Parameters.SequenceEqual(otherF.Parameters);
+        }
+
+        public override string ToString() => DialectResolver.Dialect.MaxAggregationFunctionToString(this);
+    }
+
     public class StDevAggregationFunction : ScalarFunction
     {
         public StDevAggregationFunction(string functionName = "", string aliasName = "", ICollection<Expression> parameters = null)
