@@ -49,9 +49,21 @@ namespace PrismaDB.QueryAST.DML
         public SingleTable FirstTable { get; set; }
         public List<JoinedTable> JoinedTables;
 
-        public FromSource()
+        public FromSource(string tableName = "")
         {
-            FirstTable = new TableSource();
+            FirstTable = new TableSource(tableName);
+            JoinedTables = new List<JoinedTable>();
+        }
+
+        public FromSource(TableRef table)
+        {
+            FirstTable = new TableSource(table);
+            JoinedTables = new List<JoinedTable>();
+        }
+
+        public FromSource(SelectSubQuery subQuery)
+        {
+            FirstTable = subQuery;
             JoinedTables = new List<JoinedTable>();
         }
 
@@ -105,9 +117,14 @@ namespace PrismaDB.QueryAST.DML
     {
         public TableRef Table { get; set; }
 
-        public TableSource()
+        public TableSource(string tableName = "")
         {
-            Table = new TableRef("");
+            Table = new TableRef(tableName);
+        }
+
+        public TableSource(TableRef table)
+        {
+            Table = table;
         }
 
         public TableSource(TableSource other)
@@ -150,6 +167,12 @@ namespace PrismaDB.QueryAST.DML
         {
             Select = new SelectQuery();
             Alias = new Identifier();
+        }
+
+        public SelectSubQuery(SelectQuery select, string alias = "")
+        {
+            Select = new SelectQuery(select);
+            Alias = new Identifier(alias);
         }
 
         public SelectSubQuery(SelectSubQuery other)
