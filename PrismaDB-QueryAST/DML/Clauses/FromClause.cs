@@ -5,17 +5,17 @@ namespace PrismaDB.QueryAST.DML
 {
     public class FromClause : Clause
     {
-        public List<FromTable> FromTables;
+        public List<FromSource> Sources;
 
         public FromClause()
         {
-            FromTables = new List<FromTable>();
+            Sources = new List<FromSource>();
         }
 
         public FromClause(FromClause other)
         {
-            FromTables = new List<FromTable>(other.FromTables.Capacity);
-            FromTables.AddRange(other.FromTables.Select(x => x.Clone() as FromTable));
+            Sources = new List<FromSource>(other.Sources.Capacity);
+            Sources.AddRange(other.Sources.Select(x => x.Clone() as FromSource));
         }
 
         public override object Clone()
@@ -25,17 +25,17 @@ namespace PrismaDB.QueryAST.DML
 
         public List<TableRef> GetTables()
         {
-            return FromTables.SelectMany(x => x.GetTables()).ToList();
+            return Sources.SelectMany(x => x.GetTables()).ToList();
         }
 
         public override List<ColumnRef> GetColumns()
         {
-            return FromTables.SelectMany(x => x.GetColumns()).ToList();
+            return Sources.SelectMany(x => x.GetColumns()).ToList();
         }
 
         public override List<ColumnRef> GetNoCopyColumns()
         {
-            return FromTables.SelectMany(x => x.GetNoCopyColumns()).ToList();
+            return Sources.SelectMany(x => x.GetNoCopyColumns()).ToList();
         }
 
         public override string ToString()
@@ -44,30 +44,80 @@ namespace PrismaDB.QueryAST.DML
         }
     }
 
-    public abstract class FromTable : Clause
+    public class FromSource : Clause
+    {
+        public SingleTable FirstTable { get; set; }
+        public List<JoinedTable> JoinedTables;
+
+        public FromSource()
+        {
+            FirstTable = new TableSource();
+            JoinedTables = new List<JoinedTable>();
+        }
+
+        public FromSource(FromSource other)
+        {
+            FirstTable = other.FirstTable.Clone() as SingleTable;
+            JoinedTables.AddRange(other.JoinedTables.Select(x => x.Clone() as JoinedTable));
+        }
+
+        public override object Clone()
+        {
+            return new FromSource(this);
+        }
+
+        public List<TableRef> GetTables()
+        {
+            var res = new List<TableRef>();
+            res.AddRange(FirstTable.GetTables());
+            res.AddRange(JoinedTables.SelectMany(x => x.GetTables()).ToList());
+            return res;
+        }
+
+        public override List<ColumnRef> GetColumns()
+        {
+            var res = new List<ColumnRef>();
+            res.AddRange(FirstTable.GetColumns());
+            res.AddRange(JoinedTables.SelectMany(x => x.GetColumns()).ToList());
+            return res;
+        }
+
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            var res = new List<ColumnRef>();
+            res.AddRange(FirstTable.GetNoCopyColumns());
+            res.AddRange(JoinedTables.SelectMany(x => x.GetNoCopyColumns()).ToList());
+            return res;
+        }
+
+        public override string ToString()
+        {
+            return DialectResolver.Dialect.FromSourceToString(this);
+        }
+    }
+
+    public abstract class SingleTable : Clause
     {
         public abstract List<TableRef> GetTables();
     }
 
-    public abstract class SingleTable : FromTable { }
-
-    public class TableRefSource : SingleTable
+    public class TableSource : SingleTable
     {
         public TableRef Table { get; set; }
 
-        public TableRefSource()
+        public TableSource()
         {
             Table = new TableRef("");
         }
 
-        public TableRefSource(TableRefSource other)
+        public TableSource(TableSource other)
         {
             Table = other.Table.Clone();
         }
 
         public override object Clone()
         {
-            return new TableRefSource(this);
+            return new TableSource(this);
         }
 
         public override List<TableRef> GetTables()
@@ -87,7 +137,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override string ToString()
         {
-            return DialectResolver.Dialect.TableRefSourceToString(this);
+            return DialectResolver.Dialect.TableSourceToString(this);
         }
     }
 
@@ -134,18 +184,16 @@ namespace PrismaDB.QueryAST.DML
         }
     }
 
-    public class JoinedTable : FromTable
+    public class JoinedTable : Clause
     {
-        public FromTable Table1;
-        public FromTable Table2;
+        public SingleTable SecondTable;
         public ColumnRef FirstColumn;
         public ColumnRef SecondColumn;
         public JoinType JoinType;
 
         public JoinedTable()
         {
-            Table1 = new TableRefSource();
-            Table2 = new TableRefSource();
+            SecondTable = new TableSource();
             FirstColumn = new ColumnRef("");
             SecondColumn = new ColumnRef("");
             JoinType = JoinType.INNER;
@@ -153,8 +201,7 @@ namespace PrismaDB.QueryAST.DML
 
         public JoinedTable(JoinedTable other)
         {
-            Table1 = other.Table1.Clone() as FromTable;
-            Table2 = other.Table2.Clone() as FromTable;
+            SecondTable = other.SecondTable.Clone() as SingleTable;
             FirstColumn = other.FirstColumn.Clone() as ColumnRef;
             SecondColumn = other.SecondColumn.Clone() as ColumnRef;
             JoinType = other.JoinType;
@@ -165,37 +212,30 @@ namespace PrismaDB.QueryAST.DML
             return new JoinedTable(this);
         }
 
-        public override List<TableRef> GetTables()
+        public List<TableRef> GetTables()
         {
-            var res = new List<TableRef>();
-            res.AddRange(Table1.GetTables());
-            res.AddRange(Table2.GetTables());
-            return res;
+            return SecondTable.GetTables();
         }
 
         public override List<ColumnRef> GetColumns()
         {
             var res = new List<ColumnRef>();
-            if (FirstColumn.ColumnName.id == "" || SecondColumn.ColumnName.id == "")
-                return res;
-
-            res.AddRange(FirstColumn.GetColumns());
-            res.AddRange(SecondColumn.GetColumns());
-            res.AddRange(Table1.GetColumns());
-            res.AddRange(Table2.GetColumns());
+            if (FirstColumn.ColumnName.id != "")
+                res.AddRange(FirstColumn.GetColumns());
+            if (SecondColumn.ColumnName.id != "")
+                res.AddRange(SecondColumn.GetColumns());
+            res.AddRange(SecondTable.GetColumns());
             return res;
         }
 
         public override List<ColumnRef> GetNoCopyColumns()
         {
             var res = new List<ColumnRef>();
-            if (FirstColumn.ColumnName.id == "" || SecondColumn.ColumnName.id == "")
-                return res;
-
-            res.AddRange(FirstColumn.GetNoCopyColumns());
-            res.AddRange(SecondColumn.GetNoCopyColumns());
-            res.AddRange(Table1.GetNoCopyColumns());
-            res.AddRange(Table2.GetNoCopyColumns());
+            if (FirstColumn.ColumnName.id != "")
+                res.AddRange(FirstColumn.GetNoCopyColumns());
+            if (SecondColumn.ColumnName.id != "")
+                res.AddRange(SecondColumn.GetNoCopyColumns());
+            res.AddRange(SecondTable.GetNoCopyColumns());
             return res;
         }
 
