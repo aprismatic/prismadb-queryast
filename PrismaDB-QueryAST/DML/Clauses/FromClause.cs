@@ -70,6 +70,7 @@ namespace PrismaDB.QueryAST.DML
         public FromSource(FromSource other)
         {
             FirstTable = other.FirstTable.Clone() as SingleTable;
+            JoinedTables = new List<JoinedTable>();
             JoinedTables.AddRange(other.JoinedTables.Select(x => x.Clone() as JoinedTable));
         }
 
