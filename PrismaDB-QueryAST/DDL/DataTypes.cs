@@ -136,6 +136,45 @@ namespace PrismaDB.QueryAST.DDL
             }
         }
 
+        public static bool IsIntegerDataType(SqlDataType type)
+        {
+            switch (type)
+            {
+                case SqlDataType.MSSQL_INT:
+                case SqlDataType.MySQL_INT:
+                case SqlDataType.Postgres_INT4:
+                case SqlDataType.MSSQL_BIGINT:
+                case SqlDataType.MySQL_BIGINT:
+                case SqlDataType.Postgres_INT8:
+                case SqlDataType.MSSQL_SMALLINT:
+                case SqlDataType.MySQL_SMALLINT:
+                case SqlDataType.Postgres_INT2:
+                case SqlDataType.MSSQL_TINYINT:
+                case SqlDataType.MySQL_TINYINT:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static bool IsFractionalDataType(SqlDataType type)
+        {
+            switch (type)
+            {
+                case SqlDataType.MSSQL_FLOAT:
+                case SqlDataType.MySQL_FLOAT:
+                case SqlDataType.MySQL_DOUBLE:
+                case SqlDataType.Postgres_FLOAT4:
+                case SqlDataType.Postgres_FLOAT8:
+                case SqlDataType.MSSQL_DECIMAL:
+                case SqlDataType.MySQL_DECIMAL:
+                case SqlDataType.Postgres_DECIMAL:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         public static SqlDataType GetSqlDataType(Type type, TargetDatabase target)
         {
             switch (Type.GetTypeCode(type))
