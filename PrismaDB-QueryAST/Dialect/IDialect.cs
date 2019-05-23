@@ -38,6 +38,8 @@ namespace PrismaDB.QueryAST
         string BooleanEqualsToString(BooleanEquals q);
         string BooleanGreaterThanToString(BooleanGreaterThan q);
         string BooleanLessThanToString(BooleanLessThan q);
+        string BooleanGreaterThanEqualsToString(BooleanGreaterThanEquals q);
+        string BooleanLessThanEqualsToString(BooleanLessThanEquals q);
         string ConjunctiveNormalFormToString(ConjunctiveNormalForm q);
         string DisjunctionToString(Disjunction q);
         string ScalarFunctionToString(ScalarFunction q);
