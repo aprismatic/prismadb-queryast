@@ -29,6 +29,7 @@ namespace PrismaDB.QueryAST.DDL
         public bool IsRowId;
         public Expression DefaultValue;
         public bool AutoIncrement;
+        public bool PrimaryKey;
 
         public ColumnDefinition()
             : this("", SqlDataType.MSSQL_INT)
@@ -42,7 +43,8 @@ namespace PrismaDB.QueryAST.DDL
                                 ColumnEncryptionFlags encryptionFlags = ColumnEncryptionFlags.None,
                                 int? keyVersion = null,
                                 Expression defaultValue = null,
-                                bool autoIncrement = false)
+                                bool autoIncrement = false,
+                                bool primaryKey = false)
             : this(new Identifier(columnName),
                    dataType,
                    length,
@@ -51,7 +53,8 @@ namespace PrismaDB.QueryAST.DDL
                    encryptionFlags,
                    keyVersion,
                    defaultValue,
-                   autoIncrement)
+                   autoIncrement,
+                   primaryKey)
         { }
 
         public ColumnDefinition(Identifier column,
@@ -62,18 +65,20 @@ namespace PrismaDB.QueryAST.DDL
                                 ColumnEncryptionFlags encryptionFlags = ColumnEncryptionFlags.None,
                                 int? keyVersion = null,
                                 Expression defaultValue = null,
-                                bool autoIncrement = false)
+                                bool autoIncrement = false,
+                                bool primaryKey = false)
         {
-            this.ColumnName = column == null ? new Identifier("") : column.Clone();
-            this.DataType = dataType;
-            this.EncryptionFlags = encryptionFlags;
-            this.KeyVersion = keyVersion;
-            this.Length = length;
-            this.EnumValues = new List<StringConstant>();
-            this.Nullable = nullable;
-            this.IsRowId = isRowId;
-            this.DefaultValue = defaultValue;
-            this.AutoIncrement = autoIncrement;
+            ColumnName = column == null ? new Identifier("") : column.Clone();
+            DataType = dataType;
+            EncryptionFlags = encryptionFlags;
+            KeyVersion = keyVersion;
+            Length = length;
+            EnumValues = new List<StringConstant>();
+            Nullable = nullable;
+            IsRowId = isRowId;
+            DefaultValue = defaultValue;
+            AutoIncrement = autoIncrement;
+            PrimaryKey = primaryKey;
         }
 
         public ColumnDefinition(ColumnDefinition other)
@@ -88,6 +93,7 @@ namespace PrismaDB.QueryAST.DDL
             IsRowId = other.IsRowId;
             DefaultValue = other.DefaultValue;
             AutoIncrement = other.AutoIncrement;
+            PrimaryKey = other.PrimaryKey;
         }
 
         public override string ToString()
@@ -112,8 +118,9 @@ namespace PrismaDB.QueryAST.DDL
                 && (EnumValues.SequenceEqual(otherCD.EnumValues))
                 && (Nullable == otherCD.Nullable)
                 && (IsRowId == otherCD.IsRowId)
-                && (Equals(DefaultValue, otherCD.DefaultValue)
-                && (AutoIncrement == otherCD.AutoIncrement));
+                && (Equals(DefaultValue, otherCD.DefaultValue))
+                && (AutoIncrement == otherCD.AutoIncrement)
+                && (PrimaryKey == otherCD.PrimaryKey);
         }
 
         public override int GetHashCode()
@@ -128,7 +135,8 @@ namespace PrismaDB.QueryAST.DDL
                 (1 + Nullable.GetHashCode()) *
                 (1 + IsRowId.GetHashCode()) *
                 DefaultValue.GetHashCode() *
-                (1 + AutoIncrement.GetHashCode()));
+                (1 + AutoIncrement.GetHashCode()) *
+                (1 + PrimaryKey.GetHashCode()));
         }
     }
 }
