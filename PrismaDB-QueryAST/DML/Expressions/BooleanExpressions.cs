@@ -563,7 +563,7 @@ namespace PrismaDB.QueryAST.DML
         }
     }
 
-    public class BooleanGreaterThan : BooleanExpression
+    public abstract class BooleanInequality : BooleanExpression
     {
         protected Expression _left, _right;
 
@@ -587,15 +587,13 @@ namespace PrismaDB.QueryAST.DML
             }
         }
 
-        public BooleanGreaterThan(Expression left, Expression right, bool NOT = false)
+        public BooleanInequality(Expression left, Expression right, bool NOT = false)
         {
             Alias = new Identifier("");
             this.left = left.Clone() as Expression;
             this.right = right.Clone() as Expression;
             this.NOT = NOT;
         }
-
-        public override object Clone() => new BooleanGreaterThan(left, right, NOT);
 
         public override bool UpdateChild(Expression child, Expression newChild)
         {
@@ -615,16 +613,14 @@ namespace PrismaDB.QueryAST.DML
             return false;
         }
 
-        public override string ToString() => DialectResolver.Dialect.BooleanGreaterThanToString(this);
-
         public override bool Equals(object other)
         {
-            if (!(other is BooleanGreaterThan otherBG)) return false;
+            if (!(other is BooleanInequality otherBIE)) return false;
 
-            return NOT != otherBG.NOT
-                && Alias.Equals(otherBG.Alias)
-                && left.Equals(otherBG.left)
-                && right.Equals(otherBG.right);
+            return NOT != otherBIE.NOT
+                && Alias.Equals(otherBIE.Alias)
+                && left.Equals(otherBIE.left)
+                && right.Equals(otherBIE.right);
         }
 
         public override int GetHashCode() =>
@@ -632,6 +628,39 @@ namespace PrismaDB.QueryAST.DML
                       Alias.GetHashCode() *
                       left.GetHashCode() *
                       right.GetHashCode());
+
+        public override List<ColumnRef> GetColumns()
+        {
+            var res = new List<ColumnRef>();
+            res.AddRange(left.GetColumns());
+            res.AddRange(right.GetColumns());
+            return res;
+        }
+
+        public override List<ColumnRef> GetNoCopyColumns()
+        {
+            var res = new List<ColumnRef>();
+            res.AddRange(left.GetNoCopyColumns());
+            res.AddRange(right.GetNoCopyColumns());
+            return res;
+        }
+    }
+
+#pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
+    public class BooleanGreaterThan : BooleanInequality
+    {
+        public BooleanGreaterThan(Expression left, Expression right, bool NOT = false)
+            : base(left, right, NOT) { }
+
+        public override object Clone() => new BooleanGreaterThan(left, right, NOT);
+
+        public override string ToString() => DialectResolver.Dialect.BooleanGreaterThanToString(this);
+
+        public override bool Equals(object other)
+        {
+            if (!(other is BooleanGreaterThan)) return false;
+            return base.Equals(other);
+        }
 
         public override object Eval(ResultRow r)
         {
@@ -641,93 +670,22 @@ namespace PrismaDB.QueryAST.DML
             // Assume data in DataRow are numeric
             return Convert.ToDecimal(leftEval) > Convert.ToDecimal(rightEval) ? !NOT : NOT;
         }
-
-        public override List<ColumnRef> GetColumns()
-        {
-            var res = new List<ColumnRef>();
-            res.AddRange(left.GetColumns());
-            res.AddRange(right.GetColumns());
-            return res;
-        }
-
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            var res = new List<ColumnRef>();
-            res.AddRange(left.GetNoCopyColumns());
-            res.AddRange(right.GetNoCopyColumns());
-            return res;
-        }
     }
 
-    public class BooleanLessThan : BooleanExpression
+    public class BooleanLessThan : BooleanInequality
     {
-        protected Expression _left, _right;
-
-        public Expression left
-        {
-            get => _left;
-            set
-            {
-                _left = value;
-                _left.Parent = this;
-            }
-        }
-
-        public Expression right
-        {
-            get => _right;
-            set
-            {
-                _right = value;
-                _right.Parent = this;
-            }
-        }
-
         public BooleanLessThan(Expression left, Expression right, bool NOT = false)
-        {
-            Alias = new Identifier("");
-            this.left = left.Clone() as Expression;
-            this.right = right.Clone() as Expression;
-            this.NOT = NOT;
-        }
+            : base(left, right, NOT) { }
 
         public override object Clone() => new BooleanLessThan(left, right, NOT);
-
-        public override bool UpdateChild(Expression child, Expression newChild)
-        {
-            if (child == left)
-            {
-                left = newChild;
-                newChild.Parent = this;
-                return true;
-            }
-            if (child == right)
-            {
-                right = newChild;
-                newChild.Parent = this;
-                return true;
-            }
-
-            return false;
-        }
 
         public override string ToString() => DialectResolver.Dialect.BooleanLessThanToString(this);
 
         public override bool Equals(object other)
         {
-            if (!(other is BooleanLessThan otherBL)) return false;
-
-            return NOT != otherBL.NOT
-                && Alias.Equals(otherBL.Alias)
-                && left.Equals(otherBL.left)
-                && right.Equals(otherBL.right);
+            if (!(other is BooleanLessThan)) return false;
+            return base.Equals(other);
         }
-
-        public override int GetHashCode() =>
-            unchecked((NOT.GetHashCode() + 1) *
-                      Alias.GetHashCode() *
-                      left.GetHashCode() *
-                      right.GetHashCode());
 
         public override object Eval(ResultRow r)
         {
@@ -737,23 +695,58 @@ namespace PrismaDB.QueryAST.DML
             // Assume data in DataRow are numeric
             return Convert.ToDecimal(leftEval) < Convert.ToDecimal(rightEval) ? !NOT : NOT;
         }
+    }
 
-        public override List<ColumnRef> GetColumns()
+    public class BooleanGreaterThanEquals : BooleanInequality
+    {
+        public BooleanGreaterThanEquals(Expression left, Expression right, bool NOT = false)
+            : base(left, right, NOT) { }
+
+        public override object Clone() => new BooleanGreaterThanEquals(left, right, NOT);
+
+        public override string ToString() => DialectResolver.Dialect.BooleanGreaterThanEqualsToString(this);
+
+        public override bool Equals(object other)
         {
-            var res = new List<ColumnRef>();
-            res.AddRange(left.GetColumns());
-            res.AddRange(right.GetColumns());
-            return res;
+            if (!(other is BooleanGreaterThanEquals)) return false;
+            return base.Equals(other);
         }
 
-        public override List<ColumnRef> GetNoCopyColumns()
+        public override object Eval(ResultRow r)
         {
-            var res = new List<ColumnRef>();
-            res.AddRange(left.GetNoCopyColumns());
-            res.AddRange(right.GetNoCopyColumns());
-            return res;
+            var leftEval = left.Eval(r);
+            var rightEval = right.Eval(r);
+
+            // Assume data in DataRow are numeric
+            return Convert.ToDecimal(leftEval) >= Convert.ToDecimal(rightEval) ? !NOT : NOT;
         }
     }
+
+    public class BooleanLessThanEquals : BooleanInequality
+    {
+        public BooleanLessThanEquals(Expression left, Expression right, bool NOT = false)
+            : base(left, right, NOT) { }
+
+        public override object Clone() => new BooleanLessThanEquals(left, right, NOT);
+
+        public override string ToString() => DialectResolver.Dialect.BooleanLessThanEqualsToString(this);
+
+        public override bool Equals(object other)
+        {
+            if (!(other is BooleanLessThanEquals)) return false;
+            return base.Equals(other);
+        }
+
+        public override object Eval(ResultRow r)
+        {
+            var leftEval = left.Eval(r);
+            var rightEval = right.Eval(r);
+
+            // Assume data in DataRow are numeric
+            return Convert.ToDecimal(leftEval) <= Convert.ToDecimal(rightEval) ? !NOT : NOT;
+        }
+    }
+#pragma warning restore CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
 
     public class BooleanIsNull : BooleanExpression
     {
