@@ -23,6 +23,7 @@ namespace PrismaDB.QueryAST.DDL
 
         MSSQL_BINARY = 300,
         MSSQL_VARBINARY = 301,
+        MSSQL_IMAGE = 302,
 
         MSSQL_UNIQUEIDENTIFIER = 400,
 
@@ -46,6 +47,9 @@ namespace PrismaDB.QueryAST.DDL
         MySQL_BINARY = 1300,
         MySQL_VARBINARY = 1301,
         MySQL_BLOB = 1302,
+        MySQL_TINYBLOB = 1303,
+        MySQL_MEDIUMBLOB = 1304,
+        MySQL_LONGBLOB = 1305,
 
         MySQL_ENUM = 1400,
 
@@ -126,9 +130,13 @@ namespace PrismaDB.QueryAST.DDL
                     return typeof(String);
                 case SqlDataType.MSSQL_BINARY:
                 case SqlDataType.MSSQL_VARBINARY:
+                case SqlDataType.MSSQL_IMAGE:
                 case SqlDataType.MySQL_BINARY:
                 case SqlDataType.MySQL_VARBINARY:
                 case SqlDataType.MySQL_BLOB:
+                case SqlDataType.MySQL_TINYBLOB:
+                case SqlDataType.MySQL_MEDIUMBLOB:
+                case SqlDataType.MySQL_LONGBLOB:
                 case SqlDataType.Postgres_BYTEA:
                     return typeof(Byte[]);
                 default:
@@ -325,6 +333,22 @@ namespace PrismaDB.QueryAST.DDL
                     return SqlDataType.MSSQL_VARBINARY;
                 case TargetDatabase.MySQL:
                     return SqlDataType.MySQL_VARBINARY;
+                case TargetDatabase.PostgreSQL:
+                case TargetDatabase.CockroachDB:
+                    return SqlDataType.Postgres_BYTEA;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public static SqlDataType GetSqlBigBinaryDataType(TargetDatabase target)
+        {
+            switch (target)
+            {
+                case TargetDatabase.MS_SQL_Server:
+                    return SqlDataType.MSSQL_IMAGE;
+                case TargetDatabase.MySQL:
+                    return SqlDataType.MySQL_LONGBLOB;
                 case TargetDatabase.PostgreSQL:
                 case TargetDatabase.CockroachDB:
                     return SqlDataType.Postgres_BYTEA;
