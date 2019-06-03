@@ -3,10 +3,9 @@ using System.Collections.Generic;
 
 namespace PrismaDB.QueryAST.DCL
 {
-    public class RebalanceOpetreeCommand : Command
+    public class RebalanceOpetreeCommand : AsyncCommand
     {
         public List<Constant> WithValues;
-        public bool StatusCheck;
 
         public RebalanceOpetreeCommand(bool statusCheck = false)
         {

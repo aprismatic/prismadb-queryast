@@ -2,10 +2,8 @@
 
 namespace PrismaDB.QueryAST.DCL
 {
-    public class UpdateKeysCommand : Command
+    public class UpdateKeysCommand : AsyncCommand
     {
-        public bool StatusCheck;
-
         public UpdateKeysCommand(bool statusCheck = false)
         {
             StatusCheck = statusCheck;

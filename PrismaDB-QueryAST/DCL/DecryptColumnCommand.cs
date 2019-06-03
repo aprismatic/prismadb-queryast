@@ -3,10 +3,9 @@ using System.Collections.Generic;
 
 namespace PrismaDB.QueryAST.DCL
 {
-    public class DecryptColumnCommand : Command
+    public class DecryptColumnCommand : AsyncCommand
     {
         public ColumnRef Column;
-        public bool StatusCheck;
 
         public DecryptColumnCommand(bool statusCheck = false)
             : this(new ColumnRef(""), statusCheck) { }
