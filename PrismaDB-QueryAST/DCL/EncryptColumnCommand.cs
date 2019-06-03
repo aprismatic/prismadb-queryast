@@ -4,11 +4,10 @@ using System.Collections.Generic;
 
 namespace PrismaDB.QueryAST.DCL
 {
-    public class EncryptColumnCommand : Command
+    public class EncryptColumnCommand : AsyncCommand
     {
         public ColumnRef Column;
         public ColumnEncryptionFlags EncryptionFlags;
-        public bool StatusCheck;
 
         public EncryptColumnCommand(bool statusCheck = false)
             : this(new ColumnRef(""), ColumnEncryptionFlags.None, statusCheck) { }
