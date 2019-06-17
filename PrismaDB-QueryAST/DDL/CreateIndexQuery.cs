@@ -6,17 +6,18 @@ namespace PrismaDB.QueryAST.DDL
 {
     public enum IndexModifier
     {
+        DEFAULT,
         MSSQL_UNIQUE,
         MySQL_UNIQUE,
         MSSQL_FULLTEXT,
         MySQL_FULLTEXT,
         MySQL_SPATIAL,
-        Postgres_UNIQUE,
-        DEFAULT
+        Postgres_UNIQUE
     }
 
     public enum IndexType
     {
+        DEFAULT,
         MSSQL_CLUSTERED,
         MSSQL_NONCLUSTERED,
         MySQL_BTREE,
@@ -24,8 +25,7 @@ namespace PrismaDB.QueryAST.DDL
         Postgres_BTREE,
         Postgres_HASH,
         Postgres_GIN,
-        Postgres_GIST,
-        DEFAULT
+        Postgres_GIST
     }
 
     public class CreateIndexQuery : DdlQuery
