@@ -37,6 +37,16 @@ namespace PrismaDB.QueryAST.DDL
         public Identifier Name;
         public Identifier MsSqlFullTextKeyIndex;
 
+        public CreateIndexQuery()
+        {
+            Name = new Identifier();
+            OnTable = new TableRef("");
+            Type = IndexType.DEFAULT;
+            Modifier = IndexModifier.DEFAULT;
+            OnColumns = new List<ColumnRef>();
+            MsSqlFullTextKeyIndex = null;
+        }
+
         public CreateIndexQuery(string name, TableRef table, IndexType type = IndexType.DEFAULT, IndexModifier modifier = IndexModifier.DEFAULT, string msSqlFullTextKeyIndex = null, params ColumnRef[] columns)
         {
             Name = new Identifier(name);
