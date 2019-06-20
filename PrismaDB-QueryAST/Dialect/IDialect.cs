@@ -75,6 +75,7 @@ namespace PrismaDB.QueryAST
         string EncryptColumnCommandToString(EncryptColumnCommand c);
         string RebalanceOpetreeCommandToString(RebalanceOpetreeCommand c);
         string SaveOpetreeCommandToString(SaveOpetreeCommand c);
+        string LoadSchemaCommandToString(LoadSchemaCommand c);
 
         string SqlDataTypeToString(SqlDataType q);
         string ColumnEncryptionFlagsToString(ColumnEncryptionFlags q);
