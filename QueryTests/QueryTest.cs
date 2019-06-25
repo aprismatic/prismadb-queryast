@@ -344,47 +344,6 @@ namespace QueryTests
             Assert.NotNull(jsonRes);
         }
 
-        [Fact(DisplayName = "ColumnDefinition Serialization")]
-        public void TestColumnDefinitionSerialization()
-        {
-            var colDefDict = new Dictionary<Identifier, ColumnDefinition>
-            {
-                {
-                    new Identifier("col1"),
-                    new ColumnDefinition("col1", SqlDataType.MSSQL_INT, null, true, false, ColumnEncryptionFlags.Store, null,
-                        new NullConstant())
-                },
-                {
-                    new Identifier("col2"),
-                    new ColumnDefinition("col2", SqlDataType.MSSQL_DATETIME, null, false, false, ColumnEncryptionFlags.Store, null,
-                        new ScalarFunction("CURRENT_TIMESTAMP"))
-                }
-            };
-
-            var tableDict =
-                new Dictionary<TableRef, Dictionary<Identifier, ColumnDefinition>> { { new TableRef("tbl1"), colDefDict } };
-
-            var serializerSettings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Objects,
-                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
-                Formatting = Newtonsoft.Json.Formatting.Indented,
-                ContractResolver = new MyContractResolver()
-            };
-
-            var json = JsonConvert.SerializeObject(tableDict, serializerSettings);
-
-            var deserializerSettings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Objects
-            };
-
-            var newTableDict = JsonConvert.DeserializeObject<Dictionary<TableRef, Dictionary<Identifier, ColumnDefinition>>>(json, deserializerSettings);
-
-            Assert.Equal(tableDict[new TableRef("tbl1")][new Identifier("col1")], newTableDict[new TableRef("tbl1")][new Identifier("col1")]);
-            Assert.Equal(tableDict[new TableRef("tbl1")][new Identifier("col2")], newTableDict[new TableRef("tbl1")][new Identifier("col2")]);
-        }
-
         [Fact(DisplayName = "BooleanExpression Like")]
         public void TestBooleanExpressionLike()
         {
