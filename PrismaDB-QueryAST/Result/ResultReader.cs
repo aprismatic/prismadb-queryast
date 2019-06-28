@@ -64,16 +64,12 @@ namespace PrismaDB.QueryAST.Result
 
         public object this[Expression exp]
         {
-            get => CurrentRow[Columns.Headers.IndexOf(
-                ((ResultColumnList)Columns).Headers.Single(
-                    x => ((ResultColumnHeader)x).Expression.Equals(exp)))];
+            get => CurrentRow[Columns.Headers.IndexOf(Columns.Headers.Single(x => ((ResultColumnHeader)x).Expression.Equals(exp)))];
         }
 
         public object this[ColumnDefinition columnDef]
         {
-            get => CurrentRow[Columns.Headers.IndexOf(
-                ((ResultColumnList)Columns).Headers.Single(
-                    x => ((ResultColumnHeader)x).ColumnDefinition.Equals(columnDef)))];
+            get => CurrentRow[Columns.Headers.IndexOf(Columns.Headers.Single(x => ((ResultColumnHeader)x).ColumnDefinition.Equals(columnDef)))];
         }
     }
 }
