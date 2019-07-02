@@ -68,7 +68,7 @@ namespace PrismaDB.QueryAST
         string LinRegAggregationFunctionToString(LinRegAggregationFunction q);
         string UseStatementToString(UseStatement q);
 
-        string ExportSettingsCommandToString(ExportSettingsCommand c);
+        string ExportKeysCommandToString(ExportKeysCommand c);
         string RegisterUserCommandToString(RegisterUserCommand c);
         string UpdateKeysCommandToString(UpdateKeysCommand c);
         string DecryptColumnCommandToString(DecryptColumnCommand c);
@@ -77,6 +77,8 @@ namespace PrismaDB.QueryAST
         string SaveOpetreeCommandToString(SaveOpetreeCommand c);
         string LoadOpetreeCommandToString(LoadOpetreeCommand c);
         string LoadSchemaCommandToString(LoadSchemaCommand c);
+        string SaveSettingsCommandToString(SaveSettingsCommand c);
+        string LoadSettingsCommandToString(LoadSettingsCommand c);
 
         string SqlDataTypeToString(SqlDataType q);
         string ColumnEncryptionFlagsToString(ColumnEncryptionFlags q);
