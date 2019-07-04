@@ -15,7 +15,7 @@ namespace PrismaDB.QueryAST.DML
         public FromClause(FromClause other)
         {
             Sources = new List<FromSource>(other.Sources.Capacity);
-            Sources.AddRange(other.Sources.Select(x => x.Clone() as FromSource));
+            Sources.AddRange(other.Sources.Select(x => x));
         }
 
         public override object Clone()
@@ -79,9 +79,9 @@ namespace PrismaDB.QueryAST.DML
 
         public FromSource(FromSource other)
         {
-            FirstTable = other.FirstTable.Clone() as SingleTable;
+            FirstTable = other.FirstTable;
             JoinedTables = new List<JoinedTable>();
-            JoinedTables.AddRange(other.JoinedTables.Select(x => x.Clone() as JoinedTable));
+            JoinedTables.AddRange(other.JoinedTables.Select(x => x));
         }
 
         public override object Clone()
@@ -156,7 +156,7 @@ namespace PrismaDB.QueryAST.DML
 
         public TableSource(TableSource other)
         {
-            Table = other.Table.Clone();
+            Table = other.Table;
         }
 
         public override object Clone()
@@ -166,7 +166,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<TableRef> GetTables()
         {
-            return new List<TableRef> { Table.Clone() };
+            return new List<TableRef> { Table };
         }
 
         public override List<TableRef> GetNoCopyTables()
@@ -210,7 +210,7 @@ namespace PrismaDB.QueryAST.DML
         public SelectSubQuery(SelectSubQuery other)
         {
             Select = new SelectQuery(other.Select);
-            Alias = other.Alias.Clone();
+            Alias = other.Alias;
         }
 
         public override object Clone()
@@ -261,9 +261,9 @@ namespace PrismaDB.QueryAST.DML
 
         public JoinedTable(JoinedTable other)
         {
-            SecondTable = other.SecondTable.Clone() as SingleTable;
-            FirstColumn = other.FirstColumn.Clone() as ColumnRef;
-            SecondColumn = other.SecondColumn.Clone() as ColumnRef;
+            SecondTable = other.SecondTable;
+            FirstColumn = other.FirstColumn;
+            SecondColumn = other.SecondColumn;
             JoinType = other.JoinType;
         }
 

@@ -27,7 +27,7 @@ namespace PrismaDB.QueryAST.DML
         public SelectQuery(SelectQuery other)
         {
             SelectExpressions = new List<Expression>(other.SelectExpressions.Capacity);
-            SelectExpressions.AddRange(other.SelectExpressions.Select(x => x.Clone() as Expression));
+            SelectExpressions.AddRange(other.SelectExpressions.Select(x => x));
 
             From = new FromClause(other.From);
 

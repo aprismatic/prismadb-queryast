@@ -15,7 +15,7 @@ namespace PrismaDB.QueryAST.DML
         public GroupByClause(GroupByClause other)
         {
             GroupColumns = new List<ColumnRef>(other.GroupColumns.Capacity);
-            GroupColumns.AddRange(other.GroupColumns.Select(x => x.Clone() as ColumnRef));
+            GroupColumns.AddRange(other.GroupColumns.Select(x => x));
         }
 
         public override object Clone()

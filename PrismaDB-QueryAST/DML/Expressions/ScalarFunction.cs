@@ -27,7 +27,7 @@ namespace PrismaDB.QueryAST.DML
             if (parameters != null)
             {
                 foreach (var v in parameters)
-                    AddChild(v.Clone() as Expression);
+                    AddChild(v);
             }
         }
 

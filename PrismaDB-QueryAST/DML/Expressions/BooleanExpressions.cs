@@ -53,8 +53,8 @@ namespace PrismaDB.QueryAST.DML
         public BooleanLike(ColumnRef column, StringConstant value, char? escape = null, bool NOT = false)
         {
             Alias = new Identifier("");
-            Column = column.Clone() as ColumnRef;
-            SearchValue = value.Clone() as StringConstant;
+            Column = column;
+            SearchValue = value;
             EscapeChar = escape;
             this.NOT = NOT;
         }
@@ -302,10 +302,10 @@ namespace PrismaDB.QueryAST.DML
         public BooleanIn(ColumnRef column, bool NOT = false, params Constant[] values)
         {
             Alias = new Identifier("");
-            Column = column.Clone() as ColumnRef;
+            Column = column;
             _inValues = new List<Constant>();
             foreach (var v in values)
-                AddChild(v.Clone() as Constant);
+                AddChild(v);
             this.NOT = NOT;
         }
 
@@ -413,8 +413,8 @@ namespace PrismaDB.QueryAST.DML
         public BooleanFullTextSearch(ColumnRef column, StringConstant searchText, bool NOT = false)
         {
             Alias = new Identifier("");
-            Column = column.Clone() as ColumnRef;
-            SearchText = searchText.Clone() as StringConstant;
+            Column = column;
+            SearchText = searchText;
             this.NOT = NOT;
         }
 
@@ -489,8 +489,8 @@ namespace PrismaDB.QueryAST.DML
         public BooleanEquals(Expression left, Expression right, bool NOT = false)
         {
             Alias = new Identifier("");
-            this.left = left.Clone() as Expression;
-            this.right = right.Clone() as Expression;
+            this.left = left;
+            this.right = right;
             this.NOT = NOT;
         }
 
@@ -590,8 +590,8 @@ namespace PrismaDB.QueryAST.DML
         public BooleanInequality(Expression left, Expression right, bool NOT = false)
         {
             Alias = new Identifier("");
-            this.left = left.Clone() as Expression;
-            this.right = right.Clone() as Expression;
+            this.left = left;
+            this.right = right;
             this.NOT = NOT;
         }
 
@@ -765,7 +765,7 @@ namespace PrismaDB.QueryAST.DML
         public BooleanIsNull(Expression left, bool NOT = false)
         {
             Alias = new Identifier("");
-            this.left = left.Clone() as Expression;
+            this.left = left;
             this.NOT = NOT;
         }
 

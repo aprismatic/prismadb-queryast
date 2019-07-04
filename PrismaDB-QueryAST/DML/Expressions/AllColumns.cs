@@ -20,7 +20,7 @@ namespace PrismaDB.QueryAST.DML
         public AllColumns(TableRef table)
             : this()
         {
-            Table = table.Clone();
+            Table = table;
         }
 
         public override object Clone() => new AllColumns(Table);

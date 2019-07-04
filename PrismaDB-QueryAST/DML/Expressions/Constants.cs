@@ -91,7 +91,7 @@ namespace PrismaDB.QueryAST.DML
 
         public StringConstant(string value, string aliasName = "")
         {
-            strvalue = (string)value.Clone();
+            strvalue = (string)value;
             Alias = new Identifier(aliasName);
         }
 
@@ -128,7 +128,7 @@ namespace PrismaDB.QueryAST.DML
 
         public BinaryConstant(byte[] value, string aliasName = "")
         {
-            binvalue = (byte[])value.Clone();
+            binvalue = (byte[])value;
             Alias = new Identifier(aliasName);
         }
 

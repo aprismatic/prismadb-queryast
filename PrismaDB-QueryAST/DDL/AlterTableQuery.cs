@@ -27,16 +27,16 @@ namespace PrismaDB.QueryAST.DDL
         public AlterTableQuery(AlterType type, TableRef table)
         {
             AlterType = type;
-            TableName = table.Clone();
+            TableName = table;
             AlteredColumns = new List<AlteredColumn>();
         }
 
         public AlterTableQuery(AlterTableQuery other)
         {
-            TableName = other.TableName.Clone();
+            TableName = other.TableName;
             AlterType = other.AlterType;
             AlteredColumns = new List<AlteredColumn>(other.AlteredColumns.Count);
-            AlteredColumns.AddRange(other.AlteredColumns.Select(x => x.Clone() as AlteredColumn));
+            AlteredColumns.AddRange(other.AlteredColumns.Select(x => x));
         }
 
         public override List<TableRef> GetTables() => new List<TableRef> { TableName.Clone() };

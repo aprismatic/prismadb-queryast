@@ -114,7 +114,7 @@ namespace PrismaDB.QueryAST.DML
 
             foreach (var boolexp in other.OR)
             {
-                OR.Add((BooleanExpression)boolexp.Clone());
+                OR.Add((BooleanExpression)boolexp);
             }
         }
 

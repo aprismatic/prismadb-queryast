@@ -18,15 +18,15 @@ namespace PrismaDB.QueryAST.DDL
 
         public CreateTableQuery(TableRef newTable)
         {
-            TableName = newTable.Clone();
+            TableName = newTable;
             ColumnDefinitions = new List<ColumnDefinition>();
         }
 
         public CreateTableQuery(CreateTableQuery other)
         {
-            TableName = other.TableName.Clone();
+            TableName = other.TableName;
             ColumnDefinitions = new List<ColumnDefinition>(other.ColumnDefinitions.Count);
-            ColumnDefinitions.AddRange(other.ColumnDefinitions.Select(x => x.Clone() as ColumnDefinition));
+            ColumnDefinitions.AddRange(other.ColumnDefinitions.Select(x => x));
         }
 
         public override List<TableRef> GetTables() => new List<TableRef> { TableName.Clone() };

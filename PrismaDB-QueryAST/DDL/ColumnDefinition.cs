@@ -68,7 +68,7 @@ namespace PrismaDB.QueryAST.DDL
                                 bool autoIncrement = false,
                                 bool primaryKey = false)
         {
-            ColumnName = column == null ? new Identifier("") : column.Clone();
+            ColumnName = column == null ? new Identifier("") : column;
             DataType = dataType;
             EncryptionFlags = encryptionFlags;
             KeyVersion = keyVersion;
@@ -83,12 +83,12 @@ namespace PrismaDB.QueryAST.DDL
 
         public ColumnDefinition(ColumnDefinition other)
         {
-            ColumnName = other.ColumnName.Clone();
+            ColumnName = other.ColumnName;
             DataType = other.DataType;
             EncryptionFlags = other.EncryptionFlags;
             KeyVersion = other.KeyVersion;
             Length = other.Length;
-            EnumValues = other.EnumValues.Select(item => (StringConstant)item.Clone()).ToList();
+            EnumValues = other.EnumValues.Select(item => (StringConstant)item).ToList();
             Nullable = other.Nullable;
             IsRowId = other.IsRowId;
             DefaultValue = other.DefaultValue;

@@ -15,7 +15,7 @@ namespace PrismaDB.QueryAST.DML
 
         public DeleteQuery(DeleteQuery other)
         {
-            DeleteTable = other.DeleteTable.Clone();
+            DeleteTable = other.DeleteTable;
             Where = new WhereClause(other.Where);
         }
 

@@ -50,11 +50,11 @@ namespace PrismaDB.QueryAST.DDL
         public CreateIndexQuery(string name, TableRef table, IndexType type = IndexType.DEFAULT, IndexModifier modifier = IndexModifier.DEFAULT, string msSqlFullTextKeyIndex = null, params ColumnRef[] columns)
         {
             Name = new Identifier(name);
-            OnTable = table.Clone();
+            OnTable = table;
             Type = type;
             Modifier = modifier;
             OnColumns = new List<ColumnRef>(columns.Length);
-            OnColumns.AddRange(columns.Select(x => x.Clone() as ColumnRef));
+            OnColumns.AddRange(columns.Select(x => x));
             if (msSqlFullTextKeyIndex != null)
                 MsSqlFullTextKeyIndex = new Identifier(msSqlFullTextKeyIndex);
         }

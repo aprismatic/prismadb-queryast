@@ -18,12 +18,12 @@ namespace PrismaDB.QueryAST.DML
 
         public UpdateQuery(UpdateQuery other)
         {
-            UpdateTable = other.UpdateTable.Clone();
+            UpdateTable = other.UpdateTable;
 
             UpdateExpressions = new List<Tuple<ColumnRef, Constant>>(other.UpdateExpressions.Count);
             foreach (var pr in other.UpdateExpressions)
             {
-                var newpr = new Tuple<ColumnRef, Constant>((ColumnRef)(pr.Item1.Clone()), (Constant)pr.Item2.Clone());
+                var newpr = new Tuple<ColumnRef, Constant>((ColumnRef)(pr.Item1), (Constant)pr.Item2);
                 UpdateExpressions.Add(newpr);
             }
 

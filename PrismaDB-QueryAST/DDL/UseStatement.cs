@@ -8,7 +8,7 @@ namespace PrismaDB.QueryAST.DDL
 
         public UseStatement(DatabaseRef database)
         {
-            Database = database.Clone();
+            Database = database;
         }
 
         public UseStatement(string database)

@@ -18,16 +18,16 @@ namespace PrismaDB.QueryAST.DML
 
         public InsertQuery(InsertQuery other)
         {
-            Into = other.Into.Clone();
+            Into = other.Into;
 
             Columns = new List<ColumnRef>(other.Columns.Capacity);
-            Columns.AddRange(other.Columns.Select(x => x.Clone() as ColumnRef));
+            Columns.AddRange(other.Columns.Select(x => x));
 
             Values = new List<List<Expression>>(other.Values.Capacity);
             foreach (var vallist in other.Values)
             {
                 var new_vallist = new List<Expression>(vallist.Capacity);
-                new_vallist.AddRange(vallist.Select(val => val.Clone() as Expression));
+                new_vallist.AddRange(vallist.Select(val => val));
                 Values.Add(new_vallist);
             }
         }
