@@ -83,12 +83,12 @@ namespace PrismaDB.QueryAST.DDL
 
         public ColumnDefinition(ColumnDefinition other)
         {
-            ColumnName = other.ColumnName;
+            ColumnName = other.ColumnName.Clone();
             DataType = other.DataType;
             EncryptionFlags = other.EncryptionFlags;
             KeyVersion = other.KeyVersion;
             Length = other.Length;
-            EnumValues = other.EnumValues.Select(item => (StringConstant)item).ToList();
+            EnumValues = other.EnumValues.Select(item => (StringConstant)item.Clone()).ToList();
             Nullable = other.Nullable;
             IsRowId = other.IsRowId;
             DefaultValue = other.DefaultValue;

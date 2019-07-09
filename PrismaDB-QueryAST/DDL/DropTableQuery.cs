@@ -21,7 +21,7 @@ namespace PrismaDB.QueryAST.DDL
 
         public DropTableQuery(DropTableQuery other)
         {
-            TableName = other.TableName;
+            TableName = other.TableName.Clone();
         }
 
         public override List<TableRef> GetTables() => new List<TableRef> { TableName.Clone() };

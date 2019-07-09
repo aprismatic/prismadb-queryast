@@ -33,10 +33,10 @@ namespace PrismaDB.QueryAST.DDL
 
         public AlterTableQuery(AlterTableQuery other)
         {
-            TableName = other.TableName;
+            TableName = other.TableName.Clone();
             AlterType = other.AlterType;
             AlteredColumns = new List<AlteredColumn>(other.AlteredColumns.Count);
-            AlteredColumns.AddRange(other.AlteredColumns.Select(x => x));
+            AlteredColumns.AddRange(other.AlteredColumns.Select(x => x.Clone() as AlteredColumn));
         }
 
         public override List<TableRef> GetTables() => new List<TableRef> { TableName.Clone() };

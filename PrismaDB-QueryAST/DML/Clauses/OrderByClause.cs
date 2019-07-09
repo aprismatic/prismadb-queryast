@@ -17,7 +17,7 @@ namespace PrismaDB.QueryAST.DML
         {
             OrderColumns = new List<Tuple<ColumnRef, OrderDirection>>(other.OrderColumns.Capacity);
             OrderColumns.AddRange(other.OrderColumns.Select(
-                x => new Tuple<ColumnRef, OrderDirection>(x.Item1, x.Item2)));
+                x => new Tuple<ColumnRef, OrderDirection>(x.Item1.Clone() as ColumnRef, x.Item2)));
         }
 
         public override object Clone()

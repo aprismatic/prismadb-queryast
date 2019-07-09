@@ -15,7 +15,7 @@ namespace PrismaDB.QueryAST.DML
         public FromClause(FromClause other)
         {
             Sources = new List<FromSource>(other.Sources.Capacity);
-            Sources.AddRange(other.Sources.Select(x => x));
+            Sources.AddRange(other.Sources.Select(x => x.Clone() as FromSource));
         }
 
         public override object Clone()
@@ -79,9 +79,9 @@ namespace PrismaDB.QueryAST.DML
 
         public FromSource(FromSource other)
         {
-            FirstTable = other.FirstTable;
+            FirstTable = other.FirstTable.Clone() as SingleTable;
             JoinedTables = new List<JoinedTable>();
-            JoinedTables.AddRange(other.JoinedTables.Select(x => x));
+            JoinedTables.AddRange(other.JoinedTables.Select(x => x.Clone() as JoinedTable));
         }
 
         public override object Clone()
@@ -156,7 +156,7 @@ namespace PrismaDB.QueryAST.DML
 
         public TableSource(TableSource other)
         {
-            Table = other.Table;
+            Table = other.Table.Clone();
         }
 
         public override object Clone()
@@ -210,7 +210,7 @@ namespace PrismaDB.QueryAST.DML
         public SelectSubQuery(SelectSubQuery other)
         {
             Select = new SelectQuery(other.Select);
-            Alias = other.Alias;
+            Alias = other.Alias.Clone();
         }
 
         public override object Clone()
@@ -261,9 +261,9 @@ namespace PrismaDB.QueryAST.DML
 
         public JoinedTable(JoinedTable other)
         {
-            SecondTable = other.SecondTable;
-            FirstColumn = other.FirstColumn;
-            SecondColumn = other.SecondColumn;
+            SecondTable = other.SecondTable.Clone() as SingleTable;
+            FirstColumn = other.FirstColumn.Clone() as ColumnRef;
+            SecondColumn = other.SecondColumn.Clone() as ColumnRef;
             JoinType = other.JoinType;
         }
 
