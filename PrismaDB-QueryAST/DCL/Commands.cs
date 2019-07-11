@@ -98,4 +98,19 @@ namespace PrismaDB.QueryAST.DCL
 
         public override object Clone() => new RegisterUserCommand(UserId.strvalue, Password.strvalue);
     }
+
+    public class BypassCommand : Command
+    {
+        public Query Query;
+
+        public BypassCommand() { }
+
+        public BypassCommand(Query query) { Query = query; }
+
+        public override List<TableRef> GetTables() => new List<TableRef>();
+
+        public override string ToString() => DialectResolver.Dialect.BypassCommandToString(this);
+
+        public override object Clone() => new BypassCommand((Query)Query.Clone());
+    }
 }
