@@ -29,15 +29,15 @@ namespace PrismaDB.QueryAST.DML
             SelectExpressions = new List<Expression>(other.SelectExpressions.Capacity);
             SelectExpressions.AddRange(other.SelectExpressions.Select(x => x.Clone() as Expression));
 
-            From = new FromClause(other.From);
+            From = other.From;
 
-            Where = new WhereClause(other.Where);
+            Where = other.Where;
 
             Limit = other.Limit;
 
-            OrderBy = new OrderByClause(other.OrderBy);
+            OrderBy = other.OrderBy;
 
-            GroupBy = new GroupByClause(other.GroupBy);
+            GroupBy = other.GroupBy;
 
             LockForUpdate = other.LockForUpdate;
         }

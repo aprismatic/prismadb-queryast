@@ -203,7 +203,7 @@ namespace PrismaDB.QueryAST.DML
 
         public SelectSubQuery(SelectQuery select, string alias = "")
         {
-            Select = new SelectQuery(select);
+            Select = select;
             Alias = new Identifier(alias);
         }
 

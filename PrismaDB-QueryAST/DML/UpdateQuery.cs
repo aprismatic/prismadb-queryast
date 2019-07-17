@@ -27,7 +27,7 @@ namespace PrismaDB.QueryAST.DML
                 UpdateExpressions.Add(newpr);
             }
 
-            Where = new WhereClause(other.Where);
+            Where = other.Where;
         }
 
         public override List<TableRef> GetTables() => new List<TableRef> { UpdateTable.Clone() };
