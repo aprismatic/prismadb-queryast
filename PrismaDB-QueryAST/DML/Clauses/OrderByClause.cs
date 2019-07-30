@@ -34,11 +34,6 @@ namespace PrismaDB.QueryAST.DML
         {
             return OrderColumns.SelectMany(x => x.Item1.GetColumns()).ToList();
         }
-
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            return OrderColumns.SelectMany(x => x.Item1.GetNoCopyColumns()).ToList();
-        }
     }
 
     public enum OrderDirection

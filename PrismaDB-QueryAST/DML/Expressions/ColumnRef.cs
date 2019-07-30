@@ -9,12 +9,8 @@ namespace PrismaDB.QueryAST.DML
         public Identifier ColumnName;
 
         public ColumnRef(string tableName, string columnName, string aliasName)
-        {
-            Parent = null;
-            Table = new TableRef(tableName);
-            ColumnName = new Identifier(columnName);
-            Alias = new Identifier(aliasName);
-        }
+            : this(new TableRef(tableName), new Identifier(columnName), new Identifier(aliasName))
+        { }
 
         public ColumnRef(string tableName, string columnName)
             : this(tableName, columnName, "")
@@ -25,46 +21,35 @@ namespace PrismaDB.QueryAST.DML
         { }
 
         public ColumnRef(Identifier columnName)
-            : this("", columnName.id, "")
+            : this(new TableRef(""), columnName, new Identifier(""))
         { }
 
         public ColumnRef(TableRef table, string columnName)
-            : this(columnName)
-        {
-            Table = table.Clone();
-        }
+            : this(table, new Identifier(columnName), new Identifier(""))
+        { }
 
         public ColumnRef(string tableName, Identifier columnName)
-            : this(tableName, columnName.id, "")
+            : this(new TableRef(tableName), columnName, new Identifier(""))
         { }
 
         public ColumnRef(TableRef table, Identifier columnName)
-            : this(columnName.id)
-        {
-            Table = table.Clone();
-        }
+            : this(table, columnName, new Identifier(""))
+        { }
 
         public ColumnRef(TableRef table, Identifier columnName, Identifier alias)
-            : this("", columnName.id, alias.id)
         {
-            Table = table.Clone();
+            Parent = null;
+            Table = table;
+            ColumnName = columnName;
+            Alias = alias;
         }
 
-        public override object Clone() => new ColumnRef(Table, ColumnName, Alias);
+        public override object Clone() => new ColumnRef(Table.Clone(), ColumnName.Clone(), Alias.Clone());
 
         public override object Eval(ResultRow r) => r[this];
 
         public override List<ColumnRef> GetColumns() =>
-            new List<ColumnRef>
-            {
-                (ColumnRef)Clone()
-            };
-
-        public override List<ColumnRef> GetNoCopyColumns() =>
-            new List<ColumnRef>
-            {
-                this
-            };
+            new List<ColumnRef> { this };
 
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 

@@ -23,15 +23,12 @@ namespace PrismaDB.QueryAST.DML
             Table = table;
         }
 
-        public override object Clone() => new AllColumns(Table);
+        public override object Clone() => new AllColumns(Table.Clone());
 
         public override object Eval(ResultRow r) =>
             throw new InvalidOperationException("AllColumns should not be in a WHERE clause.");
 
         public override List<ColumnRef> GetColumns() =>
-            throw new InvalidOperationException("AllColumns needs to be replaced with corresponding ColumnRefs in table.");
-
-        public override List<ColumnRef> GetNoCopyColumns() =>
             throw new InvalidOperationException("AllColumns needs to be replaced with corresponding ColumnRefs in table.");
 
         public override bool UpdateChild(Expression child, Expression newChild) =>

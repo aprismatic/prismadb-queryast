@@ -16,7 +16,7 @@ namespace PrismaDB.QueryAST.DDL
         { }
 
         public UseStatement(UseStatement other)
-            : this(other.Database)
+            : this(other.Database.Clone())
         { }
 
         public override List<TableRef> GetTables() => new List<TableRef>();

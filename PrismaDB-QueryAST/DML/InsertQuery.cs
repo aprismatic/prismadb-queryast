@@ -32,7 +32,7 @@ namespace PrismaDB.QueryAST.DML
             }
         }
 
-        public override List<TableRef> GetTables() => new List<TableRef> { Into.Clone() };
+        public override List<TableRef> GetTables() => new List<TableRef> { Into };
 
         public override string ToString() => DialectResolver.Dialect.InsertQueryToString(this);
 

@@ -29,7 +29,7 @@ namespace PrismaDB.QueryAST.DDL
             ColumnDefinitions.AddRange(other.ColumnDefinitions.Select(x => x.Clone() as ColumnDefinition));
         }
 
-        public override List<TableRef> GetTables() => new List<TableRef> { TableName.Clone() };
+        public override List<TableRef> GetTables() => new List<TableRef> { TableName };
 
         public override string ToString() => DialectResolver.Dialect.CreateTableQueryToString(this);
 

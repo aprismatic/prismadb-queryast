@@ -28,19 +28,9 @@ namespace PrismaDB.QueryAST.DML
             return Sources.SelectMany(x => x.GetTables()).ToList();
         }
 
-        public List<TableRef> GetNoCopyTables()
-        {
-            return Sources.SelectMany(x => x.GetNoCopyTables()).ToList();
-        }
-
         public override List<ColumnRef> GetColumns()
         {
             return Sources.SelectMany(x => x.GetColumns()).ToList();
-        }
-
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            return Sources.SelectMany(x => x.GetNoCopyColumns()).ToList();
         }
 
         public List<SingleTable> GetSingleTables()
@@ -97,27 +87,11 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public List<TableRef> GetNoCopyTables()
-        {
-            var res = new List<TableRef>();
-            res.AddRange(FirstTable.GetNoCopyTables());
-            res.AddRange(JoinedTables.SelectMany(x => x.GetNoCopyTables()));
-            return res;
-        }
-
         public override List<ColumnRef> GetColumns()
         {
             var res = new List<ColumnRef>();
             res.AddRange(FirstTable.GetColumns());
             res.AddRange(JoinedTables.SelectMany(x => x.GetColumns()));
-            return res;
-        }
-
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            var res = new List<ColumnRef>();
-            res.AddRange(FirstTable.GetNoCopyColumns());
-            res.AddRange(JoinedTables.SelectMany(x => x.GetNoCopyColumns()));
             return res;
         }
 
@@ -137,7 +111,6 @@ namespace PrismaDB.QueryAST.DML
     public abstract class SingleTable : Clause
     {
         public abstract List<TableRef> GetTables();
-        public abstract List<TableRef> GetNoCopyTables();
     }
 
     public class TableSource : SingleTable
@@ -169,17 +142,7 @@ namespace PrismaDB.QueryAST.DML
             return new List<TableRef> { Table };
         }
 
-        public override List<TableRef> GetNoCopyTables()
-        {
-            return new List<TableRef> { Table };
-        }
-
         public override List<ColumnRef> GetColumns()
-        {
-            return new List<ColumnRef>();
-        }
-
-        public override List<ColumnRef> GetNoCopyColumns()
         {
             return new List<ColumnRef>();
         }
@@ -223,17 +186,7 @@ namespace PrismaDB.QueryAST.DML
             return new List<TableRef>();
         }
 
-        public override List<TableRef> GetNoCopyTables()
-        {
-            return new List<TableRef>();
-        }
-
         public override List<ColumnRef> GetColumns()
-        {
-            return new List<ColumnRef>();
-        }
-
-        public override List<ColumnRef> GetNoCopyColumns()
         {
             return new List<ColumnRef>();
         }
@@ -277,11 +230,6 @@ namespace PrismaDB.QueryAST.DML
             return SecondTable.GetTables();
         }
 
-        public List<TableRef> GetNoCopyTables()
-        {
-            return SecondTable.GetNoCopyTables();
-        }
-
         public override List<ColumnRef> GetColumns()
         {
             var res = new List<ColumnRef>();
@@ -290,17 +238,6 @@ namespace PrismaDB.QueryAST.DML
             if (SecondColumn.ColumnName.id != "")
                 res.AddRange(SecondColumn.GetColumns());
             res.AddRange(SecondTable.GetColumns());
-            return res;
-        }
-
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            var res = new List<ColumnRef>();
-            if (FirstColumn.ColumnName.id != "")
-                res.AddRange(FirstColumn.GetNoCopyColumns());
-            if (SecondColumn.ColumnName.id != "")
-                res.AddRange(SecondColumn.GetNoCopyColumns());
-            res.AddRange(SecondTable.GetNoCopyColumns());
             return res;
         }
 

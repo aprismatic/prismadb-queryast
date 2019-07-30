@@ -21,7 +21,7 @@ namespace PrismaDB.QueryAST.DDL
             TableName = other.TableName.Clone();
         }
 
-        public override List<TableRef> GetTables() => new List<TableRef> { TableName.Clone() };
+        public override List<TableRef> GetTables() => new List<TableRef> { TableName };
 
         public override string ToString() => DialectResolver.Dialect.ShowColumnsQueryToString(this);
 
