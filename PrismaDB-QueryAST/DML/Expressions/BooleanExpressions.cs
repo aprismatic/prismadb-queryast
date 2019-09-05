@@ -17,7 +17,6 @@ namespace PrismaDB.QueryAST.DML
         public override object Clone() => new BooleanTrue(NOT);
         public override object Eval(ResultRow r) => !NOT;
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
-        public override List<ColumnRef> GetNoCopyColumns() => new List<ColumnRef>();
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 
         public override string ToString() => DialectResolver.Dialect.BooleanTrueToString(this);
@@ -53,13 +52,16 @@ namespace PrismaDB.QueryAST.DML
         public BooleanLike(ColumnRef column, StringConstant value, char? escape = null, bool NOT = false)
         {
             Alias = new Identifier("");
-            Column = column.Clone() as ColumnRef;
-            SearchValue = value.Clone() as StringConstant;
+            Column = column;
+            SearchValue = value;
             EscapeChar = escape;
             this.NOT = NOT;
         }
 
-        public override object Clone() => new BooleanLike(Column, SearchValue, EscapeChar, NOT);
+        public override object Clone()
+        {
+            return new BooleanLike((ColumnRef)Column.Clone(), (StringConstant)SearchValue.Clone(), EscapeChar, NOT);
+        }
 
         public override object Eval(ResultRow r)
         {
@@ -245,8 +247,6 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns() => Column.GetColumns();
 
-        public override List<ColumnRef> GetNoCopyColumns() => Column.GetNoCopyColumns();
-
         public override bool UpdateChild(Expression child, Expression newChild)
         {
             if (SearchValue == child)
@@ -302,14 +302,20 @@ namespace PrismaDB.QueryAST.DML
         public BooleanIn(ColumnRef column, bool NOT = false, params Constant[] values)
         {
             Alias = new Identifier("");
-            Column = column.Clone() as ColumnRef;
+            Column = column;
             _inValues = new List<Constant>();
             foreach (var v in values)
-                AddChild(v.Clone() as Constant);
+                AddChild(v);
             this.NOT = NOT;
         }
 
-        public override object Clone() => new BooleanIn(Column, NOT, InValues.ToArray());
+        public override object Clone()
+        {
+            var res = new BooleanIn((ColumnRef)Column.Clone(), NOT);
+            foreach (var v in _inValues)
+                res.AddChild((Constant)v.Clone());
+            return res;
+        }
 
         public override object Eval(ResultRow r)  // TODO: Check for correctness
         {
@@ -317,8 +323,6 @@ namespace PrismaDB.QueryAST.DML
         }
 
         public override List<ColumnRef> GetColumns() => Column.GetColumns();
-
-        public override List<ColumnRef> GetNoCopyColumns() => Column.GetNoCopyColumns();
 
         public void AddChild(Constant child)
         {
@@ -413,18 +417,16 @@ namespace PrismaDB.QueryAST.DML
         public BooleanFullTextSearch(ColumnRef column, StringConstant searchText, bool NOT = false)
         {
             Alias = new Identifier("");
-            Column = column.Clone() as ColumnRef;
-            SearchText = searchText.Clone() as StringConstant;
+            Column = column;
+            SearchText = searchText;
             this.NOT = NOT;
         }
 
-        public override object Clone() => new BooleanFullTextSearch(Column, SearchText, NOT);
+        public override object Clone() => new BooleanFullTextSearch((ColumnRef)Column.Clone(), (StringConstant)SearchText.Clone(), NOT);
 
         public override object Eval(ResultRow r) => r[Column].ToString().ToUpperInvariant().Contains(SearchText.strvalue.ToUpperInvariant()) ? !NOT : NOT;
 
         public override List<ColumnRef> GetColumns() => Column.GetColumns();
-
-        public override List<ColumnRef> GetNoCopyColumns() => Column.GetNoCopyColumns();
 
         public override bool UpdateChild(Expression child, Expression newChild)
         {
@@ -489,12 +491,12 @@ namespace PrismaDB.QueryAST.DML
         public BooleanEquals(Expression left, Expression right, bool NOT = false)
         {
             Alias = new Identifier("");
-            this.left = left.Clone() as Expression;
-            this.right = right.Clone() as Expression;
+            this.left = left;
+            this.right = right;
             this.NOT = NOT;
         }
 
-        public override object Clone() => new BooleanEquals(left, right, NOT);
+        public override object Clone() => new BooleanEquals((Expression)left.Clone(), (Expression)right.Clone(), NOT);
 
         public override bool UpdateChild(Expression child, Expression newChild)
         {
@@ -553,14 +555,6 @@ namespace PrismaDB.QueryAST.DML
             res.AddRange(right.GetColumns());
             return res;
         }
-
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            var res = new List<ColumnRef>();
-            res.AddRange(left.GetNoCopyColumns());
-            res.AddRange(right.GetNoCopyColumns());
-            return res;
-        }
     }
 
     public abstract class BooleanInequality : BooleanExpression
@@ -590,8 +584,8 @@ namespace PrismaDB.QueryAST.DML
         public BooleanInequality(Expression left, Expression right, bool NOT = false)
         {
             Alias = new Identifier("");
-            this.left = left.Clone() as Expression;
-            this.right = right.Clone() as Expression;
+            this.left = left;
+            this.right = right;
             this.NOT = NOT;
         }
 
@@ -636,14 +630,6 @@ namespace PrismaDB.QueryAST.DML
             res.AddRange(right.GetColumns());
             return res;
         }
-
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            var res = new List<ColumnRef>();
-            res.AddRange(left.GetNoCopyColumns());
-            res.AddRange(right.GetNoCopyColumns());
-            return res;
-        }
     }
 
 #pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
@@ -652,7 +638,7 @@ namespace PrismaDB.QueryAST.DML
         public BooleanGreaterThan(Expression left, Expression right, bool NOT = false)
             : base(left, right, NOT) { }
 
-        public override object Clone() => new BooleanGreaterThan(left, right, NOT);
+        public override object Clone() => new BooleanGreaterThan((Expression)left.Clone(), (Expression)right.Clone(), NOT);
 
         public override string ToString() => DialectResolver.Dialect.BooleanGreaterThanToString(this);
 
@@ -677,7 +663,7 @@ namespace PrismaDB.QueryAST.DML
         public BooleanLessThan(Expression left, Expression right, bool NOT = false)
             : base(left, right, NOT) { }
 
-        public override object Clone() => new BooleanLessThan(left, right, NOT);
+        public override object Clone() => new BooleanLessThan((Expression)left.Clone(), (Expression)right.Clone(), NOT);
 
         public override string ToString() => DialectResolver.Dialect.BooleanLessThanToString(this);
 
@@ -702,7 +688,7 @@ namespace PrismaDB.QueryAST.DML
         public BooleanGreaterThanEquals(Expression left, Expression right, bool NOT = false)
             : base(left, right, NOT) { }
 
-        public override object Clone() => new BooleanGreaterThanEquals(left, right, NOT);
+        public override object Clone() => new BooleanGreaterThanEquals((Expression)left.Clone(), (Expression)right.Clone(), NOT);
 
         public override string ToString() => DialectResolver.Dialect.BooleanGreaterThanEqualsToString(this);
 
@@ -727,7 +713,7 @@ namespace PrismaDB.QueryAST.DML
         public BooleanLessThanEquals(Expression left, Expression right, bool NOT = false)
             : base(left, right, NOT) { }
 
-        public override object Clone() => new BooleanLessThanEquals(left, right, NOT);
+        public override object Clone() => new BooleanLessThanEquals((Expression)left.Clone(), (Expression)right.Clone(), NOT);
 
         public override string ToString() => DialectResolver.Dialect.BooleanLessThanEqualsToString(this);
 
@@ -765,13 +751,13 @@ namespace PrismaDB.QueryAST.DML
         public BooleanIsNull(Expression left, bool NOT = false)
         {
             Alias = new Identifier("");
-            this.left = left.Clone() as Expression;
+            this.left = left;
             this.NOT = NOT;
         }
 
         public override object Clone()
         {
-            return new BooleanIsNull(left, NOT);
+            return new BooleanIsNull((Expression)left.Clone(), NOT);
         }
 
         public override object Eval(ResultRow r)
@@ -781,8 +767,6 @@ namespace PrismaDB.QueryAST.DML
         }
 
         public override List<ColumnRef> GetColumns() => left.GetColumns();
-
-        public override List<ColumnRef> GetNoCopyColumns() => left.GetNoCopyColumns();
 
         public override bool UpdateChild(Expression child, Expression newChild)
         {

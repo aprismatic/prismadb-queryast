@@ -79,9 +79,7 @@ namespace PrismaDB.QueryAST.DCL
         }
         public RebalanceOpetreeCommand(List<Constant> withValues, bool statusCheck = false)
         {
-            WithValues = new List<Constant>();
-            foreach (var value in withValues)
-                WithValues.Add(value);
+            WithValues = withValues;
             StatusCheck = statusCheck;
         }
 
@@ -89,6 +87,12 @@ namespace PrismaDB.QueryAST.DCL
 
         public override string ToString() => DialectResolver.Dialect.RebalanceOpetreeCommandToString(this);
 
-        public override object Clone() => new RebalanceOpetreeCommand(WithValues, StatusCheck);
+        public override object Clone()
+        {
+            var res = new RebalanceOpetreeCommand(StatusCheck);
+            foreach (var value in WithValues)
+                res.WithValues.Add((Constant)value.Clone());
+            return res;
+        }
     }
 }

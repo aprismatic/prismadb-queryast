@@ -27,7 +27,7 @@ namespace PrismaDB.QueryAST.DDL
         public AlterTableQuery(AlterType type, TableRef table)
         {
             AlterType = type;
-            TableName = table.Clone();
+            TableName = table;
             AlteredColumns = new List<AlteredColumn>();
         }
 
@@ -39,7 +39,7 @@ namespace PrismaDB.QueryAST.DDL
             AlteredColumns.AddRange(other.AlteredColumns.Select(x => x.Clone() as AlteredColumn));
         }
 
-        public override List<TableRef> GetTables() => new List<TableRef> { TableName.Clone() };
+        public override List<TableRef> GetTables() => new List<TableRef> { TableName };
 
         public override string ToString() => DialectResolver.Dialect.AlterTableQueryToString(this);
 

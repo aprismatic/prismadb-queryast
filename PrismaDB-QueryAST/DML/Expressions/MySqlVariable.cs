@@ -12,7 +12,7 @@ namespace PrismaDB.QueryAST.DML
         { }
 
         public MySqlVariable(Identifier variable)
-            : this(variable.id)
+            : this(variable, new Identifier(""))
         { }
 
         public MySqlVariable(string variableName, string aliasName)
@@ -22,16 +22,16 @@ namespace PrismaDB.QueryAST.DML
         }
 
         public MySqlVariable(Identifier variable, Identifier alias)
-            : this(variable.id, alias.id)
-        { }
+        {
+            VariableName = variable;
+            Alias = alias;
+        }
 
-        public override object Clone() => new MySqlVariable(VariableName, Alias);
+        public override object Clone() => new MySqlVariable(VariableName.Clone(), Alias.Clone());
 
         public override object Eval(ResultRow r) => r[this];
 
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
-
-        public override List<ColumnRef> GetNoCopyColumns() => new List<ColumnRef>();
 
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 

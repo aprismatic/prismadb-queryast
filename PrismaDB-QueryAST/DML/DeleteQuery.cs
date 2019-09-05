@@ -19,7 +19,7 @@ namespace PrismaDB.QueryAST.DML
             Where = new WhereClause(other.Where);
         }
 
-        public override List<TableRef> GetTables() => new List<TableRef> { DeleteTable.Clone() };
+        public override List<TableRef> GetTables() => new List<TableRef> { DeleteTable };
 
         public override string ToString() => DialectResolver.Dialect.DeleteQueryToString(this);
 

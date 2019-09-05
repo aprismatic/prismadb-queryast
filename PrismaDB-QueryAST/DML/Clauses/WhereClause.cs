@@ -57,16 +57,6 @@ namespace PrismaDB.QueryAST.DML
             }
             return whereCols;
         }
-
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            var whereCols = new List<ColumnRef>();
-            foreach (var eachBE in CNF.AND.SelectMany(eachAND => eachAND.OR))
-            {
-                whereCols.AddRange(eachBE.GetNoCopyColumns());
-            }
-            return whereCols;
-        }
     }
 
     public class ConjunctiveNormalForm

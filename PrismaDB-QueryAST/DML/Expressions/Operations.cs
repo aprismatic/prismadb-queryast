@@ -81,14 +81,6 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            var res = new List<ColumnRef>();
-            res.AddRange(left.GetNoCopyColumns());
-            res.AddRange(right.GetNoCopyColumns());
-            return res;
-        }
-
         public override string ToString() => DialectResolver.Dialect.AdditionToString(this);
 
         public override bool Equals(object other)
@@ -136,14 +128,6 @@ namespace PrismaDB.QueryAST.DML
             var res = new List<ColumnRef>();
             res.AddRange(left.GetColumns());
             res.AddRange(right.GetColumns());
-            return res;
-        }
-
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            var res = new List<ColumnRef>();
-            res.AddRange(left.GetNoCopyColumns());
-            res.AddRange(right.GetNoCopyColumns());
             return res;
         }
 
@@ -197,14 +181,6 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            var res = new List<ColumnRef>();
-            res.AddRange(left.GetNoCopyColumns());
-            res.AddRange(right.GetNoCopyColumns());
-            return res;
-        }
-
         public override string ToString() => DialectResolver.Dialect.MultiplicationToString(this);
 
         public override bool Equals(object other)
@@ -252,14 +228,6 @@ namespace PrismaDB.QueryAST.DML
             var res = new List<ColumnRef>();
             res.AddRange(left.GetColumns());
             res.AddRange(right.GetColumns());
-            return res;
-        }
-
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            var res = new List<ColumnRef>();
-            res.AddRange(left.GetNoCopyColumns());
-            res.AddRange(right.GetNoCopyColumns());
             return res;
         }
 

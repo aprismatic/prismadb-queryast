@@ -32,10 +32,5 @@ namespace PrismaDB.QueryAST.DML
         {
             return GroupColumns.SelectMany(x => x.GetColumns()).ToList();
         }
-
-        public override List<ColumnRef> GetNoCopyColumns()
-        {
-            return GroupColumns.SelectMany(x => x.GetNoCopyColumns()).ToList();
-        }
     }
 }

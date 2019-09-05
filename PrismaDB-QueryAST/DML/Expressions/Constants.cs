@@ -64,8 +64,6 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
 
-        public override List<ColumnRef> GetNoCopyColumns() => new List<ColumnRef>();
-
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 
         public override string ToString() => DialectResolver.Dialect.IntConstantToString(this);
@@ -91,7 +89,7 @@ namespace PrismaDB.QueryAST.DML
 
         public StringConstant(string value, string aliasName = "")
         {
-            strvalue = (string)value.Clone();
+            strvalue = (string)value;
             Alias = new Identifier(aliasName);
         }
 
@@ -100,8 +98,6 @@ namespace PrismaDB.QueryAST.DML
         public override object Eval(ResultRow r) => strvalue;
 
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
-
-        public override List<ColumnRef> GetNoCopyColumns() => new List<ColumnRef>();
 
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 
@@ -128,17 +124,15 @@ namespace PrismaDB.QueryAST.DML
 
         public BinaryConstant(byte[] value, string aliasName = "")
         {
-            binvalue = (byte[])value.Clone();
+            binvalue = value;
             Alias = new Identifier(aliasName);
         }
 
-        public override object Clone() => new BinaryConstant(binvalue, Alias.id);
+        public override object Clone() => new BinaryConstant((byte[])binvalue.Clone(), Alias.id);
 
         public override object Eval(ResultRow r) => throw new NotImplementedException("This method should not be called.");
 
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
-
-        public override List<ColumnRef> GetNoCopyColumns() => new List<ColumnRef>();
 
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 
@@ -175,8 +169,6 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
 
-        public override List<ColumnRef> GetNoCopyColumns() => new List<ColumnRef>();
-
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 
         public override string ToString() => DialectResolver.Dialect.DecimalConstantToString(this);
@@ -209,8 +201,6 @@ namespace PrismaDB.QueryAST.DML
             throw new InvalidOperationException("NULL constant should not be used in WHERE clause like that.");
 
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
-
-        public override List<ColumnRef> GetNoCopyColumns() => new List<ColumnRef>();
 
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 

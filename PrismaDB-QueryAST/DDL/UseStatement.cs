@@ -8,7 +8,7 @@ namespace PrismaDB.QueryAST.DDL
 
         public UseStatement(DatabaseRef database)
         {
-            Database = database.Clone();
+            Database = database;
         }
 
         public UseStatement(string database)
@@ -16,7 +16,7 @@ namespace PrismaDB.QueryAST.DDL
         { }
 
         public UseStatement(UseStatement other)
-            : this(other.Database)
+            : this(other.Database.Clone())
         { }
 
         public override List<TableRef> GetTables() => new List<TableRef>();

@@ -68,7 +68,7 @@ namespace PrismaDB.QueryAST.DDL
                                 bool autoIncrement = false,
                                 bool primaryKey = false)
         {
-            ColumnName = column == null ? new Identifier("") : column.Clone();
+            ColumnName = column == null ? new Identifier("") : column;
             DataType = dataType;
             EncryptionFlags = encryptionFlags;
             KeyVersion = keyVersion;

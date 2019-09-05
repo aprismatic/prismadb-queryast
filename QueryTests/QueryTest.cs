@@ -204,6 +204,8 @@ namespace QueryTests
                 new Tuple<ColumnRef, OrderDirection>(new ColumnRef(new TableRef("t1"), "col1"), OrderDirection.ASC));
 
             {
+                var clonedSel = new SelectQuery(selQuery);
+
                 var allColumns = new List<ColumnRef>();
                 allColumns.AddRange(selQuery.SelectExpressions.SelectMany(x => x.GetColumns()));
                 allColumns.AddRange(selQuery.From.GetColumns());
@@ -220,11 +222,11 @@ namespace QueryTests
                 }
 
                 var updatedColumns = new List<ColumnRef>();
-                updatedColumns.AddRange(selQuery.SelectExpressions.SelectMany(x => x.GetColumns()));
-                updatedColumns.AddRange(selQuery.From.GetColumns());
-                updatedColumns.AddRange(selQuery.Where.GetColumns());
-                updatedColumns.AddRange(selQuery.GroupBy.GetColumns());
-                updatedColumns.AddRange(selQuery.OrderBy.GetColumns());
+                updatedColumns.AddRange(clonedSel.SelectExpressions.SelectMany(x => x.GetColumns()));
+                updatedColumns.AddRange(clonedSel.From.GetColumns());
+                updatedColumns.AddRange(clonedSel.Where.GetColumns());
+                updatedColumns.AddRange(clonedSel.GroupBy.GetColumns());
+                updatedColumns.AddRange(clonedSel.OrderBy.GetColumns());
 
                 Assert.Contains(new ColumnRef(new TableRef("t1"), "col1"), updatedColumns);
                 Assert.Contains(new ColumnRef(new TableRef("t2"), "col2"), updatedColumns);
@@ -234,11 +236,11 @@ namespace QueryTests
             }
             {
                 var allColumns = new List<ColumnRef>();
-                allColumns.AddRange(selQuery.SelectExpressions.SelectMany(x => x.GetNoCopyColumns()));
+                allColumns.AddRange(selQuery.SelectExpressions.SelectMany(x => x.GetColumns()));
                 allColumns.AddRange(selQuery.From.GetColumns());
-                allColumns.AddRange(selQuery.Where.GetNoCopyColumns());
-                allColumns.AddRange(selQuery.GroupBy.GetNoCopyColumns());
-                allColumns.AddRange(selQuery.OrderBy.GetNoCopyColumns());
+                allColumns.AddRange(selQuery.Where.GetColumns());
+                allColumns.AddRange(selQuery.GroupBy.GetColumns());
+                allColumns.AddRange(selQuery.OrderBy.GetColumns());
 
                 foreach (var col in allColumns)
                 {

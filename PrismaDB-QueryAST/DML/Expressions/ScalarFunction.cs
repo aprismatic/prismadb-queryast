@@ -12,29 +12,29 @@ namespace PrismaDB.QueryAST.DML
         protected List<Expression> _parameters;
         public ReadOnlyCollection<Expression> Parameters => _parameters.AsReadOnly();
 
-        public ScalarFunction()
-        {
-            FunctionName = new Identifier("");
-            Alias = new Identifier("");
-            _parameters = new List<Expression>();
-        }
-
         public ScalarFunction(string functionName = "", string aliasName = "", ICollection<Expression> parameters = null)
+            : this(new Identifier(functionName), new Identifier(aliasName), parameters)
+        { }
+
+        public ScalarFunction(Identifier functionName, Identifier alias = null, ICollection<Expression> parameters = null)
         {
-            FunctionName = new Identifier(functionName);
-            Alias = new Identifier(aliasName);
+            FunctionName = functionName;
+            Alias = alias ?? new Identifier();
             _parameters = new List<Expression>();
             if (parameters != null)
             {
                 foreach (var v in parameters)
-                    AddChild(v.Clone() as Expression);
+                    AddChild(v);
             }
         }
 
-        public ScalarFunction(Identifier functionName, Identifier alias = null, ICollection<Expression> parameters = null)
-            : this(functionName.id, alias?.id ?? "", parameters) { }
-
-        public override object Clone() => new ScalarFunction(FunctionName, Alias, Parameters);
+        public override object Clone()
+        {
+            var res = new ScalarFunction(FunctionName.Clone(), Alias.Clone());
+            foreach (var v in Parameters)
+                res.AddChild((Expression)v.Clone());
+            return res;
+        }
 
         public override bool Equals(object other)
         {
@@ -49,8 +49,6 @@ namespace PrismaDB.QueryAST.DML
             throw new NotImplementedException("Functions can't currently be evaluated on proxy side.");
 
         public override List<ColumnRef> GetColumns() => Parameters.SelectMany(x => x.GetColumns()).ToList();
-
-        public override List<ColumnRef> GetNoCopyColumns() => Parameters.SelectMany(x => x.GetNoCopyColumns()).ToList();
 
         public override bool UpdateChild(Expression child, Expression newChild)
         {
@@ -128,7 +126,13 @@ namespace PrismaDB.QueryAST.DML
             AddChild(N);
         }
 
-        public override object Clone() => new PaillierAdditionFunction(FunctionName, Alias, Parameters);
+        public override object Clone()
+        {
+            var res = new PaillierAdditionFunction(FunctionName.Clone(), Alias.Clone());
+            foreach (var v in Parameters)
+                res.AddChild((Expression)v.Clone());
+            return res;
+        }
 
         public override bool Equals(object other)
         {
@@ -166,7 +170,13 @@ namespace PrismaDB.QueryAST.DML
             AddChild(N);
         }
 
-        public override object Clone() => new PaillierSubtractionFunction(FunctionName, Alias, Parameters);
+        public override object Clone()
+        {
+            var res = new PaillierSubtractionFunction(FunctionName.Clone(), Alias.Clone());
+            foreach (var v in Parameters)
+                res.AddChild((Expression)v.Clone());
+            return res;
+        }
 
         public override bool Equals(object other)
         {
@@ -204,7 +214,13 @@ namespace PrismaDB.QueryAST.DML
             AddChild(P);
         }
 
-        public override object Clone() => new ElGamalMultiplicationFunction(FunctionName, Alias, Parameters);
+        public override object Clone()
+        {
+            var res = new ElGamalMultiplicationFunction(FunctionName.Clone(), Alias.Clone());
+            foreach (var v in Parameters)
+                res.AddChild((Expression)v.Clone());
+            return res;
+        }
 
         public override bool Equals(object other)
         {
@@ -242,7 +258,13 @@ namespace PrismaDB.QueryAST.DML
             AddChild(P);
         }
 
-        public override object Clone() => new ElGamalDivisionFunction(FunctionName, Alias, Parameters);
+        public override object Clone()
+        {
+            var res = new ElGamalDivisionFunction(FunctionName.Clone(), Alias.Clone());
+            foreach (var v in Parameters)
+                res.AddChild((Expression)v.Clone());
+            return res;
+        }
 
         public override bool Equals(object other)
         {
@@ -264,7 +286,13 @@ namespace PrismaDB.QueryAST.DML
         public SumAggregationFunction(Identifier functionName, Identifier alias = null, ICollection<Expression> parameters = null)
             : base(functionName, alias, parameters) { }
 
-        public override object Clone() => new SumAggregationFunction(FunctionName, Alias, Parameters);
+        public override object Clone()
+        {
+            var res = new SumAggregationFunction(FunctionName.Clone(), Alias.Clone());
+            foreach (var v in Parameters)
+                res.AddChild((Expression)v.Clone());
+            return res;
+        }
 
         public override bool Equals(object other)
         {
@@ -286,7 +314,13 @@ namespace PrismaDB.QueryAST.DML
         public CountAggregationFunction(Identifier functionName, Identifier alias = null, ICollection<Expression> parameters = null)
             : base(functionName, alias, parameters) { }
 
-        public override object Clone() => new CountAggregationFunction(FunctionName, Alias, Parameters);
+        public override object Clone()
+        {
+            var res = new CountAggregationFunction(FunctionName.Clone(), Alias.Clone());
+            foreach (var v in Parameters)
+                res.AddChild((Expression)v.Clone());
+            return res;
+        }
 
         public override bool Equals(object other)
         {
@@ -308,7 +342,13 @@ namespace PrismaDB.QueryAST.DML
         public AvgAggregationFunction(Identifier functionName, Identifier alias = null, ICollection<Expression> parameters = null)
             : base(functionName, alias, parameters) { }
 
-        public override object Clone() => new AvgAggregationFunction(FunctionName, Alias, Parameters);
+        public override object Clone()
+        {
+            var res = new AvgAggregationFunction(FunctionName.Clone(), Alias.Clone());
+            foreach (var v in Parameters)
+                res.AddChild((Expression)v.Clone());
+            return res;
+        }
 
         public override bool Equals(object other)
         {
@@ -330,7 +370,13 @@ namespace PrismaDB.QueryAST.DML
         public MinAggregationFunction(Identifier functionName, Identifier alias = null, ICollection<Expression> parameters = null)
             : base(functionName, alias, parameters) { }
 
-        public override object Clone() => new MinAggregationFunction(FunctionName, Alias, Parameters);
+        public override object Clone()
+        {
+            var res = new MinAggregationFunction(FunctionName.Clone(), Alias.Clone());
+            foreach (var v in Parameters)
+                res.AddChild((Expression)v.Clone());
+            return res;
+        }
 
         public override bool Equals(object other)
         {
@@ -352,7 +398,13 @@ namespace PrismaDB.QueryAST.DML
         public MaxAggregationFunction(Identifier functionName, Identifier alias = null, ICollection<Expression> parameters = null)
             : base(functionName, alias, parameters) { }
 
-        public override object Clone() => new MaxAggregationFunction(FunctionName, Alias, Parameters);
+        public override object Clone()
+        {
+            var res = new MaxAggregationFunction(FunctionName.Clone(), Alias.Clone());
+            foreach (var v in Parameters)
+                res.AddChild((Expression)v.Clone());
+            return res;
+        }
 
         public override bool Equals(object other)
         {
@@ -374,7 +426,13 @@ namespace PrismaDB.QueryAST.DML
         public StDevAggregationFunction(Identifier functionName, Identifier alias = null, ICollection<Expression> parameters = null)
             : base(functionName, alias, parameters) { }
 
-        public override object Clone() => new StDevAggregationFunction(FunctionName, Alias, Parameters);
+        public override object Clone()
+        {
+            var res = new StDevAggregationFunction(FunctionName.Clone(), Alias.Clone());
+            foreach (var v in Parameters)
+                res.AddChild((Expression)v.Clone());
+            return res;
+        }
 
         public override bool Equals(object other)
         {
@@ -396,7 +454,13 @@ namespace PrismaDB.QueryAST.DML
         public LinRegAggregationFunction(Identifier functionName, Identifier alias = null, ICollection<Expression> parameters = null)
             : base(functionName, alias, parameters) { }
 
-        public override object Clone() => new LinRegAggregationFunction(FunctionName, Alias, Parameters);
+        public override object Clone()
+        {
+            var res = new LinRegAggregationFunction(FunctionName.Clone(), Alias.Clone());
+            foreach (var v in Parameters)
+                res.AddChild((Expression)v.Clone());
+            return res;
+        }
 
         public override bool Equals(object other)
         {
@@ -418,7 +482,13 @@ namespace PrismaDB.QueryAST.DML
         public PaillierAggregationSumFunction(Identifier functionName, Identifier alias = null, ICollection<Expression> parameters = null)
             : base(functionName, alias, parameters) { }
 
-        public override object Clone() => new PaillierAggregationSumFunction(FunctionName, Alias, Parameters);
+        public override object Clone()
+        {
+            var res = new PaillierAggregationSumFunction(FunctionName.Clone(), Alias.Clone());
+            foreach (var v in Parameters)
+                res.AddChild((Expression)v.Clone());
+            return res;
+        }
 
         public override bool Equals(object other)
         {
