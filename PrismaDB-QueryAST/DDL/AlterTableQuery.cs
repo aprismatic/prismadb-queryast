@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PrismaDB.QueryAST.DML;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PrismaDB.QueryAST.DDL
@@ -40,6 +41,8 @@ namespace PrismaDB.QueryAST.DDL
         }
 
         public override List<TableRef> GetTables() => new List<TableRef> { TableName };
+
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
 
         public override string ToString() => DialectResolver.Dialect.AlterTableQueryToString(this);
 

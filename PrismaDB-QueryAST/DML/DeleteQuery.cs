@@ -21,6 +21,8 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<TableRef> GetTables() => new List<TableRef> { DeleteTable };
 
+        public override List<PlaceholderConstant> GetPlaceholders() => Where.GetPlaceholders();
+
         public override string ToString() => DialectResolver.Dialect.DeleteQueryToString(this);
 
         public override object Clone() => new DeleteQuery(this);

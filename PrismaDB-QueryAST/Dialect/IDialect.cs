@@ -53,6 +53,7 @@ namespace PrismaDB.QueryAST
         string GroupByClauseToString(GroupByClause q);
         string AllColumnsToString(AllColumns q);
         string NullConstantToString(NullConstant q);
+        string PlaceholderConstantToString(PlaceholderConstant q);
         string BooleanIsNullToString(BooleanIsNull q);
         string PaillierAdditionFunctionToString(PaillierAdditionFunction q);
         string PaillierSubtractionFunctionToString(PaillierSubtractionFunction q);

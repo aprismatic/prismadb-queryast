@@ -69,6 +69,8 @@ namespace PrismaDB.QueryAST.DDL
 
         public override List<TableRef> GetTables() => new List<TableRef> { OnTable.Clone() };
 
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+
         public override string ToString() => DialectResolver.Dialect.CreateIndexQueryToString(this);
 
         public override object Clone() => new CreateIndexQuery(this);

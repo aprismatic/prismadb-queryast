@@ -34,6 +34,8 @@ namespace PrismaDB.QueryAST.DML
         {
             return OrderColumns.SelectMany(x => x.Item1.GetColumns()).ToList();
         }
+
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
     }
 
     public enum OrderDirection

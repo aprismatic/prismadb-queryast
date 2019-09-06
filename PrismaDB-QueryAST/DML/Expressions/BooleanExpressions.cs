@@ -17,6 +17,7 @@ namespace PrismaDB.QueryAST.DML
         public override object Clone() => new BooleanTrue(NOT);
         public override object Eval(ResultRow r) => !NOT;
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 
         public override string ToString() => DialectResolver.Dialect.BooleanTrueToString(this);
@@ -247,6 +248,8 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns() => Column.GetColumns();
 
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+
         public override bool UpdateChild(Expression child, Expression newChild)
         {
             if (SearchValue == child)
@@ -323,6 +326,15 @@ namespace PrismaDB.QueryAST.DML
         }
 
         public override List<ColumnRef> GetColumns() => Column.GetColumns();
+
+        public override List<PlaceholderConstant> GetPlaceholders()
+        {
+            var res = new List<PlaceholderConstant>();
+            foreach (var constant in _inValues)
+                if (constant is PlaceholderConstant phc)
+                    res.Add(phc);
+            return res;
+        }
 
         public void AddChild(Constant child)
         {
@@ -428,6 +440,7 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns() => Column.GetColumns();
 
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
         public override bool UpdateChild(Expression child, Expression newChild)
         {
             if (SearchText == child)
@@ -555,6 +568,14 @@ namespace PrismaDB.QueryAST.DML
             res.AddRange(right.GetColumns());
             return res;
         }
+
+        public override List<PlaceholderConstant> GetPlaceholders()
+        {
+            var res = new List<PlaceholderConstant>();
+            res.AddRange(left.GetPlaceholders());
+            res.AddRange(right.GetPlaceholders());
+            return res;
+        }
     }
 
     public abstract class BooleanInequality : BooleanExpression
@@ -628,6 +649,14 @@ namespace PrismaDB.QueryAST.DML
             var res = new List<ColumnRef>();
             res.AddRange(left.GetColumns());
             res.AddRange(right.GetColumns());
+            return res;
+        }
+
+        public override List<PlaceholderConstant> GetPlaceholders()
+        {
+            var res = new List<PlaceholderConstant>();
+            res.AddRange(left.GetPlaceholders());
+            res.AddRange(right.GetPlaceholders());
             return res;
         }
     }
@@ -767,6 +796,8 @@ namespace PrismaDB.QueryAST.DML
         }
 
         public override List<ColumnRef> GetColumns() => left.GetColumns();
+
+        public override List<PlaceholderConstant> GetPlaceholders() => left.GetPlaceholders();
 
         public override bool UpdateChild(Expression child, Expression newChild)
         {

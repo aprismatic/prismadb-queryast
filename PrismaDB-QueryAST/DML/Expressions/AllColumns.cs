@@ -31,6 +31,8 @@ namespace PrismaDB.QueryAST.DML
         public override List<ColumnRef> GetColumns() =>
             throw new InvalidOperationException("AllColumns needs to be replaced with corresponding ColumnRefs in table.");
 
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+
         public override bool UpdateChild(Expression child, Expression newChild) =>
             throw new InvalidOperationException("AllColumns needs to be replaced with corresponding ColumnRefs in table.");
 

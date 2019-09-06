@@ -64,6 +64,8 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
 
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 
         public override string ToString() => DialectResolver.Dialect.IntConstantToString(this);
@@ -89,7 +91,7 @@ namespace PrismaDB.QueryAST.DML
 
         public StringConstant(string value, string aliasName = "")
         {
-            strvalue = (string)value;
+            strvalue = value;
             Alias = new Identifier(aliasName);
         }
 
@@ -98,6 +100,8 @@ namespace PrismaDB.QueryAST.DML
         public override object Eval(ResultRow r) => strvalue;
 
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
+
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
 
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 
@@ -134,6 +138,8 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
 
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 
         public override string ToString() => DialectResolver.Dialect.BinaryConstantToString(this);
@@ -169,6 +175,8 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
 
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 
         public override string ToString() => DialectResolver.Dialect.DecimalConstantToString(this);
@@ -202,6 +210,8 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
 
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 
         public override string ToString() => DialectResolver.Dialect.NullConstantToString(this);
@@ -214,5 +224,45 @@ namespace PrismaDB.QueryAST.DML
         }
 
         public override int GetHashCode() => unchecked(Alias.GetHashCode());
+    }
+
+    public class PlaceholderConstant : Constant
+    {
+        public int index;
+
+        public PlaceholderConstant() : this("") { }
+
+        public PlaceholderConstant(string aliasName = "") : this(0, aliasName) { }
+
+        public PlaceholderConstant(int index, string aliasName = "")
+        {
+            this.index = index;
+            Alias = new Identifier(aliasName);
+        }
+
+        public override object Clone() => new PlaceholderConstant(index, Alias.id);
+
+        public override object Eval(ResultRow r) =>
+            throw new InvalidOperationException("Placeholder constant should not be used in WHERE clause like that.");
+
+        public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
+
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant> { this };
+
+        public override bool UpdateChild(Expression child, Expression newChild) => false;
+
+        public override string ToString() => DialectResolver.Dialect.PlaceholderConstantToString(this);
+
+        public override bool Equals(object other)
+        {
+            if (!(other is PlaceholderConstant otherPC)) return false;
+
+            return Alias.Equals(otherPC.Alias)
+                 && index == otherPC.index;
+        }
+
+        public override int GetHashCode() =>
+            unchecked(Alias.GetHashCode() *
+                      index.GetHashCode());
     }
 }

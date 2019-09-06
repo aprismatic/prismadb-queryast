@@ -32,6 +32,19 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<TableRef> GetTables() => new List<TableRef> { UpdateTable.Clone() };
 
+        public override List<PlaceholderConstant> GetPlaceholders()
+        {
+            var res = new List<PlaceholderConstant>();
+
+            foreach (var exp in UpdateExpressions)
+                if (exp.Item2 is PlaceholderConstant phc)
+                    res.Add(phc);
+
+            res.AddRange(Where.GetPlaceholders());
+
+            return res;
+        }
+
         public override string ToString() => DialectResolver.Dialect.UpdateQueryToString(this);
 
         public override object Clone() => new UpdateQuery(this);

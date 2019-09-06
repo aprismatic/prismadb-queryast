@@ -33,6 +33,8 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
 
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 
         public override string ToString() => DialectResolver.Dialect.MySqlVariableToString(this);

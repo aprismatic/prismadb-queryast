@@ -9,6 +9,8 @@ namespace PrismaDB.QueryAST.DML
 
         public abstract List<ColumnRef> GetColumns();
 
+        public abstract List<PlaceholderConstant> GetPlaceholders();
+
         public abstract override string ToString();
     }
 }

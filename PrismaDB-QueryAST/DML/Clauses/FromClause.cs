@@ -33,6 +33,14 @@ namespace PrismaDB.QueryAST.DML
             return Sources.SelectMany(x => x.GetColumns()).ToList();
         }
 
+        public override List<PlaceholderConstant> GetPlaceholders()
+        {
+            var res = new List<PlaceholderConstant>();
+            foreach (var src in Sources)
+                res.AddRange(src.GetPlaceholders());
+            return res;
+        }
+
         public List<SingleTable> GetSingleTables()
         {
             return Sources.SelectMany(x => x.GetSingleTables()).ToList();
@@ -95,6 +103,8 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
+        public override List<PlaceholderConstant> GetPlaceholders() => FirstTable.GetPlaceholders();
+
         public List<SingleTable> GetSingleTables()
         {
             var res = new List<SingleTable> { FirstTable };
@@ -147,6 +157,8 @@ namespace PrismaDB.QueryAST.DML
             return new List<ColumnRef>();
         }
 
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+
         public override string ToString()
         {
             return DialectResolver.Dialect.TableSourceToString(this);
@@ -190,6 +202,8 @@ namespace PrismaDB.QueryAST.DML
         {
             return new List<ColumnRef>();
         }
+
+        public override List<PlaceholderConstant> GetPlaceholders() => Select.GetPlaceholders();
 
         public override string ToString()
         {
@@ -240,6 +254,8 @@ namespace PrismaDB.QueryAST.DML
             res.AddRange(SecondTable.GetColumns());
             return res;
         }
+
+        public override List<PlaceholderConstant> GetPlaceholders() => SecondTable.GetPlaceholders();
 
         public override string ToString()
         {

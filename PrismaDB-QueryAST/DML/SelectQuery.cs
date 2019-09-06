@@ -42,6 +42,21 @@ namespace PrismaDB.QueryAST.DML
             return From.GetTables();
         }
 
+        public override List<PlaceholderConstant> GetPlaceholders()
+        {
+            var res = new List<PlaceholderConstant>();
+
+            foreach (var exp in SelectExpressions)
+                res.AddRange(exp.GetPlaceholders());
+
+            res.AddRange(From.GetPlaceholders());
+            res.AddRange(Where.GetPlaceholders());
+            res.AddRange(OrderBy.GetPlaceholders());
+            res.AddRange(GroupBy.GetPlaceholders());
+
+            return res;
+        }
+
         public override string ToString() => DialectResolver.Dialect.SelectQueryToString(this);
 
         public override object Clone() => new SelectQuery(this);

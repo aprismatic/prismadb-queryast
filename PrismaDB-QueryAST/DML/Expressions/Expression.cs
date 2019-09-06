@@ -16,6 +16,8 @@ namespace PrismaDB.QueryAST.DML
 
         public abstract List<ColumnRef> GetColumns();
 
+        public abstract List<PlaceholderConstant> GetPlaceholders();
+
         public abstract bool UpdateChild(Expression child, Expression newChild);
 
         public abstract override string ToString();

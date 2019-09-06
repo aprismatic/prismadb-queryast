@@ -15,6 +15,8 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+
         public override string ToString() => DialectResolver.Dialect.UpdateKeysCommandToString(this);
 
         public override object Clone() => new UpdateKeysCommand(StatusCheck);
@@ -40,6 +42,8 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+
         public override string ToString() => DialectResolver.Dialect.EncryptColumnCommandToString(this);
 
         public override object Clone() => new EncryptColumnCommand((ColumnRef)Column.Clone(), EncryptionFlags, StatusCheck);
@@ -63,6 +67,8 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
+        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+
         public override string ToString() => DialectResolver.Dialect.DecryptColumnCommandToString(this);
 
         public override object Clone() => new DecryptColumnCommand((ColumnRef)Column.Clone(), StatusCheck);
@@ -84,6 +90,17 @@ namespace PrismaDB.QueryAST.DCL
         }
 
         public override List<TableRef> GetTables() => new List<TableRef>();
+
+        public override List<PlaceholderConstant> GetPlaceholders()
+        {
+            var res = new List<PlaceholderConstant>();
+
+            foreach (var constant in WithValues)
+                if (constant is PlaceholderConstant phc)
+                    res.Add(phc);
+
+            return res;
+        }
 
         public override string ToString() => DialectResolver.Dialect.RebalanceOpetreeCommandToString(this);
 

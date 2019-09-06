@@ -57,6 +57,14 @@ namespace PrismaDB.QueryAST.DML
             }
             return whereCols;
         }
+
+        public override List<PlaceholderConstant> GetPlaceholders()
+        {
+            var res = new List<PlaceholderConstant>();
+            foreach (var and in CNF.AND)
+                res.AddRange(and.GetPlaceholders());
+            return res;
+        }
     }
 
     public class ConjunctiveNormalForm
@@ -76,6 +84,14 @@ namespace PrismaDB.QueryAST.DML
             {
                 AND.Add(disj_copy);
             }
+        }
+
+        public List<PlaceholderConstant> GetPlaceholders()
+        {
+            var res = new List<PlaceholderConstant>();
+            foreach (var disj in AND)
+                res.AddRange(disj.GetPlaceholders());
+            return res;
         }
 
         public bool IsEmpty()
@@ -106,6 +122,14 @@ namespace PrismaDB.QueryAST.DML
             {
                 OR.Add((BooleanExpression)boolexp.Clone());
             }
+        }
+
+        public List<PlaceholderConstant> GetPlaceholders()
+        {
+            var res = new List<PlaceholderConstant>();
+            foreach (var boolexp in OR)
+                res.AddRange(boolexp.GetPlaceholders());
+            return res;
         }
 
         public bool IsEmpty()
