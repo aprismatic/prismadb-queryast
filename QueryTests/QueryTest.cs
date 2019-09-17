@@ -150,9 +150,10 @@ namespace QueryTests
             Assert.False(cd1.Equals(cd6));
         }
 
-        [Fact(DisplayName = "Constant Containers")]
+        [Fact(DisplayName = "Constants")]
         public void Constants()
         {
+            // Basic tests
             var c1 = new ConstantContainer();
             var c2 = new ConstantContainer(123);
             Assert.NotEqual(c1, c2);
@@ -162,11 +163,11 @@ namespace QueryTests
             Assert.NotEqual(c1, c2);
             c2.Alias = new Identifier("abc");
             Assert.Equal(c1, c2);
-
             c2.constant = c1.constant;
             ((IntConstant)c1.constant).intvalue = 10;
             Assert.Equal(10, ((IntConstant)c2.constant).intvalue);
 
+            // INSERT query without indexes
             var q1 = new InsertQuery();
             q1.Values.Add(new List<Expression> { new ConstantContainer(), new ConstantContainer(), new ConstantContainer() });
             q1.Values.Add(new List<Expression> { new ConstantContainer(), new ConstantContainer(), new ConstantContainer() });
@@ -185,6 +186,7 @@ namespace QueryTests
             Assert.Equal(q1.Values[1][1], new ConstantContainer("def"));
             Assert.Equal(q1.Values[1][2], new ConstantContainer(20));
 
+            // SELECT query without indexes
             var q2 = new SelectQuery();
             q2.SelectExpressions.Add(new Addition(new ColumnRef("a"), new ConstantContainer()));
             q2.SelectExpressions.Add(new ConstantContainer());
@@ -217,6 +219,7 @@ namespace QueryTests
             Assert.Equal(((BooleanGreaterThan)q2.Where.CNF.AND[1].OR[0]).left, new ConstantContainer(60));
             Assert.Equal(((BooleanGreaterThan)q2.Where.CNF.AND[1].OR[0]).right, new ConstantContainer(70));
 
+            // INSERT query with indexes
             var q3 = new InsertQuery();
             q3.Values.Add(new List<Expression> { new ConstantContainer(index: 1), new ConstantContainer(index: 2), new ConstantContainer(index: 3) });
             q3.Values.Add(new List<Expression> { new ConstantContainer(index: 4), new ConstantContainer(index: 5), new ConstantContainer(index: 6) });
@@ -234,6 +237,12 @@ namespace QueryTests
             Assert.Equal(q3.Values[1][0], new ConstantContainer(10));
             Assert.Equal(q3.Values[1][1], new ConstantContainer("def"));
             Assert.Equal(q3.Values[1][2], new ConstantContainer(20));
+
+            // Eval tests
+            var b1 = new BooleanEquals(new ConstantContainer(5), new ConstantContainer(5));
+            Assert.True((bool)b1.Eval(null));
+            b1.left = new ConstantContainer(10);
+            Assert.False((bool)b1.Eval(null));
         }
 
         [Fact(DisplayName = "NULLs")]
