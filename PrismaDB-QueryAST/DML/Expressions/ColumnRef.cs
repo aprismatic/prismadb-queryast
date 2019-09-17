@@ -51,8 +51,8 @@ namespace PrismaDB.QueryAST.DML
         public override List<ColumnRef> GetColumns() =>
             new List<ColumnRef> { this };
 
-        public override List<PlaceholderConstant> GetPlaceholders() =>
-            new List<PlaceholderConstant>();
+        public override List<ConstantContainer> GetConstants() =>
+            new List<ConstantContainer>();
 
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 

@@ -33,11 +33,11 @@ namespace PrismaDB.QueryAST.DML
             return Sources.SelectMany(x => x.GetColumns()).ToList();
         }
 
-        public override List<PlaceholderConstant> GetPlaceholders()
+        public override List<ConstantContainer> GetConstants()
         {
-            var res = new List<PlaceholderConstant>();
+            var res = new List<ConstantContainer>();
             foreach (var src in Sources)
-                res.AddRange(src.GetPlaceholders());
+                res.AddRange(src.GetConstants());
             return res;
         }
 
@@ -103,7 +103,7 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override List<PlaceholderConstant> GetPlaceholders() => FirstTable.GetPlaceholders();
+        public override List<ConstantContainer> GetConstants() => FirstTable.GetConstants();
 
         public List<SingleTable> GetSingleTables()
         {
@@ -157,7 +157,7 @@ namespace PrismaDB.QueryAST.DML
             return new List<ColumnRef>();
         }
 
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
         public override string ToString()
         {
@@ -203,7 +203,7 @@ namespace PrismaDB.QueryAST.DML
             return new List<ColumnRef>();
         }
 
-        public override List<PlaceholderConstant> GetPlaceholders() => Select.GetPlaceholders();
+        public override List<ConstantContainer> GetConstants() => Select.GetConstants();
 
         public override string ToString()
         {
@@ -255,7 +255,7 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override List<PlaceholderConstant> GetPlaceholders() => SecondTable.GetPlaceholders();
+        public override List<ConstantContainer> GetConstants() => SecondTable.GetConstants();
 
         public override string ToString()
         {

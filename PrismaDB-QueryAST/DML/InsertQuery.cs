@@ -34,13 +34,13 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<TableRef> GetTables() => new List<TableRef> { Into };
 
-        public override List<PlaceholderConstant> GetPlaceholders()
+        public override List<ConstantContainer> GetConstants()
         {
-            var res = new List<PlaceholderConstant>();
+            var res = new List<ConstantContainer>();
 
             foreach (var vallist in Values)
                 foreach (var val in vallist)
-                    res.AddRange(val.GetPlaceholders());
+                    res.AddRange(val.GetConstants());
 
             return res;
         }

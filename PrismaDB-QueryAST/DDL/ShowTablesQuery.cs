@@ -11,7 +11,7 @@ namespace PrismaDB.QueryAST.DDL
 
         public override string ToString() => DialectResolver.Dialect.ShowTablesQueryToString(this);
 
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
         public override object Clone() => new ShowTablesQuery();
     }

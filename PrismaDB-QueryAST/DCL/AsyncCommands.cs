@@ -15,7 +15,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
         public override string ToString() => DialectResolver.Dialect.UpdateKeysCommandToString(this);
 
@@ -42,7 +42,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
         public override string ToString() => DialectResolver.Dialect.EncryptColumnCommandToString(this);
 
@@ -67,7 +67,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
         public override string ToString() => DialectResolver.Dialect.DecryptColumnCommandToString(this);
 
@@ -76,14 +76,14 @@ namespace PrismaDB.QueryAST.DCL
 
     public class RebalanceOpetreeCommand : AsyncCommand
     {
-        public List<Constant> WithValues;
+        public List<ConstantContainer> WithValues;
 
         public RebalanceOpetreeCommand(bool statusCheck = false)
         {
-            WithValues = new List<Constant>();
+            WithValues = new List<ConstantContainer>();
             StatusCheck = statusCheck;
         }
-        public RebalanceOpetreeCommand(List<Constant> withValues, bool statusCheck = false)
+        public RebalanceOpetreeCommand(List<ConstantContainer> withValues, bool statusCheck = false)
         {
             WithValues = withValues;
             StatusCheck = statusCheck;
@@ -91,16 +91,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override List<PlaceholderConstant> GetPlaceholders()
-        {
-            var res = new List<PlaceholderConstant>();
-
-            foreach (var constant in WithValues)
-                if (constant is PlaceholderConstant phc)
-                    res.Add(phc);
-
-            return res;
-        }
+        public override List<ConstantContainer> GetConstants() => WithValues;
 
         public override string ToString() => DialectResolver.Dialect.RebalanceOpetreeCommandToString(this);
 
@@ -108,7 +99,7 @@ namespace PrismaDB.QueryAST.DCL
         {
             var res = new RebalanceOpetreeCommand(StatusCheck);
             foreach (var value in WithValues)
-                res.WithValues.Add((Constant)value.Clone());
+                res.WithValues.Add((ConstantContainer)value.Clone());
             return res;
         }
     }

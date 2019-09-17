@@ -11,7 +11,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
         public override string ToString() => DialectResolver.Dialect.SaveSettingsCommandToString(this);
 
@@ -24,7 +24,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
         public override string ToString() => DialectResolver.Dialect.LoadSettingsCommandToString(this);
 
@@ -37,7 +37,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
         public override string ToString() => DialectResolver.Dialect.SaveOpetreeCommandToString(this);
 
@@ -50,7 +50,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
         public override string ToString() => DialectResolver.Dialect.LoadOpetreeCommandToString(this);
 
@@ -63,7 +63,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
         public override string ToString() => DialectResolver.Dialect.LoadSchemaCommandToString(this);
 
@@ -80,7 +80,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
         public override string ToString() => DialectResolver.Dialect.ExportKeysCommandToString(this);
 
@@ -106,7 +106,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
         public override string ToString() => DialectResolver.Dialect.RegisterUserCommandToString(this);
 
@@ -123,7 +123,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override List<PlaceholderConstant> GetPlaceholders() => Query.GetPlaceholders();
+        public override List<ConstantContainer> GetConstants() => Query.GetConstants();
 
         public override string ToString() => DialectResolver.Dialect.BypassCommandToString(this);
 

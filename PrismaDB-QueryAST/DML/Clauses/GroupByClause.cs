@@ -33,6 +33,6 @@ namespace PrismaDB.QueryAST.DML
             return GroupColumns.SelectMany(x => x.GetColumns()).ToList();
         }
 
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
     }
 }

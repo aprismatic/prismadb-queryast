@@ -42,17 +42,17 @@ namespace PrismaDB.QueryAST.DML
             return From.GetTables();
         }
 
-        public override List<PlaceholderConstant> GetPlaceholders()
+        public override List<ConstantContainer> GetConstants()
         {
-            var res = new List<PlaceholderConstant>();
+            var res = new List<ConstantContainer>();
 
             foreach (var exp in SelectExpressions)
-                res.AddRange(exp.GetPlaceholders());
+                res.AddRange(exp.GetConstants());
 
-            res.AddRange(From.GetPlaceholders());
-            res.AddRange(Where.GetPlaceholders());
-            res.AddRange(OrderBy.GetPlaceholders());
-            res.AddRange(GroupBy.GetPlaceholders());
+            res.AddRange(From.GetConstants());
+            res.AddRange(Where.GetConstants());
+            res.AddRange(OrderBy.GetConstants());
+            res.AddRange(GroupBy.GetConstants());
 
             return res;
         }

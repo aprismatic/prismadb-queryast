@@ -18,21 +18,21 @@ namespace QueryTests
         public void FunctionEquals()
         {
             var func1 = new ScalarFunction("func");
-            func1.AddChild(new IntConstant(1));
-            func1.AddChild(new StringConstant("abc"));
+            func1.AddChild(new ConstantContainer(1));
+            func1.AddChild(new ConstantContainer("abc"));
 
             var func2 = new ScalarFunction("func");
-            func2.AddChild(new IntConstant(1));
-            func2.AddChild(new StringConstant("abc"));
+            func2.AddChild(new ConstantContainer(1));
+            func2.AddChild(new ConstantContainer("abc"));
             Assert.Equal(func1, func2);
 
             var func3 = new ScalarFunction("func");
-            func3.AddChild(new StringConstant("abc"));
-            func3.AddChild(new IntConstant(1));
+            func3.AddChild(new ConstantContainer("abc"));
+            func3.AddChild(new ConstantContainer(1));
             Assert.NotEqual(func1, func3);
 
             var func4 = (ScalarFunction)func2.Clone();
-            func4.SetChild(0, new StringConstant("123"));
+            func4.SetChild(0, new ConstantContainer("123"));
 
             Assert.NotEqual(func2, func4);
 
@@ -40,7 +40,7 @@ namespace QueryTests
             Assert.NotEqual(func1, func5);
 
             var func6 = new ScalarFunction("func");
-            func6.AddChild(new IntConstant(1));
+            func6.AddChild(new ConstantContainer(1));
             Assert.NotEqual(func1, func6);
 
             var func7 = new ScalarFunction("func");
@@ -90,10 +90,10 @@ namespace QueryTests
             }
             {
                 var func = new PaillierAdditionFunction("fn", new ColumnRef("a"), new ColumnRef("b"),
-                    new BinaryConstant(new byte[] { 0x00 }));
+                    new ConstantContainer(new byte[] { 0x00 }));
 
                 var func2 = new PaillierAdditionFunction("fn", new ColumnRef("a"), new ColumnRef("b"),
-                    new BinaryConstant(new byte[] { 0x00 }), "alias");
+                    new ConstantContainer(new byte[] { 0x00 }), "alias");
                 Assert.NotEqual(func, func2);
                 func.Alias.id = "alias";
                 Assert.Equal(func, func2);
@@ -103,10 +103,10 @@ namespace QueryTests
             }
             {
                 var func = new ElGamalMultiplicationFunction("fn", new ColumnRef("a"), new ColumnRef("b"),
-                    new BinaryConstant(new byte[] { 0x00 }));
+                    new ConstantContainer(new byte[] { 0x00 }));
 
                 var func2 = new ElGamalMultiplicationFunction("fn", new ColumnRef("a"), new ColumnRef("b"),
-                    new BinaryConstant(new byte[] { 0x00 }), "alias");
+                    new ConstantContainer(new byte[] { 0x00 }), "alias");
                 Assert.NotEqual(func, func2);
                 func.Alias.id = "alias";
                 Assert.Equal(func, func2);
@@ -150,23 +150,97 @@ namespace QueryTests
             Assert.False(cd1.Equals(cd6));
         }
 
-        [Fact(DisplayName = "Constant")]
-        public void ConstantTest()
+        [Fact(DisplayName = "Constant Containers")]
+        public void Constants()
         {
-            var str1 = new StringConstant("abc");
-            var int1 = new IntConstant(1);
-            var str2 = new StringConstant("abc");
-            var int2 = new IntConstant(1);
+            var c1 = new ConstantContainer();
+            var c2 = new ConstantContainer(123);
+            Assert.NotEqual(c1, c2);
+            c1.constant = new IntConstant(123);
+            Assert.Equal(c1, c2);
+            c1.Alias = new Identifier("abc");
+            Assert.NotEqual(c1, c2);
+            c2.Alias = new Identifier("abc");
+            Assert.Equal(c1, c2);
 
-            Assert.True(str1.Equals(str2));
-            Assert.True(int1.Equals(int2));
+            c2.constant = c1.constant;
+            ((IntConstant)c1.constant).intvalue = 10;
+            Assert.Equal(10, ((IntConstant)c2.constant).intvalue);
+
+            var q1 = new InsertQuery();
+            q1.Values.Add(new List<Expression> { new ConstantContainer(), new ConstantContainer(), new ConstantContainer() });
+            q1.Values.Add(new List<Expression> { new ConstantContainer(), new ConstantContainer(), new ConstantContainer() });
+            Assert.Equal(6, q1.GetConstants().Count());
+            q1.SetConstant(1);
+            q1.SetConstant("abc");
+            q1.SetConstant(2);
+            q1.SetConstant(10);
+            q1.SetConstant("def");
+            q1.SetConstant(20);
+
+            Assert.Equal(q1.Values[0][0], new ConstantContainer(1));
+            Assert.Equal(q1.Values[0][1], new ConstantContainer("abc"));
+            Assert.Equal(q1.Values[0][2], new ConstantContainer(2));
+            Assert.Equal(q1.Values[1][0], new ConstantContainer(10));
+            Assert.Equal(q1.Values[1][1], new ConstantContainer("def"));
+            Assert.Equal(q1.Values[1][2], new ConstantContainer(20));
+
+            var q2 = new SelectQuery();
+            q2.SelectExpressions.Add(new Addition(new ColumnRef("a"), new ConstantContainer()));
+            q2.SelectExpressions.Add(new ConstantContainer());
+            q2.SelectExpressions.Add(new ColumnRef("b"));
+            q2.SelectExpressions.Add(new Multiplication(new Addition(new ConstantContainer(), new ColumnRef("c")), new ConstantContainer()));
+            var and = new Disjunction();
+            and.OR.Add(new BooleanEquals(new ColumnRef("a"), new ConstantContainer()));
+            and.OR.Add(new BooleanLike(new ColumnRef("b"), new ConstantContainer()));
+            q2.Where.CNF.AND.Add(and);
+            var and2 = new Disjunction();
+            and2.OR.Add(new BooleanGreaterThan(new ConstantContainer(), new ConstantContainer()));
+            q2.Where.CNF.AND.Add(and2);
+
+            Assert.Equal(8, q2.GetConstants().Count());
+            q2.SetConstant(10);
+            q2.SetConstant(20);
+            q2.SetConstant(30);
+            q2.SetConstant(40);
+            q2.SetConstant(50);
+            q2.SetConstant("%abc%");
+            q2.SetConstant(60);
+            q2.SetConstant(70);
+
+            Assert.Equal(((Addition)q2.SelectExpressions[0]).right, new ConstantContainer(10));
+            Assert.Equal(q2.SelectExpressions[1], new ConstantContainer(20));
+            Assert.Equal(((Addition)((Multiplication)q2.SelectExpressions[3]).left).left, new ConstantContainer(30));
+            Assert.Equal(((Multiplication)q2.SelectExpressions[3]).right, new ConstantContainer(40));
+            Assert.Equal(((BooleanEquals)q2.Where.CNF.AND[0].OR[0]).right, new ConstantContainer(50));
+            Assert.Equal(((BooleanLike)q2.Where.CNF.AND[0].OR[1]).SearchValue, new ConstantContainer("%abc%"));
+            Assert.Equal(((BooleanGreaterThan)q2.Where.CNF.AND[1].OR[0]).left, new ConstantContainer(60));
+            Assert.Equal(((BooleanGreaterThan)q2.Where.CNF.AND[1].OR[0]).right, new ConstantContainer(70));
+
+            var q3 = new InsertQuery();
+            q3.Values.Add(new List<Expression> { new ConstantContainer(index: 1), new ConstantContainer(index: 2), new ConstantContainer(index: 3) });
+            q3.Values.Add(new List<Expression> { new ConstantContainer(index: 4), new ConstantContainer(index: 5), new ConstantContainer(index: 6) });
+            Assert.Equal(6, q3.GetConstants().Count());
+            q3.SetConstant(1, 1);
+            q3.SetConstant("def", 5);
+            q3.SetConstant(10, 4);
+            q3.SetConstant(2, 3);
+            q3.SetConstant(20, 6);
+            q3.SetConstant("abc", 2);
+
+            Assert.Equal(q3.Values[0][0], new ConstantContainer(1));
+            Assert.Equal(q3.Values[0][1], new ConstantContainer("abc"));
+            Assert.Equal(q3.Values[0][2], new ConstantContainer(2));
+            Assert.Equal(q3.Values[1][0], new ConstantContainer(10));
+            Assert.Equal(q3.Values[1][1], new ConstantContainer("def"));
+            Assert.Equal(q3.Values[1][2], new ConstantContainer(20));
         }
 
         [Fact(DisplayName = "NULLs")]
         public void TestNulls()
         {
-            var a = new NullConstant();
-            var b = new NullConstant();
+            var a = new ConstantContainer(new NullConstant());
+            var b = new ConstantContainer(new NullConstant());
 
             Assert.True(a.Equals(b));
             Assert.True(b.Equals(a));
@@ -360,47 +434,47 @@ namespace QueryTests
             row1.Add(new object[] { "%%ABCDEFG" });
 
             //Escape character test
-            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("!%!%%"), '!');
+            like = new BooleanLike(new ColumnRef("TextColumn"), new ConstantContainer("!%!%%"), '!');
             Assert.Equal(true, like.Eval(row1));
 
             //Leading percent test
-            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("%EFG"));
+            like = new BooleanLike(new ColumnRef("TextColumn"), new ConstantContainer("%EFG"));
             Assert.Equal(true, like.Eval(row1));
 
             //Trailing percent test
-            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC%"), '!');
+            like = new BooleanLike(new ColumnRef("TextColumn"), new ConstantContainer("!%!%ABC%"), '!');
             Assert.Equal(true, like.Eval(row1));
 
             //Middle percent test
-            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC%EFG"), '!');
+            like = new BooleanLike(new ColumnRef("TextColumn"), new ConstantContainer("!%!%ABC%EFG"), '!');
             Assert.Equal(true, like.Eval(row1));
 
             //Leading underscore test
-            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("_!%ABCDEFG"), '!');
+            like = new BooleanLike(new ColumnRef("TextColumn"), new ConstantContainer("_!%ABCDEFG"), '!');
             Assert.Equal(true, like.Eval(row1));
 
             //Trailing underscore test
-            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("!%!%ABCDEF_"), '!');
+            like = new BooleanLike(new ColumnRef("TextColumn"), new ConstantContainer("!%!%ABCDEF_"), '!');
             Assert.Equal(true, like.Eval(row1));
 
             //Middle underscore test
-            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("!%!%ABC_EFG"), '!');
+            like = new BooleanLike(new ColumnRef("TextColumn"), new ConstantContainer("!%!%ABC_EFG"), '!');
             Assert.Equal(true, like.Eval(row1));
 
             //Mixed wild card test
-            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("__ABCD%_"));
+            like = new BooleanLike(new ColumnRef("TextColumn"), new ConstantContainer("__ABCD%_"));
             Assert.Equal(true, like.Eval(row1));
 
             //Case insensitive test
-            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("___bcd%_"));
+            like = new BooleanLike(new ColumnRef("TextColumn"), new ConstantContainer("___bcd%_"));
             Assert.Equal(true, like.Eval(row1));
 
             //Invalid escape character test
-            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("!%!%!ABCDEF!G!"));
+            like = new BooleanLike(new ColumnRef("TextColumn"), new ConstantContainer("!%!%!ABCDEF!G!"));
             Assert.Equal(false, like.Eval(row1));
 
             //Null escape character test
-            like = new BooleanLike(new ColumnRef("TextColumn"), new StringConstant("\\%\\%ABCDEFG"), null);
+            like = new BooleanLike(new ColumnRef("TextColumn"), new ConstantContainer("\\%\\%ABCDEFG"), null);
             Assert.Equal(true, like.Eval(row1));
         }
 

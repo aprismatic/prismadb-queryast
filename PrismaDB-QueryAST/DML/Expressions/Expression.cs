@@ -16,7 +16,7 @@ namespace PrismaDB.QueryAST.DML
 
         public abstract List<ColumnRef> GetColumns();
 
-        public abstract List<PlaceholderConstant> GetPlaceholders();
+        public abstract List<ConstantContainer> GetConstants();
 
         public abstract bool UpdateChild(Expression child, Expression newChild);
 

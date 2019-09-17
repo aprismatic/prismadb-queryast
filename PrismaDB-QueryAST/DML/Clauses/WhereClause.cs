@@ -58,11 +58,11 @@ namespace PrismaDB.QueryAST.DML
             return whereCols;
         }
 
-        public override List<PlaceholderConstant> GetPlaceholders()
+        public override List<ConstantContainer> GetConstants()
         {
-            var res = new List<PlaceholderConstant>();
+            var res = new List<ConstantContainer>();
             foreach (var and in CNF.AND)
-                res.AddRange(and.GetPlaceholders());
+                res.AddRange(and.GetConstants());
             return res;
         }
     }
@@ -86,11 +86,11 @@ namespace PrismaDB.QueryAST.DML
             }
         }
 
-        public List<PlaceholderConstant> GetPlaceholders()
+        public List<ConstantContainer> GetConstants()
         {
-            var res = new List<PlaceholderConstant>();
+            var res = new List<ConstantContainer>();
             foreach (var disj in AND)
-                res.AddRange(disj.GetPlaceholders());
+                res.AddRange(disj.GetConstants());
             return res;
         }
 
@@ -124,11 +124,11 @@ namespace PrismaDB.QueryAST.DML
             }
         }
 
-        public List<PlaceholderConstant> GetPlaceholders()
+        public List<ConstantContainer> GetConstants()
         {
-            var res = new List<PlaceholderConstant>();
+            var res = new List<ConstantContainer>();
             foreach (var boolexp in OR)
-                res.AddRange(boolexp.GetPlaceholders());
+                res.AddRange(boolexp.GetConstants());
             return res;
         }
 

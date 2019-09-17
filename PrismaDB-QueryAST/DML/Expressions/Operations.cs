@@ -81,11 +81,11 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override List<PlaceholderConstant> GetPlaceholders()
+        public override List<ConstantContainer> GetConstants()
         {
-            var res = new List<PlaceholderConstant>();
-            res.AddRange(left.GetPlaceholders());
-            res.AddRange(right.GetPlaceholders());
+            var res = new List<ConstantContainer>();
+            res.AddRange(left.GetConstants());
+            res.AddRange(right.GetConstants());
             return res;
         }
 
@@ -139,11 +139,11 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override List<PlaceholderConstant> GetPlaceholders()
+        public override List<ConstantContainer> GetConstants()
         {
-            var res = new List<PlaceholderConstant>();
-            res.AddRange(left.GetPlaceholders());
-            res.AddRange(right.GetPlaceholders());
+            var res = new List<ConstantContainer>();
+            res.AddRange(left.GetConstants());
+            res.AddRange(right.GetConstants());
             return res;
         }
 
@@ -197,11 +197,11 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override List<PlaceholderConstant> GetPlaceholders()
+        public override List<ConstantContainer> GetConstants()
         {
-            var res = new List<PlaceholderConstant>();
-            res.AddRange(left.GetPlaceholders());
-            res.AddRange(right.GetPlaceholders());
+            var res = new List<ConstantContainer>();
+            res.AddRange(left.GetConstants());
+            res.AddRange(right.GetConstants());
             return res;
         }
 
@@ -255,11 +255,11 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
-        public override List<PlaceholderConstant> GetPlaceholders()
+        public override List<ConstantContainer> GetConstants()
         {
-            var res = new List<PlaceholderConstant>();
-            res.AddRange(left.GetPlaceholders());
-            res.AddRange(right.GetPlaceholders());
+            var res = new List<ConstantContainer>();
+            res.AddRange(left.GetConstants());
+            res.AddRange(right.GetConstants());
             return res;
         }
 

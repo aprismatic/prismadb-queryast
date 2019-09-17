@@ -6,7 +6,54 @@ using System.Linq;
 
 namespace PrismaDB.QueryAST.DML
 {
-    public abstract class Constant : Expression
+    public class ConstantContainer : Expression
+    {
+        public Constant constant;
+
+        public ConstantContainer(object value = null, int index = 0, string aliasName = "")
+        {
+            Alias = new Identifier(aliasName);
+
+            if (value == null)
+                this.constant = new PlaceholderConstant(index);
+            else if (value is Constant constant)
+                this.constant = constant;
+            else
+                this.constant = Constant.GetConstant(value);
+        }
+
+        public ConstantContainer(ConstantContainer other)
+        {
+            Alias = new Identifier(other.Alias.id);
+            constant = (Constant)other.constant.Clone();
+        }
+
+        public override object Clone() => new ConstantContainer(this);
+
+        public override object Eval(ResultRow r) => constant.Eval(r);
+
+        public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
+
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer> { this };
+
+        public override string ToString() => DialectResolver.Dialect.ConstantContainerToString(this);
+
+        public override bool UpdateChild(Expression child, Expression newChild) => false;
+
+        public override bool Equals(object other)
+        {
+            if (!(other is ConstantContainer otherCC)) return false;
+
+            return Alias.Equals(otherCC.Alias)
+                && constant.Equals(otherCC.constant);
+        }
+
+        public override int GetHashCode() =>
+            unchecked(Alias.GetHashCode() *
+                      constant.GetHashCode());
+    }
+
+    public abstract class Constant : ICloneable
     {
         public static Constant GetConstant(object value)
         {
@@ -44,6 +91,16 @@ namespace PrismaDB.QueryAST.DML
                     throw new NotSupportedException("Type not supported by GetConstant.");
             }
         }
+
+        public abstract object Clone();
+
+        public abstract object Eval(ResultRow r);
+
+        public abstract override string ToString();
+
+        public abstract override bool Equals(object other);
+
+        public abstract override int GetHashCode();
     }
 
     public class IntConstant : Constant
@@ -52,35 +109,24 @@ namespace PrismaDB.QueryAST.DML
 
         public IntConstant() : this(0) { }
 
-        public IntConstant(Int64 value, string aliasName = "")
+        public IntConstant(Int64 value)
         {
             intvalue = value;
-            Alias = new Identifier(aliasName);
         }
 
-        public override object Clone() => new IntConstant(intvalue, Alias.id);
+        public override object Clone() => new IntConstant(intvalue);
 
         public override object Eval(ResultRow r) => intvalue;
-
-        public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
-
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
-
-        public override bool UpdateChild(Expression child, Expression newChild) => false;
 
         public override string ToString() => DialectResolver.Dialect.IntConstantToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is IntConstant otherIC)) return false;
-
-            return Alias.Equals(otherIC.Alias)
-                && intvalue == otherIC.intvalue;
+            return intvalue == otherIC.intvalue;
         }
 
-        public override int GetHashCode() =>
-            unchecked(Alias.GetHashCode() *
-                      intvalue.GetHashCode());
+        public override int GetHashCode() => unchecked(intvalue.GetHashCode());
     }
 
     public class StringConstant : Constant
@@ -89,35 +135,24 @@ namespace PrismaDB.QueryAST.DML
 
         public StringConstant() : this("") { }
 
-        public StringConstant(string value, string aliasName = "")
+        public StringConstant(string value)
         {
             strvalue = value;
-            Alias = new Identifier(aliasName);
         }
 
-        public override object Clone() => new StringConstant(strvalue, Alias.id);
+        public override object Clone() => new StringConstant(strvalue);
 
         public override object Eval(ResultRow r) => strvalue;
-
-        public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
-
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
-
-        public override bool UpdateChild(Expression child, Expression newChild) => false;
 
         public override string ToString() => DialectResolver.Dialect.StringConstantToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is StringConstant otherSC)) return false;
-
-            return Alias.Equals(otherSC.Alias)
-                && strvalue == otherSC.strvalue;
+            return strvalue == otherSC.strvalue;
         }
 
-        public override int GetHashCode() =>
-            unchecked(Alias.GetHashCode() *
-                      strvalue.GetHashCode());
+        public override int GetHashCode() => unchecked(strvalue.GetHashCode());
     }
 
     public class BinaryConstant : Constant
@@ -126,21 +161,14 @@ namespace PrismaDB.QueryAST.DML
 
         public BinaryConstant() : this(new byte[0]) { }
 
-        public BinaryConstant(byte[] value, string aliasName = "")
+        public BinaryConstant(byte[] value)
         {
             binvalue = value;
-            Alias = new Identifier(aliasName);
         }
 
-        public override object Clone() => new BinaryConstant((byte[])binvalue.Clone(), Alias.id);
+        public override object Clone() => new BinaryConstant((byte[])binvalue.Clone());
 
         public override object Eval(ResultRow r) => throw new NotImplementedException("This method should not be called.");
-
-        public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
-
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
-
-        public override bool UpdateChild(Expression child, Expression newChild) => false;
 
         public override string ToString() => DialectResolver.Dialect.BinaryConstantToString(this);
 
@@ -148,13 +176,10 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is BinaryConstant otherBC)) return false;
 
-            return Alias.Equals(otherBC.Alias)
-                && binvalue.SequenceEqual(otherBC.binvalue);
+            return binvalue.SequenceEqual(otherBC.binvalue);
         }
 
-        public override int GetHashCode() =>
-            unchecked(Alias.GetHashCode() *
-                      binvalue.Aggregate(1, unchecked((x, y) => x * y.GetHashCode())));
+        public override int GetHashCode() => unchecked(binvalue.Aggregate(1, unchecked((x, y) => x * y.GetHashCode())));
     }
 
     public class DecimalConstant : Constant
@@ -163,21 +188,14 @@ namespace PrismaDB.QueryAST.DML
 
         public DecimalConstant() : this(0) { }
 
-        public DecimalConstant(Decimal value, string aliasName = "")
+        public DecimalConstant(Decimal value)
         {
             decimalvalue = value;
-            Alias = new Identifier(aliasName);
         }
 
-        public override object Clone() => new DecimalConstant(decimalvalue, Alias.id);
+        public override object Clone() => new DecimalConstant(decimalvalue);
 
         public override object Eval(ResultRow r) => decimalvalue;
-
-        public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
-
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
-
-        public override bool UpdateChild(Expression child, Expression newChild) => false;
 
         public override string ToString() => DialectResolver.Dialect.DecimalConstantToString(this);
 
@@ -185,84 +203,56 @@ namespace PrismaDB.QueryAST.DML
         {
             if (!(other is DecimalConstant otherIC)) return false;
 
-            return Alias.Equals(otherIC.Alias)
-                && decimalvalue == otherIC.decimalvalue;
+            return decimalvalue == otherIC.decimalvalue;
         }
 
-        public override int GetHashCode() =>
-            unchecked(Alias.GetHashCode() *
-                      decimalvalue.GetHashCode());
+        public override int GetHashCode() => unchecked(decimalvalue.GetHashCode());
     }
 
     public class NullConstant : Constant
     {
-        public NullConstant() : this("") { }
+        public NullConstant() { }
 
-        public NullConstant(string aliasName = "")
-        {
-            Alias = new Identifier(aliasName);
-        }
-
-        public override object Clone() => new NullConstant(Alias.id);
+        public override object Clone() => new NullConstant();
 
         public override object Eval(ResultRow r) =>
             throw new InvalidOperationException("NULL constant should not be used in WHERE clause like that.");
-
-        public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
-
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant>();
-
-        public override bool UpdateChild(Expression child, Expression newChild) => false;
 
         public override string ToString() => DialectResolver.Dialect.NullConstantToString(this);
 
         public override bool Equals(object other)
         {
-            if (!(other is NullConstant otherNC)) return false;
-
-            return Alias.Equals(otherNC.Alias);
+            if (!(other is NullConstant)) return false;
+            return true;
         }
 
-        public override int GetHashCode() => unchecked(Alias.GetHashCode());
+        public override int GetHashCode() => 1;
     }
 
     public class PlaceholderConstant : Constant
     {
         public int index;
 
-        public PlaceholderConstant() : this("") { }
+        public PlaceholderConstant() : this(0) { }
 
-        public PlaceholderConstant(string aliasName = "") : this(0, aliasName) { }
-
-        public PlaceholderConstant(int index, string aliasName = "")
+        public PlaceholderConstant(int index)
         {
             this.index = index;
-            Alias = new Identifier(aliasName);
         }
 
-        public override object Clone() => new PlaceholderConstant(index, Alias.id);
+        public override object Clone() => new PlaceholderConstant(index);
 
         public override object Eval(ResultRow r) =>
-            throw new InvalidOperationException("Placeholder constant should not be used in WHERE clause like that.");
-
-        public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
-
-        public override List<PlaceholderConstant> GetPlaceholders() => new List<PlaceholderConstant> { this };
-
-        public override bool UpdateChild(Expression child, Expression newChild) => false;
+            throw new InvalidOperationException("Placeholder constant should be replaced with a proper constant.");
 
         public override string ToString() => DialectResolver.Dialect.PlaceholderConstantToString(this);
 
         public override bool Equals(object other)
         {
             if (!(other is PlaceholderConstant otherPC)) return false;
-
-            return Alias.Equals(otherPC.Alias)
-                 && index == otherPC.index;
+            return index == otherPC.index;
         }
 
-        public override int GetHashCode() =>
-            unchecked(Alias.GetHashCode() *
-                      index.GetHashCode());
+        public override int GetHashCode() => unchecked(index.GetHashCode());
     }
 }
