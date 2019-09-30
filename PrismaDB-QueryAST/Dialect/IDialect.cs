@@ -22,10 +22,13 @@ namespace PrismaDB.QueryAST
         string SelectQueryToString(SelectQuery q);
         string DeleteQueryToString(DeleteQuery q);
         string InsertQueryToString(InsertQuery q);
+        string ConstantContainerToString(ConstantContainer q);
         string IntConstantToString(IntConstant q);
         string BinaryConstantToString(BinaryConstant q);
         string StringConstantToString(StringConstant q);
         string DecimalConstantToString(DecimalConstant q);
+        string NullConstantToString(NullConstant q);
+        string PlaceholderConstantToString(PlaceholderConstant q);
         string AdditionToString(Addition q);
         string SubtractionToString(Subtraction q);
         string MultiplicationToString(Multiplication q);
@@ -52,7 +55,6 @@ namespace PrismaDB.QueryAST
         string OrderByClauseToString(OrderByClause q);
         string GroupByClauseToString(GroupByClause q);
         string AllColumnsToString(AllColumns q);
-        string NullConstantToString(NullConstant q);
         string BooleanIsNullToString(BooleanIsNull q);
         string PaillierAdditionFunctionToString(PaillierAdditionFunction q);
         string PaillierSubtractionFunctionToString(PaillierSubtractionFunction q);

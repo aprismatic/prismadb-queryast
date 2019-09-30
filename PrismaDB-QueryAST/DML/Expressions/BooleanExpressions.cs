@@ -17,6 +17,7 @@ namespace PrismaDB.QueryAST.DML
         public override object Clone() => new BooleanTrue(NOT);
         public override object Eval(ResultRow r) => !NOT;
         public override List<ColumnRef> GetColumns() => new List<ColumnRef>();
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
         public override bool UpdateChild(Expression child, Expression newChild) => false;
 
         public override string ToString() => DialectResolver.Dialect.BooleanTrueToString(this);
@@ -29,8 +30,8 @@ namespace PrismaDB.QueryAST.DML
         public ColumnRef Column;
         public char? EscapeChar;
 
-        private StringConstant _searchValue;
-        public StringConstant SearchValue
+        private ConstantContainer _searchValue;
+        public ConstantContainer SearchValue
         {
             get => _searchValue;
             set
@@ -44,12 +45,12 @@ namespace PrismaDB.QueryAST.DML
         {
             Alias = new Identifier("");
             Column = new ColumnRef("");
-            SearchValue = new StringConstant("");
+            SearchValue = new ConstantContainer();
             EscapeChar = null;
             NOT = false;
         }
 
-        public BooleanLike(ColumnRef column, StringConstant value, char? escape = null, bool NOT = false)
+        public BooleanLike(ColumnRef column, ConstantContainer value, char? escape = null, bool NOT = false)
         {
             Alias = new Identifier("");
             Column = column;
@@ -60,12 +61,12 @@ namespace PrismaDB.QueryAST.DML
 
         public override object Clone()
         {
-            return new BooleanLike((ColumnRef)Column.Clone(), (StringConstant)SearchValue.Clone(), EscapeChar, NOT);
+            return new BooleanLike((ColumnRef)Column.Clone(), (ConstantContainer)SearchValue.Clone(), EscapeChar, NOT);
         }
 
         public override object Eval(ResultRow r)
         {
-            var svalue_store = SearchValue.strvalue;
+            var svalue_store = ((StringConstant)SearchValue.constant).strvalue;
             var esc_store = EscapeChar;
             if (EscapeChar == null) esc_store = '\\';
             var col_store = r[Column].ToString();
@@ -247,17 +248,19 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns() => Column.GetColumns();
 
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer> { SearchValue };
+
         public override bool UpdateChild(Expression child, Expression newChild)
         {
             if (SearchValue == child)
             {
-                if (newChild is StringConstant newsrv)
+                if (newChild is ConstantContainer newsrv)
                 {
                     SearchValue = newsrv;
                     newsrv.Parent = this;
                 }
                 else
-                    throw new ArgumentException("Expected type StringConstant.", nameof(newChild));
+                    throw new ArgumentException("Expected type ConstantContainer.", nameof(newChild));
                 return true;
             }
 
@@ -288,22 +291,22 @@ namespace PrismaDB.QueryAST.DML
     public class BooleanIn : BooleanExpression
     {
         public ColumnRef Column;
-        private List<Constant> _inValues;
-        public ReadOnlyCollection<Constant> InValues => _inValues.AsReadOnly();
+        private List<ConstantContainer> _inValues;
+        public ReadOnlyCollection<ConstantContainer> InValues => _inValues.AsReadOnly();
 
         public BooleanIn()
         {
             Alias = new Identifier("");
             Column = new ColumnRef("");
-            _inValues = new List<Constant>();
+            _inValues = new List<ConstantContainer>();
             NOT = false;
         }
 
-        public BooleanIn(ColumnRef column, bool NOT = false, params Constant[] values)
+        public BooleanIn(ColumnRef column, bool NOT = false, params ConstantContainer[] values)
         {
             Alias = new Identifier("");
             Column = column;
-            _inValues = new List<Constant>();
+            _inValues = new List<ConstantContainer>();
             foreach (var v in values)
                 AddChild(v);
             this.NOT = NOT;
@@ -313,7 +316,7 @@ namespace PrismaDB.QueryAST.DML
         {
             var res = new BooleanIn((ColumnRef)Column.Clone(), NOT);
             foreach (var v in _inValues)
-                res.AddChild((Constant)v.Clone());
+                res.AddChild((ConstantContainer)v.Clone());
             return res;
         }
 
@@ -324,25 +327,34 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns() => Column.GetColumns();
 
-        public void AddChild(Constant child)
+        public override List<ConstantContainer> GetConstants()
+        {
+            var res = new List<ConstantContainer>();
+            foreach (var constant in _inValues)
+                if (constant is ConstantContainer cc)
+                    res.Add(cc);
+            return res;
+        }
+
+        public void AddChild(ConstantContainer child)
         {
             child.Parent = this;
             _inValues.Add(child);
         }
 
-        public void SetChild(int index, Constant child)
+        public void SetChild(int index, ConstantContainer child)
         {
             child.Parent = this;
             _inValues[index] = child;
         }
 
-        public void InsertChild(int index, Constant child)
+        public void InsertChild(int index, ConstantContainer child)
         {
             child.Parent = this;
             _inValues.Insert(index, child);
         }
 
-        public void RemoveChild(Constant child)
+        public void RemoveChild(ConstantContainer child)
         {
             _inValues.Remove(child);
         }
@@ -358,14 +370,14 @@ namespace PrismaDB.QueryAST.DML
             {
                 if (_inValues[i] == child)
                 {
-                    if (newChild is Constant cnst)
+                    if (newChild is ConstantContainer cnst)
                     {
                         _inValues[i] = cnst;
                         cnst.Parent = this;
                         return true;
                     }
 
-                    throw new ArgumentException("Expected type Constant.", nameof(newChild));
+                    throw new ArgumentException("Expected type ConstantContainer.", nameof(newChild));
                 }
             }
 
@@ -395,8 +407,8 @@ namespace PrismaDB.QueryAST.DML
     {
         public ColumnRef Column;
 
-        private StringConstant _searchText;
-        public StringConstant SearchText
+        private ConstantContainer _searchText;
+        public ConstantContainer SearchText
         {
             get => _searchText;
             set
@@ -410,11 +422,11 @@ namespace PrismaDB.QueryAST.DML
         {
             Alias = new Identifier("");
             Column = new ColumnRef("");
-            SearchText = new StringConstant("");
+            SearchText = new ConstantContainer();
             NOT = false;
         }
 
-        public BooleanFullTextSearch(ColumnRef column, StringConstant searchText, bool NOT = false)
+        public BooleanFullTextSearch(ColumnRef column, ConstantContainer searchText, bool NOT = false)
         {
             Alias = new Identifier("");
             Column = column;
@@ -422,24 +434,25 @@ namespace PrismaDB.QueryAST.DML
             this.NOT = NOT;
         }
 
-        public override object Clone() => new BooleanFullTextSearch((ColumnRef)Column.Clone(), (StringConstant)SearchText.Clone(), NOT);
+        public override object Clone() => new BooleanFullTextSearch((ColumnRef)Column.Clone(), (ConstantContainer)SearchText.Clone(), NOT);
 
-        public override object Eval(ResultRow r) => r[Column].ToString().ToUpperInvariant().Contains(SearchText.strvalue.ToUpperInvariant()) ? !NOT : NOT;
+        public override object Eval(ResultRow r) => r[Column].ToString().ToUpperInvariant().Contains(((StringConstant)SearchText.constant).strvalue.ToUpperInvariant()) ? !NOT : NOT;
 
         public override List<ColumnRef> GetColumns() => Column.GetColumns();
 
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
         public override bool UpdateChild(Expression child, Expression newChild)
         {
             if (SearchText == child)
             {
-                if (newChild is StringConstant newsrv)
+                if (newChild is ConstantContainer newsrv)
                 {
                     SearchText = newsrv;
                     newsrv.Parent = this;
                     return true;
                 }
 
-                throw new ArgumentException("Expected type StringConstant.", nameof(newChild));
+                throw new ArgumentException("Expected type ConstantContainer.", nameof(newChild));
             }
 
             return false;
@@ -555,6 +568,14 @@ namespace PrismaDB.QueryAST.DML
             res.AddRange(right.GetColumns());
             return res;
         }
+
+        public override List<ConstantContainer> GetConstants()
+        {
+            var res = new List<ConstantContainer>();
+            res.AddRange(left.GetConstants());
+            res.AddRange(right.GetConstants());
+            return res;
+        }
     }
 
     public abstract class BooleanInequality : BooleanExpression
@@ -628,6 +649,14 @@ namespace PrismaDB.QueryAST.DML
             var res = new List<ColumnRef>();
             res.AddRange(left.GetColumns());
             res.AddRange(right.GetColumns());
+            return res;
+        }
+
+        public override List<ConstantContainer> GetConstants()
+        {
+            var res = new List<ConstantContainer>();
+            res.AddRange(left.GetConstants());
+            res.AddRange(right.GetConstants());
             return res;
         }
     }
@@ -767,6 +796,8 @@ namespace PrismaDB.QueryAST.DML
         }
 
         public override List<ColumnRef> GetColumns() => left.GetColumns();
+
+        public override List<ConstantContainer> GetConstants() => left.GetConstants();
 
         public override bool UpdateChild(Expression child, Expression newChild)
         {

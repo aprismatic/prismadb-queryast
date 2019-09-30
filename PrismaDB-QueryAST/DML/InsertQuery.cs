@@ -34,6 +34,17 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<TableRef> GetTables() => new List<TableRef> { Into };
 
+        public override List<ConstantContainer> GetConstants()
+        {
+            var res = new List<ConstantContainer>();
+
+            foreach (var vallist in Values)
+                foreach (var val in vallist)
+                    res.AddRange(val.GetConstants());
+
+            return res;
+        }
+
         public override string ToString() => DialectResolver.Dialect.InsertQueryToString(this);
 
         public override object Clone() => new InsertQuery(this);

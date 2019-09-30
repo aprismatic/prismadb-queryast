@@ -33,6 +33,14 @@ namespace PrismaDB.QueryAST.DML
             return Sources.SelectMany(x => x.GetColumns()).ToList();
         }
 
+        public override List<ConstantContainer> GetConstants()
+        {
+            var res = new List<ConstantContainer>();
+            foreach (var src in Sources)
+                res.AddRange(src.GetConstants());
+            return res;
+        }
+
         public List<SingleTable> GetSingleTables()
         {
             return Sources.SelectMany(x => x.GetSingleTables()).ToList();
@@ -95,6 +103,8 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
+        public override List<ConstantContainer> GetConstants() => FirstTable.GetConstants();
+
         public List<SingleTable> GetSingleTables()
         {
             var res = new List<SingleTable> { FirstTable };
@@ -147,6 +157,8 @@ namespace PrismaDB.QueryAST.DML
             return new List<ColumnRef>();
         }
 
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
+
         public override string ToString()
         {
             return DialectResolver.Dialect.TableSourceToString(this);
@@ -190,6 +202,8 @@ namespace PrismaDB.QueryAST.DML
         {
             return new List<ColumnRef>();
         }
+
+        public override List<ConstantContainer> GetConstants() => Select.GetConstants();
 
         public override string ToString()
         {
@@ -240,6 +254,8 @@ namespace PrismaDB.QueryAST.DML
             res.AddRange(SecondTable.GetColumns());
             return res;
         }
+
+        public override List<ConstantContainer> GetConstants() => SecondTable.GetConstants();
 
         public override string ToString()
         {

@@ -81,6 +81,14 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
+        public override List<ConstantContainer> GetConstants()
+        {
+            var res = new List<ConstantContainer>();
+            res.AddRange(left.GetConstants());
+            res.AddRange(right.GetConstants());
+            return res;
+        }
+
         public override string ToString() => DialectResolver.Dialect.AdditionToString(this);
 
         public override bool Equals(object other)
@@ -128,6 +136,14 @@ namespace PrismaDB.QueryAST.DML
             var res = new List<ColumnRef>();
             res.AddRange(left.GetColumns());
             res.AddRange(right.GetColumns());
+            return res;
+        }
+
+        public override List<ConstantContainer> GetConstants()
+        {
+            var res = new List<ConstantContainer>();
+            res.AddRange(left.GetConstants());
+            res.AddRange(right.GetConstants());
             return res;
         }
 
@@ -181,6 +197,14 @@ namespace PrismaDB.QueryAST.DML
             return res;
         }
 
+        public override List<ConstantContainer> GetConstants()
+        {
+            var res = new List<ConstantContainer>();
+            res.AddRange(left.GetConstants());
+            res.AddRange(right.GetConstants());
+            return res;
+        }
+
         public override string ToString() => DialectResolver.Dialect.MultiplicationToString(this);
 
         public override bool Equals(object other)
@@ -228,6 +252,14 @@ namespace PrismaDB.QueryAST.DML
             var res = new List<ColumnRef>();
             res.AddRange(left.GetColumns());
             res.AddRange(right.GetColumns());
+            return res;
+        }
+
+        public override List<ConstantContainer> GetConstants()
+        {
+            var res = new List<ConstantContainer>();
+            res.AddRange(left.GetConstants());
+            res.AddRange(right.GetConstants());
             return res;
         }
 

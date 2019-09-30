@@ -50,6 +50,14 @@ namespace PrismaDB.QueryAST.DML
 
         public override List<ColumnRef> GetColumns() => Parameters.SelectMany(x => x.GetColumns()).ToList();
 
+        public override List<ConstantContainer> GetConstants()
+        {
+            var res = new List<ConstantContainer>();
+            foreach (var param in Parameters)
+                res.AddRange(param.GetConstants());
+            return res;
+        }
+
         public override bool UpdateChild(Expression child, Expression newChild)
         {
             for (var i = 0; i < Parameters.Count; i++)

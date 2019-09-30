@@ -6,13 +6,13 @@ namespace PrismaDB.QueryAST.DML
     public class UpdateQuery : DmlQuery
     {
         public TableRef UpdateTable;
-        public List<Tuple<ColumnRef, Constant>> UpdateExpressions;
+        public List<Tuple<ColumnRef, ConstantContainer>> UpdateExpressions;
         public WhereClause Where;
 
         public UpdateQuery()
         {
             UpdateTable = new TableRef("");
-            UpdateExpressions = new List<Tuple<ColumnRef, Constant>>();
+            UpdateExpressions = new List<Tuple<ColumnRef, ConstantContainer>>();
             Where = new WhereClause();
         }
 
@@ -20,10 +20,10 @@ namespace PrismaDB.QueryAST.DML
         {
             UpdateTable = other.UpdateTable.Clone();
 
-            UpdateExpressions = new List<Tuple<ColumnRef, Constant>>(other.UpdateExpressions.Count);
+            UpdateExpressions = new List<Tuple<ColumnRef, ConstantContainer>>(other.UpdateExpressions.Count);
             foreach (var pr in other.UpdateExpressions)
             {
-                var newpr = new Tuple<ColumnRef, Constant>((ColumnRef)pr.Item1.Clone(), (Constant)pr.Item2.Clone());
+                var newpr = new Tuple<ColumnRef, ConstantContainer>((ColumnRef)pr.Item1.Clone(), (ConstantContainer)pr.Item2.Clone());
                 UpdateExpressions.Add(newpr);
             }
 
@@ -31,6 +31,19 @@ namespace PrismaDB.QueryAST.DML
         }
 
         public override List<TableRef> GetTables() => new List<TableRef> { UpdateTable.Clone() };
+
+        public override List<ConstantContainer> GetConstants()
+        {
+            var res = new List<ConstantContainer>();
+
+            foreach (var exp in UpdateExpressions)
+                if (exp.Item2 is ConstantContainer cc)
+                    res.Add(cc);
+
+            res.AddRange(Where.GetConstants());
+
+            return res;
+        }
 
         public override string ToString() => DialectResolver.Dialect.UpdateQueryToString(this);
 
