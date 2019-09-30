@@ -7,17 +7,17 @@ namespace PrismaDB.QueryAST
 {
     public abstract class Query : ICloneable
     {
-        public void SetConstant(object value, int index = 0)
+        public void SetConstant(object value, string label = "")
         {
             if (value == null)
                 throw new ArgumentNullException("Value cannot be null.");
 
             ConstantContainer target;
 
-            if (index == 0)
+            if (String.IsNullOrEmpty(label))
                 target = GetConstants().FirstOrDefault(x => x.constant is PlaceholderConstant);
             else
-                target = GetConstants().FirstOrDefault(x => x.constant is PlaceholderConstant pc && pc.index == index);
+                target = GetConstants().FirstOrDefault(x => x.constant is PlaceholderConstant pc && pc.label == label);
 
             if (value is Constant constant)
                 target.constant = constant;

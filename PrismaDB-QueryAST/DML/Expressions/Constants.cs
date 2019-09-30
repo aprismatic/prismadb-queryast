@@ -10,12 +10,12 @@ namespace PrismaDB.QueryAST.DML
     {
         public Constant constant;
 
-        public ConstantContainer(object value = null, int index = 0, string aliasName = "")
+        public ConstantContainer(object value = null, string label = "", string aliasName = "")
         {
             Alias = new Identifier(aliasName);
 
             if (value == null)
-                this.constant = new PlaceholderConstant(index);
+                this.constant = new PlaceholderConstant(label);
             else if (value is Constant constant)
                 this.constant = constant;
             else
@@ -231,16 +231,16 @@ namespace PrismaDB.QueryAST.DML
 
     public class PlaceholderConstant : Constant
     {
-        public int index;
+        public string label;
 
-        public PlaceholderConstant() : this(0) { }
+        public PlaceholderConstant() : this("") { }
 
-        public PlaceholderConstant(int index)
+        public PlaceholderConstant(string label)
         {
-            this.index = index;
+            this.label = label;
         }
 
-        public override object Clone() => new PlaceholderConstant(index);
+        public override object Clone() => new PlaceholderConstant(label);
 
         public override object Eval(ResultRow r) =>
             throw new InvalidOperationException("Placeholder constant should be replaced with a proper constant.");
@@ -250,9 +250,9 @@ namespace PrismaDB.QueryAST.DML
         public override bool Equals(object other)
         {
             if (!(other is PlaceholderConstant otherPC)) return false;
-            return index == otherPC.index;
+            return label == otherPC.label;
         }
 
-        public override int GetHashCode() => unchecked(index.GetHashCode());
+        public override int GetHashCode() => unchecked(label.GetHashCode());
     }
 }

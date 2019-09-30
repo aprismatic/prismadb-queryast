@@ -221,15 +221,15 @@ namespace QueryTests
 
             // INSERT query with indexes
             var q3 = new InsertQuery();
-            q3.Values.Add(new List<Expression> { new ConstantContainer(index: 1), new ConstantContainer(index: 2), new ConstantContainer(index: 3) });
-            q3.Values.Add(new List<Expression> { new ConstantContainer(index: 4), new ConstantContainer(index: 5), new ConstantContainer(index: 6) });
+            q3.Values.Add(new List<Expression> { new ConstantContainer(label: "1"), new ConstantContainer(label: "2"), new ConstantContainer(label: "3") });
+            q3.Values.Add(new List<Expression> { new ConstantContainer(label: "4"), new ConstantContainer(label: "5"), new ConstantContainer(label: "6") });
             Assert.Equal(6, q3.GetConstants().Count());
-            q3.SetConstant(1, 1);
-            q3.SetConstant("def", 5);
-            q3.SetConstant(10, 4);
-            q3.SetConstant(2, 3);
-            q3.SetConstant(20, 6);
-            q3.SetConstant("abc", 2);
+            q3.SetConstant(1, "1");
+            q3.SetConstant("def", "5");
+            q3.SetConstant(10, "4");
+            q3.SetConstant(2, "3");
+            q3.SetConstant(20, "6");
+            q3.SetConstant("abc", "2");
 
             Assert.Equal(q3.Values[0][0], new ConstantContainer(1));
             Assert.Equal(q3.Values[0][1], new ConstantContainer("abc"));
