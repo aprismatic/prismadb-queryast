@@ -70,6 +70,12 @@ namespace PrismaDB.QueryAST.DML
                     return new IntConstant(shortValue);
                 case byte byteValue:
                     return new IntConstant(byteValue);
+                case uint uintValue:
+                    return new IntConstant(uintValue);
+                case ulong ulongValue:
+                    return new IntConstant((long)ulongValue);
+                case ushort ushortValue:
+                    return new IntConstant(ushortValue);
                 case sbyte sbyteValue:
                     return new IntConstant(sbyteValue);
                 case double doubleValue:
