@@ -10,7 +10,7 @@ namespace PrismaDB.QueryAST.DML
     {
         public Constant constant;
 
-        public ConstantContainer(object value = null, string label = "", string aliasName = "")
+        public ConstantContainer(object value = null, string aliasName = "", string label = "")
         {
             Alias = new Identifier(aliasName);
 
