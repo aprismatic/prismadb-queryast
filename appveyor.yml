@@ -1,27 +1,27 @@
----
+version: "0.3.2.{build}"
+
 dotnet_csproj:
   patch: true
-  file: '**\*.csproj'
+  file: '**\*.csproj;**\*.props;'
   version: '{version}'
-  package_version: '{version}'
-skip_tags: true
+
 branches:
   only:
     - master
+
+skip_tags: true
+
+image: "Visual Studio 2019"
+
+configuration: Release
+
+nuget:
+  disable_publish_on_pr: true
+
 build:
   publish_nuget: true
   publish_nuget_symbols: true
   verbosity: minimal
+
 before_build:
-  - nuget update -self
-  - nuget restore -Verbosity quiet
-test_script:
-  - dotnet test .\QueryTests\QueryTests.csproj --no-build
-configuration: Release
-image: "Visual Studio 2019"
-nuget:
-  disable_publish_on_pr: true
-environment:
-  AppVeyorAPIToken:
-    secure: GvygCCndEp8eiXvItooIyglWYnyfUvg4YNyaufw3N3A=
-version: "0.3.2.{build}"
+  - nuget restore -verbosity quiet
