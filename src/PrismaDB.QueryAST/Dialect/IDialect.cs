@@ -82,6 +82,7 @@ namespace PrismaDB.QueryAST
         string SaveSettingsCommandToString(SaveSettingsCommand c);
         string LoadSettingsCommandToString(LoadSettingsCommand c);
         string BypassCommandToString(BypassCommand c);
+        string RefreshLicenseCommandToString(RefreshLicenseCommand c);
 
         string SqlDataTypeToString(SqlDataType q);
         string ColumnEncryptionFlagsToString(ColumnEncryptionFlags q);

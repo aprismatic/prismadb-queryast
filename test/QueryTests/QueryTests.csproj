@@ -12,6 +12,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PrismaDB-QueryAST\PrismaDB-QueryAST.csproj" />
+    <ProjectReference Include="..\..\src\PrismaDB.QueryAST\PrismaDB.QueryAST.csproj" />
   </ItemGroup>
 </Project>

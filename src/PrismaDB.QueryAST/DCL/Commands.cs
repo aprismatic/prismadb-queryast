@@ -129,4 +129,17 @@ namespace PrismaDB.QueryAST.DCL
 
         public override object Clone() => new BypassCommand((Query)Query.Clone());
     }
+
+    public class RefreshLicenseCommand : Command
+    {
+        public RefreshLicenseCommand() { }
+
+        public override List<TableRef> GetTables() => new List<TableRef>();
+
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
+
+        public override string ToString() => DialectResolver.Dialect.RefreshLicenseCommandToString(this);
+
+        public override object Clone() => new RefreshLicenseCommand();
+    }
 }

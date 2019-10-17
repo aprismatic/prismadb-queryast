@@ -1,19 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrismaDB-QueryAST", "PrismaDB-QueryAST\PrismaDB-QueryAST.csproj", "{EACF586D-CF0C-4C49-8D9D-7B52C2A0511C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrismaDB.QueryAST", "src\PrismaDB.QueryAST\PrismaDB.QueryAST.csproj", "{EACF586D-CF0C-4C49-8D9D-7B52C2A0511C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{574D9D80-FA53-4FF9-8542-0DFAA71BE2E1}"
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
+		Directory.Build.props = Directory.Build.props
 		nuget.config = nuget.config
+		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QueryTests", "QueryTests\QueryTests.csproj", "{11BD3B3B-0ED8-4C52-A1D7-7F7E0882B852}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QueryTests", "test\QueryTests\QueryTests.csproj", "{11BD3B3B-0ED8-4C52-A1D7-7F7E0882B852}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{172F11C8-8DD5-41F4-BA58-7DCB06C64760}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{510C47B2-6FF4-4505-9608-5B4F0DEC7E9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +38,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EACF586D-CF0C-4C49-8D9D-7B52C2A0511C} = {172F11C8-8DD5-41F4-BA58-7DCB06C64760}
+		{11BD3B3B-0ED8-4C52-A1D7-7F7E0882B852} = {510C47B2-6FF4-4505-9608-5B4F0DEC7E9B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {60B27EEC-5A0F-4517-8597-613CBA592E7E}
