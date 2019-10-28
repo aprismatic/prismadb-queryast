@@ -142,4 +142,34 @@ namespace PrismaDB.QueryAST.DCL
 
         public override object Clone() => new RefreshLicenseCommand();
     }
+
+    public class SetLicenseKeyCommand : Command
+    {
+        public StringConstant LicenseKey;
+
+        public SetLicenseKeyCommand() { LicenseKey = new StringConstant(""); }
+
+        public SetLicenseKeyCommand(string licenseKey) { LicenseKey = new StringConstant(licenseKey); }
+
+        public override List<TableRef> GetTables() => new List<TableRef>();
+
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
+
+        public override string ToString() => DialectResolver.Dialect.SetLicenseKeyCommandToString(this);
+
+        public override object Clone() => new SetLicenseKeyCommand(LicenseKey.strvalue);
+    }
+
+    public class CheckLicenseStatusCommand : Command
+    {
+        public CheckLicenseStatusCommand() { }
+
+        public override List<TableRef> GetTables() => new List<TableRef>();
+
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
+
+        public override string ToString() => DialectResolver.Dialect.CheckLicenseStatusCommandToString(this);
+
+        public override object Clone() => new CheckLicenseStatusCommand();
+    }
 }
