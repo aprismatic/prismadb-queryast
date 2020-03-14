@@ -21,6 +21,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{172F11C8-8DD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{510C47B2-6FF4-4505-9608-5B4F0DEC7E9B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ci", "ci", "{788C05FF-2AE6-499F-82CF-9D8775DF5DBC}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\release-dotnet-nuget.yml = .github\workflows\release-dotnet-nuget.yml
+		.github\workflows\test-dotnet-windows.yml = .github\workflows\test-dotnet-windows.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
