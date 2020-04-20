@@ -57,6 +57,34 @@ namespace PrismaDB.QueryAST.DCL
         public override object Clone() => new LoadOpetreeCommand();
     }
 
+    public class InsertOpetreeCommand : Command
+    {
+        public List<ConstantContainer> Values;
+
+        public InsertOpetreeCommand()
+        {
+            Values = new List<ConstantContainer>();
+        }
+        public InsertOpetreeCommand(List<ConstantContainer> values)
+        {
+            Values = values;
+        }
+
+        public override List<TableRef> GetTables() => new List<TableRef>();
+
+        public override List<ConstantContainer> GetConstants() => Values;
+
+        public override string ToString() => DialectResolver.Dialect.InsertOpetreeCommandToString(this);
+
+        public override object Clone()
+        {
+            var res = new InsertOpetreeCommand();
+            foreach (var value in Values)
+                res.Values.Add((ConstantContainer)value.Clone());
+            return res;
+        }
+    }
+
     public class LoadSchemaCommand : Command
     {
         public LoadSchemaCommand() { }

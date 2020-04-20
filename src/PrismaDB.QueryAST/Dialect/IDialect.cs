@@ -78,6 +78,7 @@ namespace PrismaDB.QueryAST
         string RebalanceOpetreeCommandToString(RebalanceOpetreeCommand c);
         string SaveOpetreeCommandToString(SaveOpetreeCommand c);
         string LoadOpetreeCommandToString(LoadOpetreeCommand c);
+        string InsertOpetreeCommandToString(InsertOpetreeCommand c);
         string LoadSchemaCommandToString(LoadSchemaCommand c);
         string SaveSettingsCommandToString(SaveSettingsCommand c);
         string LoadSettingsCommandToString(LoadSettingsCommand c);

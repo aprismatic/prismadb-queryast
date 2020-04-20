@@ -76,31 +76,26 @@ namespace PrismaDB.QueryAST.DCL
 
     public class RebalanceOpetreeCommand : AsyncCommand
     {
-        public List<ConstantContainer> WithValues;
+        public bool Full;
 
         public RebalanceOpetreeCommand(bool statusCheck = false)
         {
-            WithValues = new List<ConstantContainer>();
+            Full = false;
             StatusCheck = statusCheck;
         }
-        public RebalanceOpetreeCommand(List<ConstantContainer> withValues, bool statusCheck = false)
+
+        public RebalanceOpetreeCommand(bool full = false, bool statusCheck = false)
         {
-            WithValues = withValues;
+            Full = full;
             StatusCheck = statusCheck;
         }
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override List<ConstantContainer> GetConstants() => WithValues;
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
         public override string ToString() => DialectResolver.Dialect.RebalanceOpetreeCommandToString(this);
 
-        public override object Clone()
-        {
-            var res = new RebalanceOpetreeCommand(StatusCheck);
-            foreach (var value in WithValues)
-                res.WithValues.Add((ConstantContainer)value.Clone());
-            return res;
-        }
+        public override object Clone() => new RebalanceOpetreeCommand(Full, StatusCheck);
     }
 }
