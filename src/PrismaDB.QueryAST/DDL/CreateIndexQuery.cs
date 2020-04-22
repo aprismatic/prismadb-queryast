@@ -67,7 +67,7 @@ namespace PrismaDB.QueryAST.DDL
             : this(other.Name.id, other.OnTable, other.Type, other.Modifier, other.MsSqlFullTextKeyIndex?.id, other.OnColumns.ToArray())
         { }
 
-        public override List<TableRef> GetTables() => new List<TableRef> { OnTable.Clone() };
+        public override List<TableRef> GetTables() => new List<TableRef> { OnTable };
 
         public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 

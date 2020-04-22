@@ -30,7 +30,7 @@ namespace PrismaDB.QueryAST.DML
             Where = other.Where;
         }
 
-        public override List<TableRef> GetTables() => new List<TableRef> { UpdateTable.Clone() };
+        public override List<TableRef> GetTables() => new List<TableRef> { UpdateTable };
 
         public override List<ConstantContainer> GetConstants()
         {
