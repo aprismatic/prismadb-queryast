@@ -5,67 +5,67 @@ namespace PrismaDB.QueryAST.DCL
 {
     public abstract class Command : Query { }
 
-    public class SaveSettingsCommand : Command
+    public class SettingsSaveCommand : Command
     {
-        public SaveSettingsCommand() { }
+        public SettingsSaveCommand() { }
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
         public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
-        public override string ToString() => DialectResolver.Dialect.SaveSettingsCommandToString(this);
+        public override string ToString() => DialectResolver.Dialect.SettingsSaveCommandToString(this);
 
-        public override object Clone() => new SaveSettingsCommand();
+        public override object Clone() => new SettingsSaveCommand();
     }
 
-    public class LoadSettingsCommand : Command
+    public class SettingsLoadCommand : Command
     {
-        public LoadSettingsCommand() { }
+        public SettingsLoadCommand() { }
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
         public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
-        public override string ToString() => DialectResolver.Dialect.LoadSettingsCommandToString(this);
+        public override string ToString() => DialectResolver.Dialect.SettingsLoadCommandToString(this);
 
-        public override object Clone() => new LoadSettingsCommand();
+        public override object Clone() => new SettingsLoadCommand();
     }
 
-    public class SaveOpetreeCommand : Command
+    public class OpetreeSaveCommand : Command
     {
-        public SaveOpetreeCommand() { }
+        public OpetreeSaveCommand() { }
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
         public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
-        public override string ToString() => DialectResolver.Dialect.SaveOpetreeCommandToString(this);
+        public override string ToString() => DialectResolver.Dialect.OpetreeSaveCommandToString(this);
 
-        public override object Clone() => new SaveOpetreeCommand();
+        public override object Clone() => new OpetreeSaveCommand();
     }
 
-    public class LoadOpetreeCommand : Command
+    public class OpetreeLoadCommand : Command
     {
-        public LoadOpetreeCommand() { }
+        public OpetreeLoadCommand() { }
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
         public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
-        public override string ToString() => DialectResolver.Dialect.LoadOpetreeCommandToString(this);
+        public override string ToString() => DialectResolver.Dialect.OpetreeLoadCommandToString(this);
 
-        public override object Clone() => new LoadOpetreeCommand();
+        public override object Clone() => new OpetreeLoadCommand();
     }
 
-    public class InsertOpetreeCommand : Command
+    public class OpetreeInsertCommand : Command
     {
         public List<ConstantContainer> Values;
 
-        public InsertOpetreeCommand()
+        public OpetreeInsertCommand()
         {
             Values = new List<ConstantContainer>();
         }
-        public InsertOpetreeCommand(List<ConstantContainer> values)
+        public OpetreeInsertCommand(List<ConstantContainer> values)
         {
             Values = values;
         }
@@ -74,45 +74,45 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<ConstantContainer> GetConstants() => Values;
 
-        public override string ToString() => DialectResolver.Dialect.InsertOpetreeCommandToString(this);
+        public override string ToString() => DialectResolver.Dialect.OpetreeInsertCommandToString(this);
 
         public override object Clone()
         {
-            var res = new InsertOpetreeCommand();
+            var res = new OpetreeInsertCommand();
             foreach (var value in Values)
                 res.Values.Add((ConstantContainer)value.Clone());
             return res;
         }
     }
 
-    public class LoadSchemaCommand : Command
+    public class SchemaLoadCommand : Command
     {
-        public LoadSchemaCommand() { }
+        public SchemaLoadCommand() { }
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
         public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
-        public override string ToString() => DialectResolver.Dialect.LoadSchemaCommandToString(this);
+        public override string ToString() => DialectResolver.Dialect.SchemaLoadCommandToString(this);
 
-        public override object Clone() => new LoadSchemaCommand();
+        public override object Clone() => new SchemaLoadCommand();
     }
 
-    public class ExportKeysCommand : Command
+    public class KeysExportCommand : Command
     {
         public StringConstant FileUri;
 
-        public ExportKeysCommand() { FileUri = new StringConstant(""); }
+        public KeysExportCommand() { FileUri = new StringConstant(""); }
 
-        public ExportKeysCommand(string fileUri) { FileUri = new StringConstant(fileUri); }
+        public KeysExportCommand(string fileUri) { FileUri = new StringConstant(fileUri); }
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
         public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
-        public override string ToString() => DialectResolver.Dialect.ExportKeysCommandToString(this);
+        public override string ToString() => DialectResolver.Dialect.KeysExportCommandToString(this);
 
-        public override object Clone() => new ExportKeysCommand(FileUri.strvalue);
+        public override object Clone() => new KeysExportCommand(FileUri.strvalue);
     }
 
     public class RegisterUserCommand : Command
@@ -158,46 +158,59 @@ namespace PrismaDB.QueryAST.DCL
         public override object Clone() => new BypassCommand((Query)Query.Clone());
     }
 
-    public class RefreshLicenseCommand : Command
+    public class LicenseRefreshCommand : Command
     {
-        public RefreshLicenseCommand() { }
+        public LicenseRefreshCommand() { }
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
         public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
-        public override string ToString() => DialectResolver.Dialect.RefreshLicenseCommandToString(this);
+        public override string ToString() => DialectResolver.Dialect.LicenseRefreshCommandToString(this);
 
-        public override object Clone() => new RefreshLicenseCommand();
+        public override object Clone() => new LicenseRefreshCommand();
     }
 
-    public class SetLicenseKeyCommand : Command
+    public class LicenseSetKeyCommand : Command
     {
         public StringConstant LicenseKey;
 
-        public SetLicenseKeyCommand() { LicenseKey = new StringConstant(""); }
+        public LicenseSetKeyCommand() { LicenseKey = new StringConstant(""); }
 
-        public SetLicenseKeyCommand(string licenseKey) { LicenseKey = new StringConstant(licenseKey); }
+        public LicenseSetKeyCommand(string licenseKey) { LicenseKey = new StringConstant(licenseKey); }
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
         public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
-        public override string ToString() => DialectResolver.Dialect.SetLicenseKeyCommandToString(this);
+        public override string ToString() => DialectResolver.Dialect.LicenseSetKeyCommandToString(this);
 
-        public override object Clone() => new SetLicenseKeyCommand(LicenseKey.strvalue);
+        public override object Clone() => new LicenseSetKeyCommand(LicenseKey.strvalue);
     }
 
-    public class CheckLicenseStatusCommand : Command
+    public class LicenseStatusCommand : Command
     {
-        public CheckLicenseStatusCommand() { }
+        public LicenseStatusCommand() { }
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
         public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
-        public override string ToString() => DialectResolver.Dialect.CheckLicenseStatusCommandToString(this);
+        public override string ToString() => DialectResolver.Dialect.LicenseStatusCommandToString(this);
 
-        public override object Clone() => new CheckLicenseStatusCommand();
+        public override object Clone() => new LicenseStatusCommand();
+    }
+
+    public class OpetreeStatusCommand : Command
+    {
+        public OpetreeStatusCommand() { }
+
+        public override List<TableRef> GetTables() => new List<TableRef>();
+
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
+
+        public override string ToString() => DialectResolver.Dialect.OpetreeStatusCommandToString(this);
+
+        public override object Clone() => new OpetreeStatusCommand();
     }
 }

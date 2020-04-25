@@ -70,22 +70,23 @@ namespace PrismaDB.QueryAST
         string LinRegAggregationFunctionToString(LinRegAggregationFunction q);
         string UseStatementToString(UseStatement q);
 
-        string ExportKeysCommandToString(ExportKeysCommand c);
+        string KeysExportCommandToString(KeysExportCommand c);
         string RegisterUserCommandToString(RegisterUserCommand c);
-        string UpdateKeysCommandToString(UpdateKeysCommand c);
+        string KeysUpdateCommandToString(KeysUpdateCommand c);
         string DecryptColumnCommandToString(DecryptColumnCommand c);
         string EncryptColumnCommandToString(EncryptColumnCommand c);
-        string RebalanceOpetreeCommandToString(RebalanceOpetreeCommand c);
-        string SaveOpetreeCommandToString(SaveOpetreeCommand c);
-        string LoadOpetreeCommandToString(LoadOpetreeCommand c);
-        string InsertOpetreeCommandToString(InsertOpetreeCommand c);
-        string LoadSchemaCommandToString(LoadSchemaCommand c);
-        string SaveSettingsCommandToString(SaveSettingsCommand c);
-        string LoadSettingsCommandToString(LoadSettingsCommand c);
+        string OpetreeRebalanceCommandToString(OpetreeRebalanceCommand c);
+        string OpetreeSaveCommandToString(OpetreeSaveCommand c);
+        string OpetreeLoadCommandToString(OpetreeLoadCommand c);
+        string OpetreeInsertCommandToString(OpetreeInsertCommand c);
+        string OpetreeStatusCommandToString(OpetreeStatusCommand c);
+        string SchemaLoadCommandToString(SchemaLoadCommand c);
+        string SettingsSaveCommandToString(SettingsSaveCommand c);
+        string SettingsLoadCommandToString(SettingsLoadCommand c);
         string BypassCommandToString(BypassCommand c);
-        string RefreshLicenseCommandToString(RefreshLicenseCommand c);
-        string SetLicenseKeyCommandToString(SetLicenseKeyCommand c);
-        string CheckLicenseStatusCommandToString(CheckLicenseStatusCommand c);
+        string LicenseRefreshCommandToString(LicenseRefreshCommand c);
+        string LicenseSetKeyCommandToString(LicenseSetKeyCommand c);
+        string LicenseStatusCommandToString(LicenseStatusCommand c);
 
         string SqlDataTypeToString(SqlDataType q);
         string ColumnEncryptionFlagsToString(ColumnEncryptionFlags q);

@@ -9,17 +9,17 @@ namespace PrismaDB.QueryAST.DCL
         public bool StatusCheck;
     }
 
-    public class UpdateKeysCommand : AsyncCommand
+    public class KeysUpdateCommand : AsyncCommand
     {
-        public UpdateKeysCommand(bool statusCheck = false) { StatusCheck = statusCheck; }
+        public KeysUpdateCommand(bool statusCheck = false) { StatusCheck = statusCheck; }
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
         public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
-        public override string ToString() => DialectResolver.Dialect.UpdateKeysCommandToString(this);
+        public override string ToString() => DialectResolver.Dialect.KeysUpdateCommandToString(this);
 
-        public override object Clone() => new UpdateKeysCommand(StatusCheck);
+        public override object Clone() => new KeysUpdateCommand(StatusCheck);
     }
 
     public class EncryptColumnCommand : AsyncCommand
@@ -74,17 +74,17 @@ namespace PrismaDB.QueryAST.DCL
         public override object Clone() => new DecryptColumnCommand((ColumnRef)Column.Clone(), StatusCheck);
     }
 
-    public class RebalanceOpetreeCommand : AsyncCommand
+    public class OpetreeRebalanceCommand : AsyncCommand
     {
         public bool Full;
 
-        public RebalanceOpetreeCommand(bool statusCheck = false)
+        public OpetreeRebalanceCommand(bool statusCheck = false)
         {
             Full = false;
             StatusCheck = statusCheck;
         }
 
-        public RebalanceOpetreeCommand(bool full = false, bool statusCheck = false)
+        public OpetreeRebalanceCommand(bool full = false, bool statusCheck = false)
         {
             Full = full;
             StatusCheck = statusCheck;
@@ -94,8 +94,8 @@ namespace PrismaDB.QueryAST.DCL
 
         public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
-        public override string ToString() => DialectResolver.Dialect.RebalanceOpetreeCommandToString(this);
+        public override string ToString() => DialectResolver.Dialect.OpetreeRebalanceCommandToString(this);
 
-        public override object Clone() => new RebalanceOpetreeCommand(Full, StatusCheck);
+        public override object Clone() => new OpetreeRebalanceCommand(Full, StatusCheck);
     }
 }
