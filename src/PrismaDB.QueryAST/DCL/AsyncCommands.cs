@@ -74,19 +74,35 @@ namespace PrismaDB.QueryAST.DCL
         public override object Clone() => new DecryptColumnCommand((ColumnRef)Column.Clone(), StatusCheck);
     }
 
+    public class OpetreeRebuildCommand : AsyncCommand
+    {
+        public OpetreeRebuildCommand(bool statusCheck = false) { StatusCheck = statusCheck; }
+
+        public override List<TableRef> GetTables() => new List<TableRef>();
+
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
+
+        public override string ToString() => DialectResolver.Dialect.OpetreeRebuildCommandToString(this);
+
+        public override object Clone() => new OpetreeRebuildCommand(StatusCheck);
+    }
+
     public class OpetreeRebalanceCommand : AsyncCommand
     {
-        public bool Full;
+        public RebalanceStopType StopType;
+        public DecimalConstant StopAfter;
 
         public OpetreeRebalanceCommand(bool statusCheck = false)
         {
-            Full = false;
+            StopType = RebalanceStopType.FULL;
+            StopAfter = new DecimalConstant(1);
             StatusCheck = statusCheck;
         }
 
-        public OpetreeRebalanceCommand(bool full = false, bool statusCheck = false)
+        public OpetreeRebalanceCommand(RebalanceStopType stopType = RebalanceStopType.FULL, decimal stopAfter = 1, bool statusCheck = false)
         {
-            Full = full;
+            StopType = stopType;
+            StopAfter = new DecimalConstant(stopAfter);
             StatusCheck = statusCheck;
         }
 
@@ -96,6 +112,15 @@ namespace PrismaDB.QueryAST.DCL
 
         public override string ToString() => DialectResolver.Dialect.OpetreeRebalanceCommandToString(this);
 
-        public override object Clone() => new OpetreeRebalanceCommand(Full, StatusCheck);
+        public override object Clone() => new OpetreeRebalanceCommand(StopType, StopAfter.decimalvalue, StatusCheck);
+    }
+
+    public enum RebalanceStopType
+    {
+        FULL,
+        IMMEDIATE,
+        ITERATIONS,
+        HOURS,
+        MINUTES
     }
 }
