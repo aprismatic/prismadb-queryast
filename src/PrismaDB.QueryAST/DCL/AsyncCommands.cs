@@ -92,13 +92,6 @@ namespace PrismaDB.QueryAST.DCL
         public RebalanceStopType StopType;
         public DecimalConstant StopAfter;
 
-        public OpetreeRebalanceCommand(bool statusCheck = false)
-        {
-            StopType = RebalanceStopType.FULL;
-            StopAfter = new DecimalConstant(1);
-            StatusCheck = statusCheck;
-        }
-
         public OpetreeRebalanceCommand(RebalanceStopType stopType = RebalanceStopType.FULL, decimal stopAfter = 1, bool statusCheck = false)
         {
             StopType = stopType;
