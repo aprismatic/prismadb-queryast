@@ -9,17 +9,17 @@ namespace PrismaDB.QueryAST.DCL
         public bool StatusCheck;
     }
 
-    public class UpdateKeysCommand : AsyncCommand
+    public class KeysUpdateCommand : AsyncCommand
     {
-        public UpdateKeysCommand(bool statusCheck = false) { StatusCheck = statusCheck; }
+        public KeysUpdateCommand(bool statusCheck = false) { StatusCheck = statusCheck; }
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
         public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
-        public override string ToString() => DialectResolver.Dialect.UpdateKeysCommandToString(this);
+        public override string ToString() => DialectResolver.Dialect.KeysUpdateCommandToString(this);
 
-        public override object Clone() => new UpdateKeysCommand(StatusCheck);
+        public override object Clone() => new KeysUpdateCommand(StatusCheck);
     }
 
     public class EncryptColumnCommand : AsyncCommand
@@ -74,33 +74,53 @@ namespace PrismaDB.QueryAST.DCL
         public override object Clone() => new DecryptColumnCommand((ColumnRef)Column.Clone(), StatusCheck);
     }
 
-    public class RebalanceOpetreeCommand : AsyncCommand
+    public class OpetreeRebuildCommand : AsyncCommand
     {
-        public List<ConstantContainer> WithValues;
+        public OpetreeRebuildCommand(bool statusCheck = false) { StatusCheck = statusCheck; }
 
-        public RebalanceOpetreeCommand(bool statusCheck = false)
+        public override List<TableRef> GetTables() => new List<TableRef>();
+
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
+
+        public override string ToString() => DialectResolver.Dialect.OpetreeRebuildCommandToString(this);
+
+        public override object Clone() => new OpetreeRebuildCommand(StatusCheck);
+    }
+
+    public class OpetreeRebalanceCommand : AsyncCommand
+    {
+        public RebalanceStopType StopType;
+        public DecimalConstant StopAfter;
+
+        public OpetreeRebalanceCommand(bool statusCheck = false)
         {
-            WithValues = new List<ConstantContainer>();
+            StopType = RebalanceStopType.FULL;
+            StopAfter = new DecimalConstant(1);
             StatusCheck = statusCheck;
         }
-        public RebalanceOpetreeCommand(List<ConstantContainer> withValues, bool statusCheck = false)
+
+        public OpetreeRebalanceCommand(RebalanceStopType stopType = RebalanceStopType.FULL, decimal stopAfter = 1, bool statusCheck = false)
         {
-            WithValues = withValues;
+            StopType = stopType;
+            StopAfter = new DecimalConstant(stopAfter);
             StatusCheck = statusCheck;
         }
 
         public override List<TableRef> GetTables() => new List<TableRef>();
 
-        public override List<ConstantContainer> GetConstants() => WithValues;
+        public override List<ConstantContainer> GetConstants() => new List<ConstantContainer>();
 
-        public override string ToString() => DialectResolver.Dialect.RebalanceOpetreeCommandToString(this);
+        public override string ToString() => DialectResolver.Dialect.OpetreeRebalanceCommandToString(this);
 
-        public override object Clone()
-        {
-            var res = new RebalanceOpetreeCommand(StatusCheck);
-            foreach (var value in WithValues)
-                res.WithValues.Add((ConstantContainer)value.Clone());
-            return res;
-        }
+        public override object Clone() => new OpetreeRebalanceCommand(StopType, StopAfter.decimalvalue, StatusCheck);
+    }
+
+    public enum RebalanceStopType
+    {
+        FULL,
+        IMMEDIATE,
+        ITERATIONS,
+        HOURS,
+        MINUTES
     }
 }
