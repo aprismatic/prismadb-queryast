@@ -90,12 +90,12 @@ namespace PrismaDB.QueryAST.DCL
     public class OpetreeRebalanceCommand : AsyncCommand
     {
         public RebalanceStopType StopType;
-        public DecimalConstant StopAfter;
+        public IntConstant StopAfter;
 
-        public OpetreeRebalanceCommand(RebalanceStopType stopType = RebalanceStopType.FULL, decimal stopAfter = 1, bool statusCheck = false)
+        public OpetreeRebalanceCommand(RebalanceStopType stopType = RebalanceStopType.FULL, long stopAfter = 1, bool statusCheck = false)
         {
             StopType = stopType;
-            StopAfter = new DecimalConstant(stopAfter);
+            StopAfter = new IntConstant(stopAfter);
             StatusCheck = statusCheck;
         }
 
@@ -105,7 +105,7 @@ namespace PrismaDB.QueryAST.DCL
 
         public override string ToString() => DialectResolver.Dialect.OpetreeRebalanceCommandToString(this);
 
-        public override object Clone() => new OpetreeRebalanceCommand(StopType, StopAfter.decimalvalue, StatusCheck);
+        public override object Clone() => new OpetreeRebalanceCommand(StopType, StopAfter.intvalue, StatusCheck);
     }
 
     public enum RebalanceStopType
